@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variables & Data Types - progguide</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>progguide</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../topics.html" class="active">Topics</a></li>
+                    <li><a href="../contact.html">Contact</a></li>
+                    <li><a href="../about.html">About Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="topic-content">
+            <div class="topic-navigation">
+                <a href="operators.html" class="nav-prev"><i class="fas fa-arrow-left"></i> Previous: Operators</a>
+                <a href="conditionals.html" class="nav-next">Next: Conditional Statements <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <article class="topic">
+                <h2>Variables & Data Types</h2>
+                <div class="topic-metadata">
+                    <span><i class="fas fa-book"></i> Basics</span>
+                    <span><i class="fas fa-clock"></i> 20 min read</span>
+                    <span><i class="fas fa-code"></i> 5 examples</span>
+                </div>
+                
+                <div class="topic-intro">
+                    <p>Variables are fundamental building blocks in programming. They allow us to store, retrieve, and manipulate data in our programs. In this lesson, you'll learn what variables are, how to declare and initialize them, and the different data types available in most programming languages.</p>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>What are Variables?</h3>
+                    <p>A variable is a named storage location that contains a value. You can think of variables as labeled containers that hold data which can be changed throughout the program's execution.</p>
+                    
+                    <div class="info-box">
+                        <h4>Key Concepts:</h4>
+                        <ul>
+                            <li>Variables have a name (identifier)</li>
+                            <li>Variables store data of specific types</li>
+                            <li>Variables can be reassigned with new values</li>
+                            <li>Variables must be declared before use</li>
+                        </ul>
+                    </div>
+                    
+                    <p>Here's how variables work in most programming languages:</p>
+                    
+                    <pre><code class="language-javascript">
+// Declaring a variable
+let age;
+
+// Initializing a variable
+age = 25;
+
+// Declaring and initializing in one step
+let name = "John";
+
+// Changing a variable's value
+age = 26;
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Common Data Types</h3>
+                    <p>Different programming languages support various data types. Here are the most common ones:</p>
+                    
+                    <div class="data-types">
+                        <div class="data-type">
+                            <h4>Numeric Types</h4>
+                            <ul>
+                                <li><strong>Integer:</strong> Whole numbers without decimals</li>
+                                <li><strong>Float/Double:</strong> Numbers with decimal points</li>
+                            </ul>
+                            <pre><code class="language-javascript">
+let count = 42;         // Integer
+let price = 9.99;       // Float
+                            </code></pre>
+                        </div>
+                        
+                        <div class="data-type">
+                            <h4>Text Types</h4>
+                            <ul>
+                                <li><strong>String:</strong> Text data enclosed in quotes</li>
+                                <li><strong>Character:</strong> Single character (in some languages)</li>
+                            </ul>
+                            <pre><code class="language-javascript">
+let message = "Hello, World!";  // String
+let grade = 'A';                // Character
+                            </code></pre>
+                        </div>
+                        
+                        <div class="data-type">
+                            <h4>Boolean Type</h4>
+                            <ul>
+                                <li><strong>Boolean:</strong> Logical values (true/false)</li>
+                            </ul>
+                            <pre><code class="language-javascript">
+let isActive = true;
+let hasPermission = false;
+                            </code></pre>
+                        </div>
+                        
+                        <div class="data-type">
+                            <h4>Complex Types</h4>
+                            <ul>
+                                <li><strong>Array:</strong> Ordered collection of values</li>
+                                <li><strong>Object:</strong> Collection of key-value pairs</li>
+                            </ul>
+                            <pre><code class="language-javascript">
+let colors = ["red", "green", "blue"];  // Array
+let person = {                          // Object
+  name: "John",
+  age: 30
+};
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Type Conversion</h3>
+                    <p>Sometimes you need to convert values from one data type to another. This is called type conversion or type casting.</p>
+                    
+                    <pre><code class="language-javascript">
+// String to Number
+let numStr = "42";
+let num = Number(numStr);  // Explicit conversion
+let num2 = +numStr;        // Shorthand conversion
+
+// Number to String
+let count = 100;
+let countStr = String(count);  // Explicit conversion
+let countStr2 = count + "";    // Implicit conversion
+
+// To Boolean
+let active = Boolean(1);      // true
+let inactive = Boolean(0);    // false
+let emptyCheck = Boolean(""); // false
+                    </code></pre>
+                    
+                    <div class="warning-box">
+                        <h4>Common Pitfalls:</h4>
+                        <p>Be careful with automatic type conversion, especially in loosely typed languages. It can lead to unexpected results:</p>
+                        <pre><code class="language-javascript">
+console.log("5" + 2);    // Outputs: "52" (string concatenation)
+console.log("5" - 2);    // Outputs: 3 (numeric subtraction)
+                        </code></pre>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Variable Scope</h3>
+                    <p>Variable scope determines where in your code a variable can be accessed or modified.</p>
+                    
+                    <div class="info-box">
+                        <h4>Common Scope Types:</h4>
+                        <ul>
+                            <li><strong>Global scope:</strong> Variables accessible throughout the program</li>
+                            <li><strong>Local/function scope:</strong> Variables accessible only within the function they're declared in</li>
+                            <li><strong>Block scope:</strong> Variables accessible only within the block they're declared in (using let/const in JavaScript)</li>
+                        </ul>
+                    </div>
+                    
+                    <pre><code class="language-javascript">
+// Global variable
+let globalVar = "I'm global";
+
+function exampleFunction() {
+  // Local variable
+  let localVar = "I'm local";
+  
+  // Block scope
+  if (true) {
+    let blockVar = "I'm in a block";
+    console.log(blockVar);  // Accessible
+  }
+  
+  console.log(localVar);    // Accessible
+  console.log(globalVar);   // Accessible
+  // console.log(blockVar); // Error: blockVar is not defined
+}
+
+exampleFunction();
+console.log(globalVar);     // Accessible
+// console.log(localVar);   // Error: localVar is not defined
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Constants</h3>
+                    <p>Constants are like variables, but their values cannot be changed after initialization.</p>
+                    
+                    <pre><code class="language-javascript">
+// Declaring a constant
+const PI = 3.14159;
+const BASE_URL = "https://api.example.com";
+
+// This would cause an error
+// PI = 3.14;  // Error: Assignment to constant variable
+                    </code></pre>
+                    
+                    <div class="tip-box">
+                        <h4>Best Practice:</h4>
+                        <p>Use constants for values that should not change throughout your program. Common examples include configuration values, mathematical constants, and API endpoints.</p>
+                    </div>
+                </div>
+            </article>
+            
+            <div class="practice-section">
+                <h3>Practice Questions</h3>
+                <p>Test your understanding of variables and data types with these practice exercises:</p>
+                
+                <div class="practice-cards">
+                    <div class="practice-card">
+                        <h4>Basic Variable Declaration</h4>
+                        <p>Practice declaring and initializing variables of different data types.</p>
+                        <a href="https://practice.codeacademy.com/variables/basic" class="btn btn-primary" target="_blank">Start Practice</a>
+                    </div>
+                    
+                    <div class="practice-card">
+                        <h4>Type Conversion Challenges</h4>
+                        <p>Convert values between different data types and predict the results.</p>
+                        <a href="https://practice.codeacademy.com/variables/type-conversion" class="btn btn-primary" target="_blank">Start Practice</a>
+                    </div>
+                    
+                    <div class="practice-card">
+                        <h4>Variable Scope Problems</h4>
+                        <p>Understand how variable scope affects accessibility in your programs.</p>
+                        <a href="https://practice.codeacademy.com/variables/scope" class="btn btn-primary" target="_blank">Start Practice</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="topic-navigation">
+                <a href="operators.html" class="nav-prev"><i class="fas fa-arrow-left"></i> Previous: Operators</a>
+                <a href="conditionals.html" class="nav-next">Next: Conditional Statements <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>progguide</h3>
+                    <p>Learn programming the right way</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../topics.html">Topics</a></li>
+                        <li><a href="../contact.html">Contact</a></li>
+                        <li><a href="../about.html">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 progguide</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

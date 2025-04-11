@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming Topics - progguide</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>progguide</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="topics.html" class="active">Topics</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="topics-content">
+            <h2>Programming Topics</h2>
+            <p>Browse our comprehensive collection of programming topics. Each guide includes detailed explanations, examples, and practice questions.</p>
+
+            <div class="topic-filters">
+                <button class="filter-btn active" data-filter="all">All Topics</button>
+                <button class="filter-btn" data-filter="basics">Basics</button>
+                <button class="filter-btn" data-filter="intermediate">Intermediate</button>
+                <button class="filter-btn" data-filter="advanced">Advanced</button>
+                <button class="filter-btn" data-filter="web">Web Development</button>
+                <button class="filter-btn" data-filter="data">Data Structures</button>
+                <button class="filter-btn" data-filter="algorithms">Algorithms</button>
+            </div>
+
+            <div class="topic-categories">
+                <!-- Basics Category -->
+                <div class="topic-category" id="basics">
+                    <h3>Basics</h3>
+                    <div class="topic-list">
+                        <div class="topic-card" data-category="basics">
+                            <h4>Variables & Data Types</h4>
+                            <p>Understanding variables, primitive types, and type conversion</p>
+                            <a href="topics/variables.html" class="btn btn-primary">Learn</a>
+                        </div>
+                        <div class="topic-card" data-category="basics">
+                            <h4>Operators</h4>
+                            <p>Arithmetic, assignment, comparison, and logical operators</p>
+                            <a href="topics/operators.html" class="btn btn-primary">Learn</a>
+                        </div>
+                        <div class="topic-card" data-category="basics">
+                            <h4>Conditional Statements</h4>
+                            <p>If/else statements, switch cases, and ternary operators</p>
+                            <a href="topics/conditionals.html" class="btn btn-primary">Learn</a>
+                        </div>
+                        <div class="topic-card" data-category="basics">
+                            <h4>Loops</h4>
+                            <p>For loops, while loops, and loop control statements</p>
+                            <a href="topics/loops.html" class="btn btn-primary">Learn</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Intermediate Category -->
+                <div class="topic-category" id="intermediate">
+                    <h3>Intermediate</h3>
+                    <div class="topic-list">
+                        <div class="topic-card" data-category="intermediate">
+                            <h4>Functions</h4>
+                            <p>Defining functions, parameters, return values, and scope</p>
+                            <a href="topics/functions.html" class="btn btn-primary">Learn</a>
+                        </div>
+                        <div class="topic-card" data-category="intermediate">
+                            <h4>Arrays</h4>
+                            <p>Creating, accessing, and manipulating arrays</p>
+                            <a href="topics/arrays.html" class="btn btn-primary">Learn</a>
+                        </div>
+                        <div class="topic-card" data-category="intermediate">
+                            <h4>Objects</h4>
+                            <p>Creating objects, properties, methods, and prototypes</p>
+                            <a href="topics/objects.html" class="btn btn-primary">Learn</a>
+                        </div>
+                        <div class="topic-card" data-category="intermediate">
+                            <h4>Error Handling</h4>
+                            <p>Try/catch blocks, throwing exceptions, and error types</p>
+                            <a href="topics/error-handling.html" class="btn btn-primary">Learn</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Category -->
+                <div class="topic-category" id="advanced">
+                    <h3>Advanced</h3>
+                    <div class="topic-list">
+                        <div class="topic-card" data-category="advanced">
+                            <h4>Object-Oriented Programming</h4>
+                            <p>Classes, inheritance, encapsulation, and polymorphism</p>
+                            <a href="topics/oop.html" class="btn btn-primary">Learn</a>
+                        </div>
+                        <div class="topic-card" data-category="advanced">
+                            <h4>Asynchronous Programming</h4>
+                            <p>Callbacks, Promises, async/await, and event loop</p>
+                            <a href="topics/async.html" class="btn btn-primary">Learn</a>
+                        </div>
+                        <div class="topic-card" data-category="advanced">
+                            <h4>Design Patterns</h4>
+                            <p>Common design patterns and their implementations</p>
+                            <a href="topics/design-patterns.html" class="btn btn-primary">Learn</a>
+                        </div>
+                        <div class="topic-card" data-category="advanced">
+                            <h4>Memory Management</h4>
+                            <p>Understanding memory allocation, garbage collection, and optimization</p>
+                            <a href="topics/memory-management.html" class="btn btn-primary">Learn</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Web Development Category -->
+                <div class="topic-category" id="web">
+                    <h3>Web Development</h3>
+                    <div class="topic-list">
+                        <div class="topic-card" data-category="web">
+                            <h4>HTML Fundamentals</h4>
+                            <p>Basic structure, elements, attributes, and semantics</p>
+                            <a href="topics/html-basics.html" class="btn btn-primary">Learn</a>
+                        </div>
+                        <div class="topic-card" data-category="web">
+                            <h4>CSS Styling</h4>
+                            <p>Selectors, properties, layouts, and responsive design</p>
+                            <a href="topics/css-styling.html" class="btn btn-primary">Learn</a>
+                        </div>
+                        <div class="topic-card" data-category="web">
+                            <h4>DOM Manipulation</h4>
+                            <p>Selecting elements, changing content, and event handling</p>
+                            <a href="topics/dom.html" class="btn btn-primary">Learn</a>
+                        </div>
+                        <div class="topic-card" data-category="web">
+                            <h4>APIs and Fetch</h4>
+                            <p>Working with REST APIs, fetch API, and handling responses</p>
+                            <a href="topics/apis.html" class="btn btn-primary">Learn</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>progguide</h3>
+                    <p>Learn programming the right way</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="topics.html">Topics</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 progguide</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

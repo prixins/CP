@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - progguide</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>progguide</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="topics.html">Topics</a></li>
+                    <li><a href="contact.html" class="active">Contact</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="contact-content">
+            <h2>Get In Touch</h2>
+            <p>Have questions or suggestions? Want to join our community or contribute to the guides? We'd love to hear from you!</p>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Email Us</h3>
+                        <p>contact@codeacademy.com</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <h3>Call Us</h3>
+                        <p>+1 (555) 123-4567</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Visit Us</h3>
+                        <p>123 Coding St, Tech City, 90210</p>
+                    </div>
+                    
+                    <div class="social-connect">
+                        <h3>Connect With Us</h3>
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fab fa-discord"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3>Send Us a Message</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <select id="subject" name="subject">
+                                <option value="general">General Inquiry</option>
+                                <option value="content">Content Suggestion</option>
+                                <option value="contribute">Contribute as Writer</option>
+                                <option value="error">Report Error</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="community-section">
+                <h3>Join Our Community</h3>
+                <p>Be part of our growing community of developers and learners. Participate in discussions, collaborate on projects, and enhance your programming skills.</p>
+                
+                <div class="community-options">
+                    <div class="community-card">
+                        <i class="fab fa-discord fa-3x"></i>
+                        <h4>Discord Server</h4>
+                        <p>Join real-time discussions, get help with coding problems, and connect with other learners</p>
+                        <a href="#" class="btn btn-secondary">Join Discord</a>
+                    </div>
+                    
+                    <div class="community-card">
+                        <i class="fab fa-github fa-3x"></i>
+                        <h4>GitHub Organization</h4>
+                        <p>Contribute to our open-source projects and collaborate with other developers</p>
+                        <a href="#" class="btn btn-secondary">View GitHub</a>
+                    </div>
+                    
+                    <div class="community-card">
+                        <i class="fas fa-users fa-3x"></i>
+                        <h4>Study Groups</h4>
+                        <p>Join virtual study groups focused on different programming topics and technologies</p>
+                        <a href="#" class="btn btn-secondary">Browse Groups</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contributor-section">
+                <h3>Become a Contributor</h3>
+                <p>Help us improve our guides and create new content for the community. We welcome contributors of all skill levels.</p>
+                
+                <div class="contributor-options">
+                    <div class="contributor-card">
+                        <i class="fas fa-pen-fancy fa-2x"></i>
+                        <h4>Content Writer</h4>
+                        <p>Write tutorials, guides, and articles on programming topics</p>
+                    </div>
+                    
+                    <div class="contributor-card">
+                        <i class="fas fa-code fa-2x"></i>
+                        <h4>Code Reviewer</h4>
+                        <p>Review code examples and practice problems for accuracy and best practices</p>
+                    </div>
+                    
+                    <div class="contributor-card">
+                        <i class="fas fa-bug fa-2x"></i>
+                        <h4>Bug Hunter</h4>
+                        <p>Find and report errors or inconsistencies in our tutorials and code examples</p>
+                    </div>
+                    
+                    <div class="contributor-card">
+                        <i class="fas fa-laptop-code fa-2x"></i>
+                        <h4>Platform Developer</h4>
+                        <p>Contribute to the development and improvement of our learning platform</p>
+                    </div>
+                </div>
+                
+                <a href="#" class="btn btn-primary">Apply to Contribute</a>
+            </div>
+            
+            <div class="faq-section">
+                <h3>Frequently Asked Questions</h3>
+                
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <h4>Are your tutorials suitable for complete beginners?</h4>
+                            <span class="accordion-icon">+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Yes! Our tutorials are designed to be accessible for beginners while also providing depth for more experienced programmers. Each topic starts with the fundamentals and gradually introduces more advanced concepts.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <h4>How can I suggest a new topic for the guides?</h4>
+                            <span class="accordion-icon">+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>You can suggest new topics using our contact form above. Select "Content Suggestion" as the subject and provide details about the topic you'd like to see covered.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <h4>Do I need to create an account to access the guides?</h4>
+                            <span class="accordion-icon">+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>No, all our guides are freely available without requiring an account. However, creating an account allows you to track your progress, save favorites, and participate in the community discussions.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <h4>How do I report errors in the tutorials?</h4>
+                            <span class="accordion-icon">+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>You can report errors using our contact form. Select "Report Error" as the subject and provide details about the error, including the page URL and a description of the issue.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>progguide</h3>
+                    <p>Learn programming the right way</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="topics.html">Topics</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 progguide</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
