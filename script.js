@@ -11,9 +11,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Topic filters
+    // Topic filters with category hiding
     const filterButtons = document.querySelectorAll('.filter-btn');
     const topicCards = document.querySelectorAll('.topic-card');
+    const topicCategories = document.querySelectorAll('.topic-category');
     
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -25,14 +26,35 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const filter = button.getAttribute('data-filter');
             
-            // Show/hide topic cards based on filter
-            topicCards.forEach(card => {
-                if (filter === 'all' || card.getAttribute('data-category') === filter) {
+            if (filter === 'all') {
+                // Show all topics and categories when "all" is selected
+                topicCards.forEach(card => {
                     card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+                });
+                
+                topicCategories.forEach(category => {
+                    category.style.display = 'block';
+                });
+            } else {
+                // For specific filters, process each category individually
+                topicCategories.forEach(category => {
+                    const cardsInCategory = category.querySelectorAll('.topic-card');
+                    let hasVisibleCards = false;
+                    
+                    // Check if any cards in this category match the filter
+                    cardsInCategory.forEach(card => {
+                        if (card.getAttribute('data-category') === filter) {
+                            card.style.display = 'block';
+                            hasVisibleCards = true;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                    
+                    // Show or hide the entire category based on whether it has matching cards
+                    category.style.display = hasVisibleCards ? 'block' : 'none';
+                });
+            }
         });
     });
     
@@ -190,4 +212,4 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-});     
+});
