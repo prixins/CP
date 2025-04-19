@@ -37,7 +37,6 @@
                 <h2>Variables & Data Types</h2>
                 <div class="topic-metadata">
                     <span><i class="fas fa-book"></i> Basics</span>
-                    <span><i class="fas fa-clock"></i> 20 min read</span>
                     <span><i class="fas fa-code"></i> 5 examples</span>
                 </div>
                 
@@ -223,29 +222,107 @@ const BASE_URL = "https://api.example.com";
             </article>
             
             <div class="practice-section">
-                <h3>Practice Questions</h3>
-                <p>Test your understanding of variables and data types with these practice exercises:</p>
+                <h3 class="mt-4">CodeForces Challenge Problems</h3>
+                <p>Ready to apply your knowledge? Try these real programming challenges that focus on variables and data types:</p>
                 
-                <div class="practice-cards">
-                    <div class="practice-card">
-                        <h4>Basic Variable Declaration</h4>
-                        <p>Practice declaring and initializing variables of different data types.</p>
-                        <a href="https://practice.codeacademy.com/variables/basic" class="btn btn-primary" target="_blank">Start Practice</a>
+                <div class="codeforces-problems">
+                    <div class="problem-card">
+                        <div class="difficulty beginner">Beginner</div>
+                        <h4>Watermelon</h4>
+                        <p>Work with integer variables to determine if a watermelon can be divided into even-weight parts.</p>
+                        <div class="tags">
+                            <span class="tag">Numbers</span>
+                            <span class="tag">Math</span>
+                            <span class="tag">Variables</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/4/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
                     </div>
                     
-                    <div class="practice-card">
-                        <h4>Type Conversion Challenges</h4>
-                        <p>Convert values between different data types and predict the results.</p>
-                        <a href="https://practice.codeacademy.com/variables/type-conversion" class="btn btn-primary" target="_blank">Start Practice</a>
+                    <div class="problem-card">
+                        <div class="difficulty easy">Easy</div>
+                        <h4>String Task</h4>
+                        <p>Practice string manipulation and character handling to transform text according to specific rules.</p>
+                        <div class="tags">
+                            <span class="tag">Strings</span>
+                            <span class="tag">Type Conversion</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/118/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
                     </div>
                     
-                    <div class="practice-card">
-                        <h4>Variable Scope Problems</h4>
-                        <p>Understand how variable scope affects accessibility in your programs.</p>
-                        <a href="https://practice.codeacademy.com/variables/scope" class="btn btn-primary" target="_blank">Start Practice</a>
+                    <div class="problem-card">
+                        <div class="difficulty medium">Medium</div>
+                        <h4>Next Round</h4>
+                        <p>Use arrays and integer variables to determine how many participants advance to the next round.</p>
+                        <div class="tags">
+                            <span class="tag">Arrays</span>
+                            <span class="tag">Variables</span>
+                            <span class="tag">Conditionals</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/158/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <div class="difficulty medium">Medium</div>
+                        <h4>Bit++</h4>
+                        <p>Implement a program that works with variables and incrementation operations.</p>
+                        <div class="tags">
+                            <span class="tag">Variables</span>
+                            <span class="tag">Operators</span>
+                            <span class="tag">Strings</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/282/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
                     </div>
                 </div>
-            </div>
+                
+                <div class="practice-tips">
+                    <h4><i class="fas fa-lightbulb"></i> Tips </h4>
+                    <ul>
+                        <li>Test your solution with the provided examples</li>
+                    </ul>
+                </div>
+<!--                 
+                <div class="submission-tracker">
+                    <h4>Track Your Progress</h4>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 0%"></div>
+                        </div>
+                        <p><span id="completed-count">0</span> of <span id="total-count">7</span> exercises completed</p>
+                    </div>
+                    <button class="btn btn-outline-primary" onclick="toggleCompletionForm()">Mark Problems as Completed</button>
+                    <div id="completion-form" style="display: none;" class="mt-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="basic-var">
+                            <label class="form-check-label" for="basic-var">Basic Variable Declaration</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="type-conv">
+                            <label class="form-check-label" for="type-conv">Type Conversion Challenges</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="var-scope">
+                            <label class="form-check-label" for="var-scope">Variable Scope Problems</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="watermelon">
+                            <label class="form-check-label" for="watermelon">Watermelon</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="string-task">
+                            <label class="form-check-label" for="string-task">String Task</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="next-round">
+                            <label class="form-check-label" for="next-round">Next Round</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="bit-pp">
+                            <label class="form-check-label" for="bit-pp">Bit++</label>
+                        </div>
+                        <button class="btn btn-primary btn-sm mt-2" onclick="updateProgress()">Save Progress</button>
+                    </div>
+                </div>
+            </div> -->
             
             <div class="topic-navigation">
                 <a href="operators.html" class="nav-prev"><i class="fas fa-arrow-left"></i> Previous: Operators</a>
@@ -272,18 +349,14 @@ const BASE_URL = "https://api.example.com";
                 <div class="footer-section">
                     <h3>Connect With Us</h3>
                     <div class="social-icons">
-                        <a href="https://discord.gg/vn3deZTE" target="_blank" rel="noopener noreferrer">
+                        <a href="https://discord.gg/maBxybfxf6" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-discord"></i>
                         </a>
                     </div>
                 </div>
             </div>
-            <div class="copyright">
-                <p>&copy; 2025 progguide</p>
-            </div>
         </div>
     </footer>
 
-    <script src="../script.js"></script>
 </body>
 </html>

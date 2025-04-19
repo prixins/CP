@@ -212,4 +212,98 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    // Practice completion tracking
+    initPracticeTracking();
 });
+
+// Practice completion tracking functionality
+function initPracticeTracking() {
+    // Load saved progress when page loads
+    loadSavedProgress();
+    
+    // Hook up any toggle buttons that exist on the page
+    const toggleBtn = document.querySelector('button[onclick="toggleCompletionForm"]');
+    if (toggleBtn) {
+        toggleBtn.onclick = toggleCompletionForm;
+    }
+    
+    // Check if we're on a page with a progress bar to update
+    const progressBarElement = document.querySelector('.submission-tracker .progress');
+    if (progressBarElement) {
+        updateProgressDisplay();
+    }
+}
+
+function toggleCompletionForm() {
+    const form = document.getElementById('completion-form');
+    if (form) {
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    }
+}
+
+function updateProgress() {
+    // Get current page to create a specific key
+    const currentPage = window.location.pathname;
+    const topicKey = currentPage.split('/').pop().replace('.html', '');
+    const storageKey = `${topicKey}Progress`;
+    
+    // Get all checkboxes
+    const checkboxes = document.querySelectorAll('.form-check-input');
+    
+    // Store checked state of all boxes
+    localStorage.setItem(storageKey, JSON.stringify(
+        Array.from(checkboxes).map(cb => cb.checked)
+    ));
+    
+    updateProgressDisplay();
+    
+    // Hide form after saving
+    document.getElementById('completion-form').style.display = 'none';
+}
+
+function updateProgressDisplay() {
+    // Get all checkboxes
+    const checkboxes = document.querySelectorAll('.form-check-input');
+    
+    // Count checked boxes
+    let completed = 0;
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            completed++;
+        }
+    });
+    
+    // Update progress bar
+    const progressBar = document.querySelector('.submission-tracker .progress');
+    const completedCount = document.getElementById('completed-count');
+    const total = checkboxes.length;
+    
+    if (progressBar && completedCount) {
+        progressBar.style.width = (completed / total * 100) + '%';
+        completedCount.textContent = completed;
+    }
+}
+
+function loadSavedProgress() {
+    // Get current page
+    const currentPage = window.location.pathname;
+    const topicKey = currentPage.split('/').pop().replace('.html', '');
+    const storageKey = `${topicKey}Progress`;
+    
+    const savedProgress = localStorage.getItem(storageKey);
+    if (savedProgress) {
+        const progress = JSON.parse(savedProgress);
+        const checkboxes = document.querySelectorAll('.form-check-input');
+        
+        checkboxes.forEach((checkbox, index) => {
+            if (progress[index]) {
+                checkbox.checked = true;
+            }
+        });
+    }
+}

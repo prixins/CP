@@ -31,89 +31,208 @@
             <div class="topic-filters">
                 <button class="filter-btn active" data-filter="all">All Topics</button>
                 <button class="filter-btn" data-filter="basics">Basics</button>
-                <button class="filter-btn" data-filter="intermediate">Intermediate</button>
-                <button class="filter-btn" data-filter="advanced">Advanced</button>
-                <button class="filter-btn" data-filter="data">Data Structures</button>
                 <button class="filter-btn" data-filter="algorithms">Algorithms</button>
+                <button class="filter-btn" data-filter="data">Data Structures</button>
+                <button class="filter-btn" data-filter="graphs">Graph Algorithms</button>
+                <button class="filter-btn" data-filter="advanced">Advanced</button>
             </div>
-                <!-- Basics Category -->
-                <div class="topic-category" id="basics">
-                    <h3>Basics</h3>
-                    <div class="topic-list">
-                        <div class="topic-card" data-category="basics">
-                            <h4>Variables & Data Types</h4>
-                            <p>Understanding variables, primitive types, and type conversion</p>
-                            <a href="topics/variable.html" class="btn btn-primary">Learn</a>
-                        </div>
-                        <div class="topic-card" data-category="basics">
-                            <h4>Operators</h4>
-                            <p>Arithmetic, assignment, comparison, and logical operators</p>
-                            <a href="topics/operators.html" class="btn btn-primary">Learn</a>
-                        </div>
-                        <div class="topic-card" data-category="basics">
-                            <h4>Conditional Statements</h4>
-                            <p>If/else statements, switch cases, and ternary operators</p>
-                            <a href="topics/conditionals.html" class="btn btn-primary">Learn</a>
-                        </div>
-                        <div class="topic-card" data-category="basics">
-                            <h4>Loops</h4>
-                            <p>For loops, while loops, and loop control statements</p>
-                            <a href="topics/loops.html" class="btn btn-primary">Learn</a>
-                        </div>
+
+            <!-- Basic Techniques -->
+            <div class="topic-category" id="basics">
+                <h3>Basic Techniques</h3>
+                <div class="topic-list">
+                    <div class="topic-card" data-category="basics">
+                        <h4>Introduction to Programming</h4>
+                        <p>Programming languages, input/output, working with numbers</p>
+                        <a href="topics/introduction.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="basics">
+                        <h4>Variables & Data Types</h4>
+                        <p>Understanding variables, primitive types, and type conversion</p>
+                        <a href="topics/variable.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="basics">
+                        <h4>Operators</h4>
+                        <p>Arithmetic, assignment, comparison, and logical operators</p>
+                        <a href="topics/operators.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="basics">
+                        <h4>Conditional Statements</h4>
+                        <p>If/else statements, switch cases, and ternary operators</p>
+                        <a href="topics/conditionals.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="basics">
+                        <h4>Loops</h4>
+                        <p>For loops, while loops, and loop control statements</p>
+                        <a href="topics/loops.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="basics">
+                        <h4>Time Complexity</h4>
+                        <p>Understanding algorithm efficiency, calculation rules, complexity classes</p>
+                        <a href="topics/time-complexity.html" class="btn btn-primary">Learn</a>
                     </div>
                 </div>
+            </div>
 
-                <!-- Intermediate Category -->
-                <div class="topic-category" id="intermediate">
-                    <h3>Intermediate</h3>
-                    <div class="topic-list">
-                        <div class="topic-card" data-category="intermediate">
-                            <h4>Functions</h4>
-                            <p>Defining functions, parameters, return values, and scope</p>
-                            <a href="topics/functions.html" class="btn btn-primary">Learn</a>
-                        </div>
-                        <div class="topic-card" data-category="intermediate">
-                            <h4>Arrays</h4>
-                            <p>Creating, accessing, and manipulating arrays</p>
-                            <a href="topics/arrays.html" class="btn btn-primary">Learn</a>
-                        </div>
-                        <div class="topic-card" data-category="intermediate">
-                            <h4>Objects</h4>
-                            <p>Creating objects, properties, methods, and prototypes</p>
-                            <a href="topics/objects.html" class="btn btn-primary">Learn</a>
-                        </div>
-                        <div class="topic-card" data-category="intermediate">
-                            <h4>Error Handling</h4>
-                            <p>Try/catch blocks, throwing exceptions, and error types</p>
-                            <a href="topics/error-handling.html" class="btn btn-primary">Learn</a>
-                        </div>
+            <!-- Algorithms -->
+            <div class="topic-category" id="algorithms">
+                <h3>Algorithms</h3>
+                <div class="topic-list">
+                    <div class="topic-card" data-category="algorithms">
+                        <h4>Sorting Algorithms</h4>
+                        <p>Sorting theory, implementation and binary search techniques</p>
+                        <a href="topics/sorting.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="algorithms">
+                        <h4>Complete Search</h4>
+                        <p>Generating subsets, permutations, backtracking techniques</p>
+                        <a href="topics/complete-search.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="algorithms">
+                        <h4>Greedy Algorithms</h4>
+                        <p>Coin problem, scheduling, tasks and deadlines, optimization</p>
+                        <a href="topics/greedy.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="algorithms">
+                        <h4>Dynamic Programming</h4>
+                        <p>Problem optimization, longest sequences, knapsack problems</p>
+                        <a href="topics/dynamic-programming.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="algorithms">
+                        <h4>Amortized Analysis</h4>
+                        <p>Two pointer methods, nearest elements, sliding window techniques</p>
+                        <a href="topics/amortized-analysis.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="algorithms">
+                        <h4>Range Queries</h4>
+                        <p>Static array queries, binary indexed trees, segment trees</p>
+                        <a href="topics/range-queries.html" class="btn btn-primary">Learn</a>
                     </div>
                 </div>
+            </div>
 
-                <!-- Advanced Category -->
-                <div class="topic-category" id="advanced">
-                    <h3>Advanced</h3>
-                    <div class="topic-list">
-                        <div class="topic-card" data-category="advanced">
-                            <h4>Object-Oriented Programming</h4>
-                            <p>Classes, inheritance, encapsulation, and polymorphism</p>
-                            <a href="topics/oop.html" class="btn btn-primary">Learn</a>
-                        </div>
-                        <div class="topic-card" data-category="advanced">
-                            <h4>Asynchronous Programming</h4>
-                            <p>Callbacks, Promises, async/await, and event loop</p>
-                            <a href="topics/async.html" class="btn btn-primary">Learn</a>
-                        </div>
-                        <div class="topic-card" data-category="advanced">
-                            <h4>Design Patterns</h4>
-                            <p>Common design patterns and their implementations</p>
-                            <a href="topics/design-patterns.html" class="btn btn-primary">Learn</a>
-                        </div>
-                        <div class="topic-card" data-category="advanced">
-                            <h4>Memory Management</h4>
-                            <p>Understanding memory allocation, garbage collection, and optimization</p>
-                            <a href="topics/memory-management.html" class="btn btn-primary">Learn</a>
-                        </div>
+            <!-- Data Structures -->
+            <div class="topic-category" id="data">
+                <h3>Data Structures</h3>
+                <div class="topic-list">
+                    <div class="topic-card" data-category="data">
+                        <h4>Dynamic Arrays</h4>
+                        <p>Creating, accessing, and manipulating dynamic arrays</p>
+                        <a href="topics/dynamic-arrays.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="data">
+                        <h4>Set Structures</h4>
+                        <p>Working with sets, operations and implementation techniques</p>
+                        <a href="topics/set-structures.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="data">
+                        <h4>Map Structures</h4>
+                        <p>Key-value pairs, hash maps, and dictionary implementations</p>
+                        <a href="topics/map-structures.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="data">
+                        <h4>Bit Manipulation</h4>
+                        <p>Bit representation, operations, and optimization techniques</p>
+                        <a href="topics/bit-manipulation.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="data">
+                        <h4>Advanced Data Structures</h4>
+                        <p>Iterators, ranges, and specialized data structures</p>
+                        <a href="topics/advanced-structures.html" class="btn btn-primary">Learn</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graph Algorithms -->
+            <div class="topic-category" id="graphs">
+                <h3>Graph Algorithms</h3>
+                <div class="topic-list">
+                    <div class="topic-card" data-category="graphs">
+                        <h4>Basics of Graphs</h4>
+                        <p>Graph terminology and representation techniques</p>
+                        <a href="topics/graph-basics.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="graphs">
+                        <h4>Graph Traversal</h4>
+                        <p>Depth-first search, breadth-first search and applications</p>
+                        <a href="topics/graph-traversal.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="graphs">
+                        <h4>Shortest Paths</h4>
+                        <p>Bellman-Ford, Dijkstra's, and Floyd-Warshall algorithms</p>
+                        <a href="topics/shortest-paths.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="graphs">
+                        <h4>Tree Algorithms</h4>
+                        <p>Tree traversal, diameter, paths and binary trees</p>
+                        <a href="topics/tree-algorithms.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="graphs">
+                        <h4>Spanning Trees</h4>
+                        <p>Kruskal's algorithm, union-find, and Prim's algorithm</p>
+                        <a href="topics/spanning-trees.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="graphs">
+                        <h4>Directed Graphs</h4>
+                        <p>Topological sorting, dynamic programming, and cycle detection</p>
+                        <a href="topics/directed-graphs.html" class="btn btn-primary">Learn</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Topics -->
+            <div class="topic-category" id="advanced">
+                <h3>Advanced Topics</h3>
+                <div class="topic-list">
+                    <div class="topic-card" data-category="advanced">
+                        <h4>Number Theory</h4>
+                        <p>Primes, factors, modular arithmetic and equation solving</p>
+                        <a href="topics/number-theory.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="advanced">
+                        <h4>Combinatorics</h4>
+                        <p>Binomial coefficients, Catalan numbers, inclusion-exclusion</p>
+                        <a href="topics/combinatorics.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="advanced">
+                        <h4>Matrices</h4>
+                        <p>Matrix operations, linear recurrences and graph representations</p>
+                        <a href="topics/matrices.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="advanced">
+                        <h4>Probability</h4>
+                        <p>Calculation, events, random variables and randomized algorithms</p>
+                        <a href="topics/probability.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="advanced">
+                        <h4>Game Theory</h4>
+                        <p>Game states, Nim game, and the Sprague-Grundy theorem</p>
+                        <a href="topics/game-theory.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="advanced">
+                        <h4>String Algorithms</h4>
+                        <p>Trie structure, string hashing, and pattern matching</p>
+                        <a href="topics/string-algorithms.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="advanced">
+                        <h4>Square Root Algorithms</h4>
+                        <p>Combining algorithms, integer partitions, and Mo's algorithm</p>
+                        <a href="topics/square-root-algorithms.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="advanced">
+                        <h4>Advanced Segment Trees</h4>
+                        <p>Lazy propagation, dynamic trees, and multi-dimensional structures</p>
+                        <a href="topics/advanced-segment-trees.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="advanced">
+                        <h4>Computational Geometry</h4>
+                        <p>Complex numbers, points and lines, polygon area calculation</p>
+                        <a href="topics/geometry.html" class="btn btn-primary">Learn</a>
+                    </div>
+                    <div class="topic-card" data-category="advanced">
+                        <h4>Sweep Line Algorithms</h4>
+                        <p>Intersection points, closest pair, and convex hull problems</p>
+                        <a href="topics/sweep-line.html" class="btn btn-primary">Learn</a>
                     </div>
                 </div>
             </div>
@@ -138,14 +257,11 @@
                 <div class="footer-section">
                     <h3>Connect With Us</h3>
                     <div class="social-icons">
-                        <a href="https://discord.gg/vn3deZTE" target="_blank" rel="noopener noreferrer">
+                        <a href="https://discord.gg/maBxybfxf6" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-discord"></i>
                         </a>
                     </div>
                 </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2025 progguide</p>
             </div>
         </div>
     </footer>
