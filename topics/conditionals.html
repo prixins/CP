@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditional Statements - progguide</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>progguide</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../topics.html">Topics</a></li>
+                    <li><a href="../contact.html">Contact</a></li>
+                    <li>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                        <span id="theme-text">Dark</span>
+                    </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="topic-content">
+            <div class="topic-navigation">
+                <a href="variable.html" class="nav-prev"><i class="fas fa-arrow-left"></i> Previous: Variables & Data Types</a>
+                <a href="loops.html" class="nav-next">Next: Loops <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <article class="topic">
+                <h2>Conditional Statements</h2>
+                <div class="topic-metadata">
+                    <span><i class="fas fa-book"></i> Basics</span>
+                    <span><i class="fas fa-code"></i> 5 examples</span>
+                </div>
+                
+                <div class="topic-intro">
+                    <p>Conditional statements allow your program to make decisions and execute different code paths based on certain conditions. They are the foundation of program logic and enable your code to respond to different situations.</p>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>If Statement</h3>
+                    <p>The if statement executes code only when a condition is true:</p>
+                    
+                    <pre><code class="language-cpp">
+#include <iostream>
+using namespace std;
+
+int main() {
+    int age;
+    cout << "Enter your age: ";
+    cin >> age;
+    
+    if (age >= 18) {
+        cout << "You are an adult!" << endl;
+    }
+    
+    if (age < 13) {
+        cout << "You are a child!" << endl;
+    }
+    
+    return 0;
+}
+                    </code></pre>
+                    
+                    <div class="info-box">
+                        <h4>If Statement Syntax:</h4>
+                        <ul>
+                            <li>Condition must be in parentheses</li>
+                            <li>Code block is enclosed in curly braces</li>
+                            <li>Condition evaluates to true or false</li>
+                            <li>Braces are optional for single statements</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>If-Else Statement</h3>
+                    <p>The if-else statement provides an alternative path when the condition is false:</p>
+                    
+                    <pre><code class="language-cpp">
+int score;
+cout << "Enter your test score: ";
+cin >> score;
+
+if (score >= 60) {
+    cout << "You passed!" << endl;
+} else {
+    cout << "You failed. Study harder!" << endl;
+}
+
+// Another example with multiple conditions
+if (score >= 90) {
+    cout << "Grade: A" << endl;
+} else if (score >= 80) {
+    cout << "Grade: B" << endl;
+} else if (score >= 70) {
+    cout << "Grade: C" << endl;
+} else if (score >= 60) {
+    cout << "Grade: D" << endl;
+} else {
+    cout << "Grade: F" << endl;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Nested If Statements</h3>
+                    <p>You can place if statements inside other if statements for complex decision making:</p>
+                    
+                    <pre><code class="language-cpp">
+int temperature, humidity;
+cout << "Enter temperature (F) and humidity (%): ";
+cin >> temperature >> humidity;
+
+if (temperature > 70) {
+    if (humidity > 60) {
+        cout << "It's hot and humid!" << endl;
+    } else {
+        cout << "It's hot but dry." << endl;
+    }
+} else {
+    if (humidity > 60) {
+        cout << "It's cool and humid." << endl;
+    } else {
+        cout << "It's cool and dry." << endl;
+    }
+}
+                    </code></pre>
+                    
+                    <div class="warning-box">
+                        <h4>Best Practice:</h4>
+                        <p>Avoid excessive nesting as it makes code hard to read. Consider using logical operators or separate functions for complex conditions.</p>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Switch Statement</h3>
+                    <p>The switch statement is useful when you have multiple possible values for a single variable:</p>
+                    
+                    <pre><code class="language-cpp">
+char grade;
+cout << "Enter your letter grade: ";
+cin >> grade;
+
+switch (grade) {
+    case 'A':
+    case 'a':
+        cout << "Excellent! (90-100)" << endl;
+        break;
+    case 'B':
+    case 'b':
+        cout << "Good! (80-89)" << endl;
+        break;
+    case 'C':
+    case 'c':
+        cout << "Average (70-79)" << endl;
+        break;
+    case 'D':
+    case 'd':
+        cout << "Below Average (60-69)" << endl;
+        break;
+    case 'F':
+    case 'f':
+        cout << "Failing (below 60)" << endl;
+        break;
+    default:
+        cout << "Invalid grade entered!" << endl;
+        break;
+}
+                    </code></pre>
+                    
+                    <div class="tip-box">
+                        <h4>Switch Statement Rules:</h4>
+                        <ul>
+                            <li>Only works with integers, characters, and enums</li>
+                            <li>Each case must end with <code>break;</code> to prevent fall-through</li>
+                            <li>Use <code>default:</code> for cases not explicitly handled</li>
+                            <li>Multiple cases can share the same code block</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Ternary Operator</h3>
+                    <p>The ternary operator provides a shorthand way to write simple if-else statements:</p>
+                    
+                    <pre><code class="language-cpp">
+int a = 10, b = 20;
+
+// Traditional if-else
+int max1;
+if (a > b) {
+    max1 = a;
+} else {
+    max1 = b;
+}
+
+// Ternary operator (shorter)
+int max2 = (a > b) ? a : b;
+
+cout << "Maximum: " << max2 << endl;
+
+// More examples
+string status = (age >= 18) ? "Adult" : "Minor";
+cout << "Status: " << status << endl;
+
+// Can be nested (but avoid for readability)
+string result = (score >= 90) ? "A" : 
+                (score >= 80) ? "B" : 
+                (score >= 70) ? "C" : "F";
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Common Patterns and Best Practices</h3>
+                    
+                    <div class="data-types">
+                        <div class="data-type">
+                            <h4>Range Checking</h4>
+                            <pre><code class="language-cpp">
+// Check if value is in range
+if (x >= 1 && x <= 100) {
+    cout << "Valid range" << endl;
+}
+
+// Check multiple ranges
+if (x < 0 || x > 100) {
+    cout << "Out of range" << endl;
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="data-type">
+                            <h4>String Comparison</h4>
+                            <pre><code class="language-cpp">
+string input;
+cin >> input;
+
+if (input == "yes" || input == "y") {
+    cout << "Confirmed!" << endl;
+} else if (input == "no" || input == "n") {
+    cout << "Cancelled." << endl;
+}
+                            </code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h4>Performance Tips:</h4>
+                        <ul>
+                            <li>Put the most likely conditions first in if-else chains</li>
+                            <li>Use switch for many equality comparisons on the same variable</li>
+                            <li>Combine conditions with logical operators when appropriate</li>
+                            <li>Consider early returns to reduce nesting</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+            
+            <div class="practice-section">
+                <h3 class="mt-4">CodeForces Challenge Problems</h3>
+                <p>Practice conditional logic with these problems:</p>
+                
+                <div class="codeforces-problems">
+                    <div class="problem-card">
+                        <div class="difficulty beginner">Beginner</div>
+                        <h4>Young Physicist</h4>
+                        <p>Use conditional statements to check if forces are in equilibrium.</p>
+                        <div class="tags">
+                            <span class="tag">Conditionals</span>
+                            <span class="tag">Math</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/69/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <div class="difficulty easy">Easy</div>
+                        <h4>Beautiful Matrix</h4>
+                        <p>Practice nested conditionals and coordinate checking.</p>
+                        <div class="tags">
+                            <span class="tag">Arrays</span>
+                            <span class="tag">Conditionals</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/263/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <div class="difficulty easy">Easy</div>
+                        <h4>Stones on the Table</h4>
+                        <p>Use conditionals to count minimum changes needed.</p>
+                        <div class="tags">
+                            <span class="tag">Strings</span>
+                            <span class="tag">Logic</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/266/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <div class="difficulty medium">Medium</div>
+                        <h4>Helpful Maths</h4>
+                        <p>Combine string processing with conditional logic.</p>
+                        <div class="tags">
+                            <span class="tag">Strings</span>
+                            <span class="tag">Sorting</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/339/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                </div>
+                
+                <div class="practice-tips">
+                    <h4><i class="fas fa-lightbulb"></i> Conditional Logic Tips</h4>
+                    <ul>
+                        <li>Always consider edge cases and boundary conditions</li>
+                        <li>Test your logic with different input values</li>
+                        <li>Use logical operators to simplify complex conditions</li>
+                        <li>Remember operator precedence in complex expressions</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic-navigation">
+                <a href="variable.html" class="nav-prev"><i class="fas fa-arrow-left"></i> Previous: Variables & Data Types</a>
+                <a href="loops.html" class="nav-next">Next: Loops <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>progguide</h3>
+                    <p>Learn programming the right way</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../topics.html">Topics</a></li>
+                        <li><a href="../contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="https://discord.gg/maBxybfxf6" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

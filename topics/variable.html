@@ -18,9 +18,15 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="../topics.html" class="active">Topics</a></li>
-                    <li><a href="../contact.html">Contact</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="topics.html">Topics</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                        <span id="theme-text">Dark</span>
+                    </button>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -358,5 +364,6 @@ const BASE_URL = "https://api.example.com";
         </div>
     </footer>
 
+    <script src="../script.js"></script>
 </body>
 </html>

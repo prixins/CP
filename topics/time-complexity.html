@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Complexity - progguide</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>progguide</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../topics.html">Topics</a></li>
+                    <li><a href="../contact.html">Contact</a></li>
+                    <li>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                        <span id="theme-text">Dark</span>
+                    </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="topic-content">
+            <div class="topic-navigation">
+                <a href="loops.html" class="nav-prev"><i class="fas fa-arrow-left"></i> Previous: Loops</a>
+                <a href="sorting.html" class="nav-next">Next: Sorting Algorithms <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <article class="topic">
+                <h2>Time Complexity</h2>
+                <div class="topic-metadata">
+                    <span><i class="fas fa-book"></i> Algorithm Analysis</span>
+                    <span><i class="fas fa-chart-line"></i> Performance</span>
+                </div>
+                
+                <div class="topic-intro">
+                    <p>Time complexity is a way to analyze how the runtime of an algorithm grows as the input size increases. Understanding time complexity is crucial for writing efficient programs and choosing the right algorithms for different problems.</p>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>What is Time Complexity?</h3>
+                    <p>Time complexity describes the amount of time an algorithm takes to run as a function of the input size. It helps us understand how algorithms scale and compare their efficiency.</p>
+                    
+                    <div class="info-box">
+                        <h4>Key Points:</h4>
+                        <ul>
+                            <li>We focus on the worst-case scenario</li>
+                            <li>We ignore constant factors and lower-order terms</li>
+                            <li>We use Big O notation to express complexity</li>
+                            <li>Input size is typically denoted as 'n'</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Common Time Complexities</h3>
+                    
+                    <div class="data-types">
+                        <div class="data-type">
+                            <h4>O(1) - Constant Time</h4>
+                            <p>Execution time doesn't change with input size</p>
+                            <pre><code class="language-cpp">
+int getFirstElement(vector<int>& arr) {
+    return arr[0];  // Always takes the same time
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="data-type">
+                            <h4>O(log n) - Logarithmic Time</h4>
+                            <p>Execution time grows logarithmically</p>
+                            <pre><code class="language-cpp">
+// Binary search
+int binarySearch(vector<int>& arr, int target) {
+    int left = 0, right = arr.size() - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (arr[mid] == target) return mid;
+        else if (arr[mid] < target) left = mid + 1;
+        else right = mid - 1;
+    }
+    return -1;
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="data-type">
+                            <h4>O(n) - Linear Time</h4>
+                            <p>Execution time grows linearly with input size</p>
+                            <pre><code class="language-cpp">
+int findMax(vector<int>& arr) {
+    int maxVal = arr[0];
+    for (int i = 1; i < arr.size(); i++) {
+        if (arr[i] > maxVal) {
+            maxVal = arr[i];
+        }
+    }
+    return maxVal;
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="data-type">
+                            <h4>O(n²) - Quadratic Time</h4>
+                            <p>Execution time grows quadratically</p>
+                            <pre><code class="language-cpp">
+// Bubble sort
+void bubbleSort(vector<int>& arr) {
+    int n = arr.size();
+    for (int i = 0; i < n-1; i++) {
+        for (int j = 0; j < n-i-1; j++) {
+            if (arr[j] > arr[j+1]) {
+                swap(arr[j], arr[j+1]);
+            }
+        }
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Analyzing Time Complexity</h3>
+                    
+                    <div class="tip-box">
+                        <h4>Rules for Analysis:</h4>
+                        <ol>
+                            <li>Drop constants: O(2n) becomes O(n)</li>
+                            <li>Drop lower-order terms: O(n² + n) becomes O(n²)</li>
+                            <li>Focus on the dominant term</li>
+                            <li>Consider worst-case scenario</li>
+                        </ol>
+                    </div>
+                    
+                    <pre><code class="language-cpp">
+// Example: Analyzing nested loops
+void example(int n) {
+    // O(n) - single loop
+    for (int i = 0; i < n; i++) {
+        cout << i << " ";
+    }
+    
+    // O(n²) - nested loops
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cout << i << "," << j << " ";
+        }
+    }
+    
+    // O(log n) - loop dividing by 2
+    for (int i = 1; i < n; i *= 2) {
+        cout << i << " ";
+    }
+}
+// Overall complexity: O(n) + O(n²) + O(log n) = O(n²)
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Space Complexity</h3>
+                    <p>Space complexity measures the amount of memory an algorithm uses relative to input size.</p>
+                    
+                    <pre><code class="language-cpp">
+// O(1) space - constant extra memory
+int sum(vector<int>& arr) {
+    int total = 0;  // Only one extra variable
+    for (int x : arr) {
+        total += x;
+    }
+    return total;
+}
+
+// O(n) space - memory grows with input
+vector<int> reverse(vector<int>& arr) {
+    vector<int> result;  // New array of size n
+    for (int i = arr.size()-1; i >= 0; i--) {
+        result.push_back(arr[i]);
+    }
+    return result;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Complexity Comparison</h3>
+                    
+                    <div class="warning-box">
+                        <h4>Performance Order (Best to Worst):</h4>
+                        <p>O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(n³) < O(2ⁿ) < O(n!)</p>
+                        
+                        <p><strong>For n = 1,000,000:</strong></p>
+                        <ul>
+                            <li>O(1): 1 operation</li>
+                            <li>O(log n): ~20 operations</li>
+                            <li>O(n): 1,000,000 operations</li>
+                            <li>O(n²): 1,000,000,000,000 operations</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+            
+            <div class="practice-section">
+                <h3 class="mt-4">CodeForces Challenge Problems</h3>
+                <p>Practice analyzing and optimizing algorithms:</p>
+                
+                <div class="codeforces-problems">
+                    <div class="problem-card">
+                        <div class="difficulty easy">Easy</div>
+                        <h4>Linear Search</h4>
+                        <p>Practice O(n) algorithms with simple search problems.</p>
+                        <div class="tags">
+                            <span class="tag">Search</span>
+                            <span class="tag">Linear</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/1/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <div class="difficulty medium">Medium</div>
+                        <h4>Binary Search</h4>
+                        <p>Implement O(log n) binary search algorithms.</p>
+                        <div class="tags">
+                            <span class="tag">Binary Search</span>
+                            <span class="tag">Logarithmic</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/778/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <div class="difficulty medium">Medium</div>
+                        <h4>Sorting Comparison</h4>
+                        <p>Compare different sorting algorithms and their complexities.</p>
+                        <div class="tags">
+                            <span class="tag">Sorting</span>
+                            <span class="tag">Comparison</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/451/B" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                </div>
+                
+                <div class="practice-tips">
+                    <h4><i class="fas fa-lightbulb"></i> Complexity Analysis Tips</h4>
+                    <ul>
+                        <li>Always consider the worst-case scenario first</li>
+                        <li>Count nested loops carefully - each level multiplies complexity</li>
+                        <li>Remember that recursive calls add to time complexity</li>
+                        <li>Consider both time and space complexity in your solutions</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic-navigation">
+                <a href="loops.html" class="nav-prev"><i class="fas fa-arrow-left"></i> Previous: Loops</a>
+                <a href="sorting.html" class="nav-next">Next: Sorting Algorithms <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>progguide</h3>
+                    <p>Learn programming the right way</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../topics.html">Topics</a></li>
+                        <li><a href="../contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="https://discord.gg/maBxybfxf6" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

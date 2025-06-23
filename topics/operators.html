@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operators - progguide</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>progguide</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../topics.html">Topics</a></li>
+                    <li><a href="../contact.html">Contact</a></li>
+                    <li>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                        <span id="theme-text">Dark</span>
+                    </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="topic-content">
+            <div class="topic-navigation">
+                <a href="introduction.html" class="nav-prev"><i class="fas fa-arrow-left"></i> Previous: Introduction</a>
+                <a href="variable.html" class="nav-next">Next: Variables & Data Types <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <article class="topic">
+                <h2>Operators</h2>
+                <div class="topic-metadata">
+                    <span><i class="fas fa-book"></i> Basics</span>
+                    <span><i class="fas fa-code"></i> 6 examples</span>
+                </div>
+                
+                <div class="topic-intro">
+                    <p>Operators are symbols that tell the compiler to perform specific mathematical, relational, or logical operations. Understanding operators is crucial for writing effective programs that can manipulate data and make decisions.</p>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Arithmetic Operators</h3>
+                    <p>These operators perform basic mathematical operations:</p>
+                    
+                    <div class="data-types">
+                        <div class="data-type">
+                            <h4>Basic Operations</h4>
+                            <ul>
+                                <li><strong>+</strong> Addition</li>
+                                <li><strong>-</strong> Subtraction</li>
+                                <li><strong>*</strong> Multiplication</li>
+                                <li><strong>/</strong> Division</li>
+                                <li><strong>%</strong> Modulus (remainder)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="data-type">
+                            <h4>Increment/Decrement</h4>
+                            <ul>
+                                <li><strong>++</strong> Increment by 1</li>
+                                <li><strong>--</strong> Decrement by 1</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <pre><code class="language-cpp">
+int a = 10, b = 3;
+cout << "Addition: " << a + b << endl;        // 13
+cout << "Subtraction: " << a - b << endl;     // 7
+cout << "Multiplication: " << a * b << endl;  // 30
+cout << "Division: " << a / b << endl;        // 3 (integer division)
+cout << "Modulus: " << a % b << endl;         // 1
+
+// Increment and Decrement
+int x = 5;
+cout << "x++: " << x++ << endl;  // Prints 5, then x becomes 6
+cout << "++x: " << ++x << endl;  // x becomes 7, then prints 7
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Assignment Operators</h3>
+                    <p>These operators assign values to variables:</p>
+                    
+                    <pre><code class="language-cpp">
+int x = 10;
+
+x += 5;   // x = x + 5; (x becomes 15)
+x -= 3;   // x = x - 3; (x becomes 12)
+x *= 2;   // x = x * 2; (x becomes 24)
+x /= 4;   // x = x / 4; (x becomes 6)
+x %= 5;   // x = x % 5; (x becomes 1)
+
+cout << "Final value of x: " << x << endl; // 1
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Comparison Operators</h3>
+                    <p>These operators compare values and return true or false:</p>
+                    
+                    <pre><code class="language-cpp">
+int a = 10, b = 20;
+
+cout << "a == b: " << (a == b) << endl;  // false (0)
+cout << "a != b: " << (a != b) << endl;  // true (1)
+cout << "a < b: " << (a < b) << endl;    // true (1)
+cout << "a > b: " << (a > b) << endl;    // false (0)
+cout << "a <= b: " << (a <= b) << endl;  // true (1)
+cout << "a >= b: " << (a >= b) << endl;  // false (0)
+                    </code></pre>
+                    
+                    <div class="info-box">
+                        <h4>Comparison Operators:</h4>
+                        <ul>
+                            <li><strong>==</strong> Equal to</li>
+                            <li><strong>!=</strong> Not equal to</li>
+                            <li><strong>&lt;</strong> Less than</li>
+                            <li><strong>&gt;</strong> Greater than</li>
+                            <li><strong>&lt;=</strong> Less than or equal to</li>
+                            <li><strong>&gt;=</strong> Greater than or equal to</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Logical Operators</h3>
+                    <p>These operators perform logical operations and are used to combine or modify boolean expressions:</p>
+                    
+                    <pre><code class="language-cpp">
+bool p = true, q = false;
+
+cout << "p && q: " << (p && q) << endl;  // false (logical AND)
+cout << "p || q: " << (p || q) << endl;  // true (logical OR)
+cout << "!p: " << (!p) << endl;          // false (logical NOT)
+
+// Practical example
+int age = 25;
+bool hasLicense = true;
+
+bool canDrive = (age >= 18) && hasLicense;
+cout << "Can drive: " << canDrive << endl; // true
+                    </code></pre>
+                    
+                    <div class="warning-box">
+                        <h4>Short-Circuit Evaluation:</h4>
+                        <p>In logical AND (&&), if the first condition is false, the second condition is not evaluated. In logical OR (||), if the first condition is true, the second condition is not evaluated.</p>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Bitwise Operators</h3>
+                    <p>These operators work at the bit level and are useful for low-level programming and optimization:</p>
+                    
+                    <pre><code class="language-cpp">
+int a = 5;  // Binary: 101
+int b = 3;  // Binary: 011
+
+cout << "a & b: " << (a & b) << endl;   // 1 (AND)
+cout << "a | b: " << (a | b) << endl;   // 7 (OR)
+cout << "a ^ b: " << (a ^ b) << endl;   // 6 (XOR)
+cout << "~a: " << (~a) << endl;         // -6 (NOT)
+cout << "a << 1: " << (a << 1) << endl; // 10 (left shift)
+cout << "a >> 1: " << (a >> 1) << endl; // 2 (right shift)
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Operator Precedence</h3>
+                    <p>When multiple operators appear in an expression, they are evaluated in a specific order:</p>
+                    
+                    <pre><code class="language-cpp">
+int result = 2 + 3 * 4;  // Multiplication first: 2 + 12 = 14
+cout << result << endl;  // 14
+
+// Use parentheses to change precedence
+result = (2 + 3) * 4;    // Addition first: 5 * 4 = 20
+cout << result << endl;  // 20
+
+// Complex expression
+result = 10 + 5 * 2 - 3 / 3;  // 10 + 10 - 1 = 19
+cout << result << endl;       // 19
+                    </code></pre>
+                    
+                    <div class="tip-box">
+                        <h4>Precedence Order (High to Low):</h4>
+                        <ol>
+                            <li>Parentheses ()</li>
+                            <li>Unary operators (++, --, !)</li>
+                            <li>Multiplication, Division, Modulus (*, /, %)</li>
+                            <li>Addition, Subtraction (+, -)</li>
+                            <li>Comparison operators (&lt;, &gt;, &lt;=, &gt;=)</li>
+                            <li>Equality operators (==, !=)</li>
+                            <li>Logical AND (&&)</li>
+                            <li>Logical OR (||)</li>
+                            <li>Assignment operators (=, +=, -=, etc.)</li>
+                        </ol>
+                    </div>
+                </div>
+            </article>
+            
+            <div class="practice-section">
+                <h3 class="mt-4">CodeForces Challenge Problems</h3>
+                <p>Practice using different operators with these problems:</p>
+                
+                <div class="codeforces-problems">
+                    <div class="problem-card">
+                        <div class="difficulty beginner">Beginner</div>
+                        <h4>Theatre Square</h4>
+                        <p>Use arithmetic operators to calculate how many flagstones are needed to pave a square.</p>
+                        <div class="tags">
+                            <span class="tag">Math</span>
+                            <span class="tag">Arithmetic</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/1/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <div class="difficulty easy">Easy</div>
+                        <h4>Team</h4>
+                        <p>Practice logical operators by determining when a team can solve a problem.</p>
+                        <div class="tags">
+                            <span class="tag">Logic</span>
+                            <span class="tag">Conditionals</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/231/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <div class="difficulty easy">Easy</div>
+                        <h4>Petya and Strings</h4>
+                        <p>Use comparison operators to compare strings lexicographically.</p>
+                        <div class="tags">
+                            <span class="tag">Strings</span>
+                            <span class="tag">Comparison</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/112/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                </div>
+                
+                <div class="practice-tips">
+                    <h4><i class="fas fa-lightbulb"></i> Operator Tips</h4>
+                    <ul>
+                        <li>Use parentheses to make your intentions clear</li>
+                        <li>Be careful with integer division - it truncates decimals</li>
+                        <li>Remember that comparison operators return boolean values</li>
+                        <li>Understand operator precedence to avoid bugs</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic-navigation">
+                <a href="introduction.html" class="nav-prev"><i class="fas fa-arrow-left"></i> Previous: Introduction</a>
+                <a href="variable.html" class="nav-next">Next: Variables & Data Types <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>progguide</h3>
+                    <p>Learn programming the right way</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../topics.html">Topics</a></li>
+                        <li><a href="../contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="https://discord.gg/maBxybfxf6" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

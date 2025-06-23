@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Programming - progguide</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>progguide</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../topics.html">Topics</a></li>
+                    <li><a href="../contact.html">Contact</a></li>
+                    <li>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                        <span id="theme-text">Dark</span>
+                    </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="topic-content">
+            <div class="topic-navigation">
+                <a href="../topics.html" class="nav-prev"><i class="fas fa-arrow-left"></i> Back to Topics</a>
+                <a href="operators.html" class="nav-next">Next: Operators <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <article class="topic">
+                <h2>Introduction to Programming</h2>
+                <div class="topic-metadata">
+                    <span><i class="fas fa-book"></i> Basics</span>
+                    <span><i class="fas fa-code"></i> 3 examples</span>
+                </div>
+                
+                <div class="topic-intro">
+                    <p>Programming is the process of creating instructions for computers to execute. In this introduction, you'll learn about programming languages, how to write your first program, and the fundamental concepts that form the foundation of all programming.</p>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>What is Programming?</h3>
+                    <p>Programming is the art and science of solving problems by writing step-by-step instructions that a computer can understand and execute. These instructions, called code, tell the computer exactly what to do to accomplish a specific task.</p>
+                    
+                    <div class="info-box">
+                        <h4>Key Programming Concepts:</h4>
+                        <ul>
+                            <li>Algorithm: A sequence of steps to solve a problem</li>
+                            <li>Syntax: The rules and structure of a programming language</li>
+                            <li>Logic: The reasoning behind solving problems</li>
+                            <li>Debugging: Finding and fixing errors in code</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Your First Program</h3>
+                    <p>Let's start with the traditional "Hello, World!" program in C++:</p>
+                    
+                    <pre><code class="language-cpp">
+#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello, World!" << endl;
+    return 0;
+}
+                    </code></pre>
+                    
+                    <div class="tip-box">
+                        <h4>Understanding the Code:</h4>
+                        <ul>
+                            <li><code>#include &lt;iostream&gt;</code> - Includes input/output functionality</li>
+                            <li><code>using namespace std;</code> - Allows us to use standard library functions</li>
+                            <li><code>int main()</code> - The main function where program execution begins</li>
+                            <li><code>cout</code> - Outputs text to the console</li>
+                            <li><code>return 0;</code> - Indicates successful program execution</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Input and Output</h3>
+                    <p>Most programs need to interact with users by taking input and producing output:</p>
+                    
+                    <pre><code class="language-cpp">
+#include <iostream>
+using namespace std;
+
+int main() {
+    string name;
+    int age;
+    
+    cout << "Enter your name: ";
+    cin >> name;
+    
+    cout << "Enter your age: ";
+    cin >> age;
+    
+    cout << "Hello " << name << "! You are " << age << " years old." << endl;
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Working with Numbers</h3>
+                    <p>Programming often involves mathematical calculations:</p>
+                    
+                    <pre><code class="language-cpp">
+#include <iostream>
+using namespace std;
+
+int main() {
+    int num1, num2;
+    
+    cout << "Enter two numbers: ";
+    cin >> num1 >> num2;
+    
+    cout << "Sum: " << num1 + num2 << endl;
+    cout << "Difference: " << num1 - num2 << endl;
+    cout << "Product: " << num1 * num2 << endl;
+    cout << "Division: " << (double)num1 / num2 << endl;
+    
+    return 0;
+}
+                    </code></pre>
+                    
+                    <div class="warning-box">
+                        <h4>Common Beginner Mistakes:</h4>
+                        <ul>
+                            <li>Forgetting semicolons at the end of statements</li>
+                            <li>Mismatching parentheses or brackets</li>
+                            <li>Case sensitivity errors (C++ is case-sensitive)</li>
+                            <li>Integer division truncating decimal results</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+            
+            <div class="practice-section">
+                <h3 class="mt-4">CodeForces Challenge Problems</h3>
+                <p>Practice basic programming concepts with these beginner-friendly problems:</p>
+                
+                <div class="codeforces-problems">
+                    <div class="problem-card">
+                        <div class="difficulty beginner">Beginner</div>
+                        <h4>A+B</h4>
+                        <p>Read two integers and output their sum. Perfect for practicing basic input/output.</p>
+                        <div class="tags">
+                            <span class="tag">Input/Output</span>
+                            <span class="tag">Arithmetic</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/1/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <div class="difficulty beginner">Beginner</div>
+                        <h4>Hello World</h4>
+                        <p>Your first programming challenge - simply output "Hello World!"</p>
+                        <div class="tags">
+                            <span class="tag">Output</span>
+                            <span class="tag">Basics</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/4/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <div class="difficulty easy">Easy</div>
+                        <h4>Way Too Long Words</h4>
+                        <p>Practice string manipulation and conditional logic with word abbreviation.</p>
+                        <div class="tags">
+                            <span class="tag">Strings</span>
+                            <span class="tag">Conditionals</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/71/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                </div>
+                
+                <div class="practice-tips">
+                    <h4><i class="fas fa-lightbulb"></i> Getting Started Tips</h4>
+                    <ul>
+                        <li>Start with simple problems to build confidence</li>
+                        <li>Read problem statements carefully</li>
+                        <li>Test your code with the provided examples</li>
+                        <li>Don't worry about efficiency at first - focus on correctness</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic-navigation">
+                <a href="../topics.html" class="nav-prev"><i class="fas fa-arrow-left"></i> Back to Topics</a>
+                <a href="operators.html" class="nav-next">Next: Operators <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>progguide</h3>
+                    <p>Learn programming the right way</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../topics.html">Topics</a></li>
+                        <li><a href="../contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="https://discord.gg/maBxybfxf6" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

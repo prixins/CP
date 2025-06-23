@@ -215,6 +215,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Practice completion tracking
     initPracticeTracking();
+    
+    // Theme management
+    initializeTheme();
 });
 
 // Practice completion tracking functionality
@@ -235,14 +238,109 @@ function initPracticeTracking() {
     }
 }
 
-function toggleCompletionForm() {
-    const form = document.getElementById('completion-form');
-    if (form) {
-        if (form.style.display === 'none') {
-            form.style.display = 'block';
+// Theme management
+function initializeTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = savedTheme === 'auto' ? (systemPrefersDark ? 'dark' : 'light') : savedTheme;
+    
+    setTheme(theme);
+}
+
+function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    updateThemeToggle(theme);
+}
+
+function updateThemeToggle(theme) {
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    
+    if (themeIcon && themeText) {
+        if (theme === 'dark') {
+            themeIcon.className = 'fas fa-sun';
+            themeText.textContent = 'Light';
         } else {
-            form.style.display = 'none';
+            themeIcon.className = 'fas fa-moon';
+            themeText.textContent = 'Dark';
         }
+    }
+}
+
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+}
+
+// Topic filtering functionality
+function filterTopics() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const topicCards = document.querySelectorAll('.topic-card');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked button
+            button.classList.add('active');
+
+            const filter = button.getAttribute('data-filter');
+
+            topicCards.forEach(card => {
+                if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+}
+
+// Contact form accordion functionality
+function initializeAccordion() {
+    const accordionHeaders = document.querySelectorAll('.accordion-header');
+    
+    accordionHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+            const accordionItem = header.parentElement;
+            const isActive = accordionItem.classList.contains('active');
+            
+            // Close all accordion items
+            document.querySelectorAll('.accordion-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                accordionItem.classList.add('active');
+            }
+        });
+    });
+}
+
+// Progress tracking functionality
+function initializeProgressTracking() {
+    const checkboxes = document.querySelectorAll('.form-check-input');
+    const totalCount = document.getElementById('total-count');
+    const completedCount = document.getElementById('completed-count');
+    const progressBar = document.querySelector('.progress');
+
+    if (checkboxes.length > 0 && totalCount && completedCount && progressBar) {
+        // Load saved progress
+        loadProgress();
+        
+        // Update display
+        updateProgressDisplay();
+        
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                updateProgressDisplay();
+                saveProgress();
+            });
+        });
     }
 }
 
@@ -289,21 +387,186 @@ function updateProgressDisplay() {
     }
 }
 
-function loadSavedProgress() {
-    // Get current page
-    const currentPage = window.location.pathname;
-    const topicKey = currentPage.split('/').pop().replace('.html', '');
-    const storageKey = `${topicKey}Progress`;
+function saveProgress() {
+    const checkboxes = document.querySelectorAll('.form-check-input');
+    const progress = {};
     
-    const savedProgress = localStorage.getItem(storageKey);
+    checkboxes.forEach(checkbox => {
+        progress[checkbox.id] = checkbox.checked;
+    });
+    
+    localStorage.setItem('learningProgress', JSON.stringify(progress));
+}
+
+function loadProgress() {
+    const savedProgress = localStorage.getItem('learningProgress');
+    
     if (savedProgress) {
         const progress = JSON.parse(savedProgress);
-        const checkboxes = document.querySelectorAll('.form-check-input');
         
-        checkboxes.forEach((checkbox, index) => {
-            if (progress[index]) {
-                checkbox.checked = true;
+        Object.keys(progress).forEach(checkboxId => {
+            const checkbox = document.getElementById(checkboxId);
+            if (checkbox) {
+                checkbox.checked = progress[checkboxId];
             }
         });
     }
 }
+
+function toggleCompletionForm() {
+    const form = document.getElementById('completion-form');
+    if (form) {
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+// Smart Search Functionality
+const searchTopics = [
+    { title: "Introduction to Programming", description: "Programming languages, input/output, working with numbers", category: "Basics", url: "topics/introduction.html", keywords: ["basics", "intro", "programming", "start"] },
+    { title: "Variables & Data Types", description: "Understanding variables, primitive types, and type conversion", category: "Basics", url: "topics/variable.html", keywords: ["variables", "data", "types", "int", "string"] },
+    { title: "Operators", description: "Arithmetic, assignment, comparison, and logical operators", category: "Basics", url: "topics/operators.html", keywords: ["operators", "arithmetic", "logic", "comparison"] },
+    { title: "Conditional Statements", description: "If/else statements, switch cases, and ternary operators", category: "Basics", url: "topics/conditionals.html", keywords: ["if", "else", "switch", "conditional"] },
+    { title: "Loops", description: "For loops, while loops, and loop control statements", category: "Basics", url: "topics/loops.html", keywords: ["for", "while", "loop", "iteration"] },
+    { title: "Time Complexity", description: "Understanding algorithm efficiency, calculation rules, complexity classes", category: "Basics", url: "topics/time-complexity.html", keywords: ["time", "complexity", "big-o", "efficiency"] },
+    { title: "Sorting Algorithms", description: "Sorting theory, implementation and binary search techniques", category: "Algorithms", url: "topics/sorting.html", keywords: ["sort", "bubble", "merge", "quick", "binary search"] },
+    { title: "Complete Search", description: "Generating subsets, permutations, backtracking techniques", category: "Algorithms", url: "topics/complete-search.html", keywords: ["search", "backtrack", "permutation", "subset"] },
+    { title: "Greedy Algorithms", description: "Coin problem, scheduling, tasks and deadlines, optimization", category: "Algorithms", url: "topics/greedy.html", keywords: ["greedy", "optimization", "coin", "scheduling"] },
+    { title: "Dynamic Programming", description: "Optimization technique using overlapping subproblems", category: "Algorithms", url: "topics/dynamic-programming.html", keywords: ["dp", "dynamic", "memoization", "optimization"] },
+    { title: "Graph Basics", description: "Graph representation, terminology, and basic concepts", category: "Graph Algorithms", url: "topics/graph-basics.html", keywords: ["graph", "vertex", "edge", "adjacency"] },
+    { title: "Graph Traversal", description: "DFS, BFS, and their applications", category: "Graph Algorithms", url: "topics/graph-traversal.html", keywords: ["dfs", "bfs", "traversal", "search"] },
+    { title: "Shortest Paths", description: "Dijkstra, Bellman-Ford, Floyd-Warshall algorithms", category: "Graph Algorithms", url: "topics/shortest-paths.html", keywords: ["dijkstra", "shortest", "path", "bellman"] },
+    { title: "Dynamic Arrays", description: "Vector, resizing, implementation details", category: "Data Structures", url: "topics/dynamic-arrays.html", keywords: ["vector", "array", "dynamic", "resize"] },
+    { title: "Set Structures", description: "Set operations, balanced binary search trees", category: "Data Structures", url: "topics/set-structures.html", keywords: ["set", "bst", "tree", "balanced"] },
+    { title: "Map Structures", description: "Key-value pairs, hash tables, tree maps", category: "Data Structures", url: "topics/map-structures.html", keywords: ["map", "hash", "dictionary", "key-value"] },
+    { title: "Tree Algorithms", description: "Tree traversal, LCA, tree DP", category: "Advanced", url: "topics/tree-algorithms.html", keywords: ["tree", "lca", "traversal", "dp"] },
+    { title: "String Algorithms", description: "Pattern matching, string processing", category: "Advanced", url: "topics/string-algorithms.html", keywords: ["string", "pattern", "kmp", "matching"] },
+    { title: "Number Theory", description: "Prime numbers, GCD, modular arithmetic", category: "Advanced", url: "topics/number-theory.html", keywords: ["prime", "gcd", "modular", "number"] },
+    { title: "Competitive Programming Tips", description: "Contest strategies, debugging, optimization", category: "Advanced", url: "competitive.html", keywords: ["competitive", "contest", "tips", "strategy"] }
+];
+
+function initializeSearch() {
+    const searchInput = document.getElementById('global-search');
+    const searchResults = document.getElementById('search-results');
+    
+    if (!searchInput || !searchResults) return;
+    
+    let debounceTimer;
+    
+    searchInput.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            const query = this.value.trim().toLowerCase();
+            
+            if (query.length < 2) {
+                searchResults.style.display = 'none';
+                return;
+            }
+            
+            const results = searchTopics.filter(topic => {
+                return topic.title.toLowerCase().includes(query) ||
+                       topic.description.toLowerCase().includes(query) ||
+                       topic.category.toLowerCase().includes(query) ||
+                       topic.keywords.some(keyword => keyword.includes(query));
+            });
+            
+            displaySearchResults(results, query);
+        }, 300);
+    });
+    
+    searchInput.addEventListener('focus', function() {
+        if (this.value.trim().length >= 2) {
+            searchResults.style.display = 'block';
+        }
+    });
+    
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.search-box')) {
+            searchResults.style.display = 'none';
+        }
+    });
+    
+    // Keyboard navigation
+    searchInput.addEventListener('keydown', function(e) {
+        const items = searchResults.querySelectorAll('.search-result-item');
+        let currentIndex = Array.from(items).findIndex(item => item.classList.contains('selected'));
+        
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (currentIndex < items.length - 1) {
+                if (currentIndex >= 0) items[currentIndex].classList.remove('selected');
+                items[currentIndex + 1].classList.add('selected');
+            }
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (currentIndex > 0) {
+                items[currentIndex].classList.remove('selected');
+                items[currentIndex - 1].classList.add('selected');
+            }
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            const selected = searchResults.querySelector('.search-result-item.selected');
+            if (selected) {
+                const link = selected.querySelector('a') || selected;
+                if (link.href) window.location.href = link.href;
+            }
+        }
+    });
+}
+
+function displaySearchResults(results, query) {
+    const searchResults = document.getElementById('search-results');
+    
+    if (results.length === 0) {
+        searchResults.innerHTML = '<div class="no-results">No topics found for "' + query + '"</div>';
+        searchResults.style.display = 'block';
+        return;
+    }
+    
+    const html = results.map(result => `
+        <div class="search-result-item" onclick="window.location.href='${result.url}'">
+            <i class="fas fa-book search-result-icon"></i>
+            <div class="search-result-content">
+                <div class="search-result-title">${highlightMatch(result.title, query)}</div>
+                <div class="search-result-description">${highlightMatch(result.description, query)}</div>
+                <div class="search-result-category">${result.category}</div>
+            </div>
+        </div>
+    `).join('');
+    
+    searchResults.innerHTML = html;
+    searchResults.style.display = 'block';
+}
+
+function highlightMatch(text, query) {
+    const regex = new RegExp(`(${query})`, 'gi');
+    return text.replace(regex, '<mark style="background-color: var(--primary-color); color: white; padding: 0 2px;">$1</mark>');
+}
+
+// Global keyboard shortcut for search
+document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        const searchInput = document.getElementById('global-search');
+        if (searchInput) {
+            searchInput.focus();
+            searchInput.select();
+        }
+    }
+});
+
+// Initialize all functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializeTheme();
+    filterTopics();
+    initializeAccordion();
+    initializeProgressTracking();
+    initializeSearch();
+});
+
+// Listen for system theme changes
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'auto' || !savedTheme) {
+        setTheme(e.matches ? 'dark' : 'light');
+    }
+});

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loops - progguide</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>progguide</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../topics.html">Topics</a></li>
+                    <li><a href="../contact.html">Contact</a></li>
+                    <li>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                        <span id="theme-text">Dark</span>
+                    </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="topic-content">
+            <div class="topic-navigation">
+                <a href="conditionals.html" class="nav-prev"><i class="fas fa-arrow-left"></i> Previous: Conditional Statements</a>
+                <a href="time-complexity.html" class="nav-next">Next: Time Complexity <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <article class="topic">
+                <h2>Loops</h2>
+                <div class="topic-metadata">
+                    <span><i class="fas fa-book"></i> Basics</span>
+                    <span><i class="fas fa-code"></i> 7 examples</span>
+                </div>
+                
+                <div class="topic-intro">
+                    <p>Loops allow you to execute a block of code repeatedly, which is essential for tasks like processing data, iterating through collections, and implementing algorithms. Understanding loops is crucial for writing efficient and concise programs.</p>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>For Loop</h3>
+                    <p>The for loop is ideal when you know exactly how many times you want to repeat something:</p>
+                    
+                    <pre><code class="language-cpp">
+// Basic for loop syntax
+for (initialization; condition; increment) {
+    // code to repeat
+}
+
+// Example: Print numbers 1 to 10
+for (int i = 1; i <= 10; i++) {
+    cout << i << " ";
+}
+cout << endl;
+
+// Example: Calculate factorial
+int n = 5;
+int factorial = 1;
+for (int i = 1; i <= n; i++) {
+    factorial *= i;
+}
+cout << "Factorial of " << n << " is " << factorial << endl;
+
+// Example: Sum of numbers
+int sum = 0;
+for (int i = 1; i <= 100; i++) {
+    sum += i;
+}
+cout << "Sum of 1 to 100 is " << sum << endl;
+                    </code></pre>
+                    
+                    <div class="info-box">
+                        <h4>For Loop Components:</h4>
+                        <ul>
+                            <li><strong>Initialization:</strong> Executed once at the beginning</li>
+                            <li><strong>Condition:</strong> Checked before each iteration</li>
+                            <li><strong>Increment:</strong> Executed after each iteration</li>
+                            <li>Any component can be empty, but semicolons are required</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>While Loop</h3>
+                    <p>The while loop continues as long as a condition is true. It's useful when you don't know the exact number of iterations:</p>
+                    
+                    <pre><code class="language-cpp">
+// Basic while loop
+int count = 0;
+while (count < 5) {
+    cout << "Count: " << count << endl;
+    count++;
+}
+
+// Example: Input validation
+int number;
+cout << "Enter a positive number: ";
+cin >> number;
+while (number <= 0) {
+    cout << "Please enter a positive number: ";
+    cin >> number;
+}
+
+// Example: Finding digits in a number
+int num = 12345;
+int digitCount = 0;
+while (num > 0) {
+    num /= 10;
+    digitCount++;
+}
+cout << "Number of digits: " << digitCount << endl;
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Do-While Loop</h3>
+                    <p>The do-while loop executes the code block at least once, then continues while the condition is true:</p>
+                    
+                    <pre><code class="language-cpp">
+// Menu example
+int choice;
+do {
+    cout << "\n=== Menu ===" << endl;
+    cout << "1. Option 1" << endl;
+    cout << "2. Option 2" << endl;
+    cout << "3. Exit" << endl;
+    cout << "Enter choice: ";
+    cin >> choice;
+    
+    switch (choice) {
+        case 1:
+            cout << "You selected Option 1" << endl;
+            break;
+        case 2:
+            cout << "You selected Option 2" << endl;
+            break;
+        case 3:
+            cout << "Goodbye!" << endl;
+            break;
+        default:
+            cout << "Invalid choice!" << endl;
+    }
+} while (choice != 3);
+
+// Example: Reverse a number
+int original = 12345;
+int reversed = 0;
+do {
+    reversed = reversed * 10 + original % 10;
+    original /= 10;
+} while (original > 0);
+cout << "Reversed number: " << reversed << endl;
+                    </code></pre>
+                    
+                    <div class="tip-box">
+                        <h4>When to Use Each Loop:</h4>
+                        <ul>
+                            <li><strong>For loop:</strong> When you know the number of iterations</li>
+                            <li><strong>While loop:</strong> When the number of iterations depends on a condition</li>
+                            <li><strong>Do-while loop:</strong> When you need to execute the code at least once</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Nested Loops</h3>
+                    <p>You can place loops inside other loops to handle multi-dimensional data or complex patterns:</p>
+                    
+                    <pre><code class="language-cpp">
+// Print a multiplication table
+for (int i = 1; i <= 10; i++) {
+    for (int j = 1; j <= 10; j++) {
+        cout << i * j << "\t";
+    }
+    cout << endl;
+}
+
+// Print a pattern
+for (int i = 1; i <= 5; i++) {
+    for (int j = 1; j <= i; j++) {
+        cout << "*";
+    }
+    cout << endl;
+}
+// Output:
+// *
+// **
+// ***
+// ****
+// *****
+
+// Find all prime numbers up to n
+int n = 30;
+for (int i = 2; i <= n; i++) {
+    bool isPrime = true;
+    for (int j = 2; j * j <= i; j++) {
+        if (i % j == 0) {
+            isPrime = false;
+            break;
+        }
+    }
+    if (isPrime) {
+        cout << i << " ";
+    }
+}
+                    </code></pre>
+                    
+                    <div class="warning-box">
+                        <h4>Nested Loop Performance:</h4>
+                        <p>Nested loops can significantly impact performance. A loop inside another loop creates O(n²) time complexity. Be mindful of this when working with large datasets.</p>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Loop Control Statements</h3>
+                    <p>Special statements that change the normal flow of loop execution:</p>
+                    
+                    <div class="data-types">
+                        <div class="data-type">
+                            <h4>Break Statement</h4>
+                            <p>Exits the loop immediately</p>
+                            <pre><code class="language-cpp">
+// Find first even number
+for (int i = 1; i <= 10; i++) {
+    if (i % 2 == 0) {
+        cout << "First even: " << i << endl;
+        break;
+    }
+}
+
+// Search in array
+int arr[] = {5, 2, 8, 1, 9};
+int target = 8;
+bool found = false;
+for (int i = 0; i < 5; i++) {
+    if (arr[i] == target) {
+        cout << "Found at index " << i << endl;
+        found = true;
+        break;
+    }
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="data-type">
+                            <h4>Continue Statement</h4>
+                            <p>Skips the rest of the current iteration</p>
+                            <pre><code class="language-cpp">
+// Print only odd numbers
+for (int i = 1; i <= 10; i++) {
+    if (i % 2 == 0) {
+        continue; // Skip even numbers
+    }
+    cout << i << " ";
+}
+// Output: 1 3 5 7 9
+
+// Skip negative numbers
+int numbers[] = {-2, 5, -1, 8, 3, -4};
+for (int i = 0; i < 6; i++) {
+    if (numbers[i] < 0) {
+        continue;
+    }
+    cout << numbers[i] << " ";
+}
+// Output: 5 8 3
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Range-Based For Loop (C++11)</h3>
+                    <p>A modern C++ feature that simplifies iterating through containers:</p>
+                    
+                    <pre><code class="language-cpp">
+#include <vector>
+#include <string>
+
+// Traditional array
+int arr[] = {1, 2, 3, 4, 5};
+cout << "Array elements: ";
+for (int x : arr) {
+    cout << x << " ";
+}
+cout << endl;
+
+// Vector
+vector<int> vec = {10, 20, 30, 40, 50};
+cout << "Vector elements: ";
+for (int x : vec) {
+    cout << x << " ";
+}
+cout << endl;
+
+// String
+string text = "Hello";
+cout << "Characters: ";
+for (char c : text) {
+    cout << c << " ";
+}
+cout << endl;
+
+// Modifying elements (use reference)
+for (int& x : vec) {
+    x *= 2; // Double each element
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Common Loop Patterns</h3>
+                    
+                    <div class="data-types">
+                        <div class="data-type">
+                            <h4>Accumulation</h4>
+                            <pre><code class="language-cpp">
+// Sum elements
+int sum = 0;
+for (int i = 0; i < n; i++) {
+    sum += arr[i];
+}
+
+// Find maximum
+int max_val = arr[0];
+for (int i = 1; i < n; i++) {
+    if (arr[i] > max_val) {
+        max_val = arr[i];
+    }
+}
+                            </code></pre>
+                        </div>
+                        
+                        <div class="data-type">
+                            <h4>Counting</h4>
+                            <pre><code class="language-cpp">
+// Count positive numbers
+int count = 0;
+for (int i = 0; i < n; i++) {
+    if (arr[i] > 0) {
+        count++;
+    }
+}
+
+// Count occurrences
+int target = 5;
+int occurrences = 0;
+for (int x : arr) {
+    if (x == target) {
+        occurrences++;
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            
+            <div class="practice-section">
+                <h3 class="mt-4">CodeForces Challenge Problems</h3>
+                <p>Practice loop concepts with these problems:</p>
+                
+                <div class="codeforces-problems">
+                    <div class="problem-card">
+                        <div class="difficulty beginner">Beginner</div>
+                        <h4>Word</h4>
+                        <p>Use loops to iterate through characters and count uppercase/lowercase letters.</p>
+                        <div class="tags">
+                            <span class="tag">Strings</span>
+                            <span class="tag">Loops</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/59/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <div class="difficulty easy">Easy</div>
+                        <h4>Domino Piling</h4>
+                        <p>Practice mathematical calculations using loops or direct formulas.</p>
+                        <div class="tags">
+                            <span class="tag">Math</span>
+                            <span class="tag">Logic</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/50/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <div class="difficulty easy">Easy</div>
+                        <h4>Sum of Consecutive Odd Numbers</h4>
+                        <p>Use loops to calculate sums with specific patterns.</p>
+                        <div class="tags">
+                            <span class="tag">Math</span>
+                            <span class="tag">Loops</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/1650/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <div class="difficulty medium">Medium</div>
+                        <h4>Hulk</h4>
+                        <p>Practice nested loops and pattern generation with alternating sequences.</p>
+                        <div class="tags">
+                            <span class="tag">Patterns</span>
+                            <span class="tag">Strings</span>
+                        </div>
+                        <a href="https://codeforces.com/problemset/problem/705/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                    </div>
+                </div>
+                
+                <div class="practice-tips">
+                    <h4><i class="fas fa-lightbulb"></i> Loop Mastery Tips</h4>
+                    <ul>
+                        <li>Always ensure your loop condition will eventually become false</li>
+                        <li>Be careful with off-by-one errors in loop bounds</li>
+                        <li>Consider using range-based for loops for simpler code</li>
+                        <li>Use break and continue wisely to improve readability</li>
+                        <li>Watch out for infinite loops - always have an exit condition</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic-navigation">
+                <a href="conditionals.html" class="nav-prev"><i class="fas fa-arrow-left"></i> Previous: Conditional Statements</a>
+                <a href="time-complexity.html" class="nav-next">Next: Time Complexity <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>progguide</h3>
+                    <p>Learn programming the right way</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../topics.html">Topics</a></li>
+                        <li><a href="../contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="https://discord.gg/maBxybfxf6" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

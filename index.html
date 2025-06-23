@@ -12,12 +12,30 @@
         <div class="container">
             <div class="logo">
                 <h1>progguide</h1>
-            </div>
-            <nav>
+            </div>            <nav>
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="topics.html">Topics</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
                     <li><a href="contact.html">Contact</a></li>
+                    <li class="search-container">
+                        <div class="search-box">
+                            <input type="text" id="global-search" placeholder="Search topics..." autocomplete="off">
+                            <i class="fas fa-search search-icon"></i>
+                            <div id="search-results" class="search-results"></div>
+                        </div>
+                    </li>
+                    <li>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                        <span id="theme-text">Dark</span>
+                    </button>
+                    </li>
+                    <li>
+                        <a href="login.html" class="btn btn-login" id="login-btn">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -61,17 +79,17 @@
                     <div class="card">
                         <h4>Variables & Data Types</h4>
                         <p>Learn the building blocks of programming</p>
-                        <a href="topics/variables.html" class="btn btn-secondary">Read More</a>
+                        <a href="topics/variable.html" class="btn btn-secondary">Read More</a>
                     </div>
                     <div class="card">
-                        <h4>Functions</h4>
-                        <p>Master the art of code reusability</p>
-                        <a href="topics/functions.html" class="btn btn-secondary">Read More</a>
+                        <h4>Loops</h4>
+                        <p>Master repetitive code execution</p>
+                        <a href="topics/loops.html" class="btn btn-secondary">Read More</a>
                     </div>
                     <div class="card">
-                        <h4>Object-Oriented Programming</h4>
-                        <p>Understand classes and objects</p>
-                        <a href="topics/oop.html" class="btn btn-secondary">Read More</a>
+                        <h4>Time Complexity</h4>
+                        <p>Understand algorithm efficiency</p>
+                        <a href="topics/time-complexity.html" class="btn btn-secondary">Read More</a>
                     </div>
                 </div>
             </div>
@@ -94,7 +112,7 @@
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h3>Connect Us</h3>
+                    <h3>Connect With Us</h3>
                     <div class="social-icons">
                         <a href="https://discord.gg/maBxybfxf6" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-discord"></i>
@@ -103,8 +121,7 @@
                 </div>
             </div>
         </div>
-    </footer>
-
-    <script src="script.js"></script>
+    </footer>    <script src="script.js"></script>
+    <script src="global-auth.js"></script>
 </body>
-</html> 
+</html>

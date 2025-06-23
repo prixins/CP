@@ -12,18 +12,33 @@
         <div class="container">
             <div class="logo">
                 <h1>progguide</h1>
-            </div>
-            <nav>
+            </div>            <nav>
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="topics.html" class="active">Topics</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
                     <li><a href="contact.html">Contact</a></li>
+                    <li class="search-container">
+                        <div class="search-box">
+                            <input type="text" id="global-search" placeholder="Search topics..." autocomplete="off">
+                            <i class="fas fa-search search-icon"></i>
+                            <div id="search-results" class="search-results"></div>
+                        </div>
+                    </li>                    <li>
+                        <button class="theme-toggle" onclick="toggleTheme()">
+                            <i class="fas fa-moon" id="theme-icon"></i>
+                            <span id="theme-text">Dark</span>
+                        </button>
+                    </li>
+                    <li>
+                        <a href="login.html" class="btn btn-login" id="login-btn">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
-    </header>
-
-    <main class="container">
+    </header>    <main class="container">
         <section id="topics-content">
             <h2>Programming Topics</h2>
             <p>Browse our comprehensive collection of programming topics. Each guide includes detailed explanations, examples, and practice questions.</p>
@@ -37,203 +52,557 @@
                 <button class="filter-btn" data-filter="advanced">Advanced</button>
             </div>
 
+            <!-- Popular Topics Section -->
+            <div class="popular-topics">
+                <h3>Popular Topics</h3>
+                <div class="mini-card-grid">
+                    <article class="mini-card" data-category="algorithms">
+                        <time>
+                            <strong>Algorithm</strong>
+                            Popular
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/dynamic-programming.html">Dynamic Programming</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Optimization</span>
+                        </div>
+                        <p>Problem optimization, longest sequences, knapsack problems</p>
+                    </article>
+                    
+                    <article class="mini-card" data-category="data">
+                        <time>
+                            <strong>Data Structure</strong>
+                            Essential
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/bit-manipulation.html">Bit Manipulation</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Optimization</span>
+                        </div>
+                        <p>Bit representation, operations, and optimization techniques</p>
+                    </article>
+                    
+                    <article class="mini-card" data-category="graphs">
+                        <time>
+                            <strong>Graph Algorithm</strong>
+                            Core
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/shortest-paths.html">Shortest Paths</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Pathfinding</span>
+                        </div>
+                        <p>Bellman-Ford, Dijkstra's, and Floyd-Warshall algorithms</p>
+                    </article>
+                    
+                    <article class="mini-card" data-category="advanced">
+                        <time>
+                            <strong>Advanced</strong>
+                            Expert
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/string-algorithms.html">String Algorithms</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Pattern Matching</span>
+                        </div>
+                        <p>Trie structure, string hashing, and pattern matching</p>
+                    </article>
+                </div>
+            </div>
+
             <!-- Basic Techniques -->
-            <div class="topic-category" id="basics">
+            <div class="topic-category mini-layout" id="basics">
                 <h3>Basic Techniques</h3>
-                <div class="topic-list">
-                    <div class="topic-card" data-category="basics">
-                        <h4>Introduction to Programming</h4>
+                <div class="mini-card-grid">
+                    <article class="mini-card" data-category="basics">
+                        <time>
+                            <strong>Fundamentals</strong>
+                            Start Here
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/introduction.html">Introduction to Programming</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Beginner</span>
+                        </div>
                         <p>Programming languages, input/output, working with numbers</p>
-                        <a href="topics/introduction.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="basics">
-                        <h4>Variables & Data Types</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="basics">
+                        <time>
+                            <strong>Fundamentals</strong>
+                            Essential
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/variable.html">Variables & Data Types</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Core Concepts</span>
+                        </div>
                         <p>Understanding variables, primitive types, and type conversion</p>
-                        <a href="topics/variable.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="basics">
-                        <h4>Operators</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="basics">
+                        <time>
+                            <strong>Fundamentals</strong>
+                            Essential
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/operators.html">Operators</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Core Concepts</span>
+                        </div>
                         <p>Arithmetic, assignment, comparison, and logical operators</p>
-                        <a href="topics/operators.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="basics">
-                        <h4>Conditional Statements</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="basics">
+                        <time>
+                            <strong>Control Flow</strong>
+                            Important
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/conditionals.html">Conditional Statements</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Logic</span>
+                        </div>
                         <p>If/else statements, switch cases, and ternary operators</p>
-                        <a href="topics/conditionals.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="basics">
-                        <h4>Loops</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="basics">
+                        <time>
+                            <strong>Control Flow</strong>
+                            Important
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/loops.html">Loops</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Iteration</span>
+                        </div>
                         <p>For loops, while loops, and loop control statements</p>
-                        <a href="topics/loops.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="basics">
-                        <h4>Time Complexity</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="basics">
+                        <time>
+                            <strong>Analysis</strong>
+                            Critical
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/time-complexity.html">Time Complexity</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Analysis</span>
+                        </div>
                         <p>Understanding algorithm efficiency, calculation rules, complexity classes</p>
-                        <a href="topics/time-complexity.html" class="btn btn-primary">Learn</a>
-                    </div>
+                    </article>
                 </div>
             </div>
 
             <!-- Algorithms -->
-            <div class="topic-category" id="algorithms">
+            <div class="topic-category mini-layout" id="algorithms">
                 <h3>Algorithms</h3>
-                <div class="topic-list">
-                    <div class="topic-card" data-category="algorithms">
-                        <h4>Sorting Algorithms</h4>
+                <div class="mini-card-grid">
+                    <article class="mini-card" data-category="algorithms">
+                        <time>
+                            <strong>Sorting</strong>
+                            Fundamental
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/sorting.html">Sorting Algorithms</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Sorting</span>
+                        </div>
                         <p>Sorting theory, implementation and binary search techniques</p>
-                        <a href="topics/sorting.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="algorithms">
-                        <h4>Complete Search</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="algorithms">
+                        <time>
+                            <strong>Search</strong>
+                            Core
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/complete-search.html">Complete Search</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Brute Force</span>
+                        </div>
                         <p>Generating subsets, permutations, backtracking techniques</p>
-                        <a href="topics/complete-search.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="algorithms">
-                        <h4>Greedy Algorithms</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="algorithms">
+                        <time>
+                            <strong>Optimization</strong>
+                            Important
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/greedy.html">Greedy Algorithms</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Optimization</span>
+                        </div>
                         <p>Coin problem, scheduling, tasks and deadlines, optimization</p>
-                        <a href="topics/greedy.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="algorithms">
-                        <h4>Dynamic Programming</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="algorithms">
+                        <time>
+                            <strong>Optimization</strong>
+                            Advanced
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/dynamic-programming.html">Dynamic Programming</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Optimization</span>
+                        </div>
                         <p>Problem optimization, longest sequences, knapsack problems</p>
-                        <a href="topics/dynamic-programming.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="algorithms">
-                        <h4>Amortized Analysis</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="algorithms">
+                        <time>
+                            <strong>Technique</strong>
+                            Advanced
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/amortized-analysis.html">Amortized Analysis</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Two Pointers</span>
+                        </div>
                         <p>Two pointer methods, nearest elements, sliding window techniques</p>
-                        <a href="topics/amortized-analysis.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="algorithms">
-                        <h4>Range Queries</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="algorithms">
+                        <time>
+                            <strong>Query</strong>
+                            Advanced
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/range-queries.html">Range Queries</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Data Structures</span>
+                        </div>
                         <p>Static array queries, binary indexed trees, segment trees</p>
-                        <a href="topics/range-queries.html" class="btn btn-primary">Learn</a>
-                    </div>
+                    </article>
                 </div>
             </div>
 
             <!-- Data Structures -->
-            <div class="topic-category" id="data">
+            <div class="topic-category mini-layout" id="data">
                 <h3>Data Structures</h3>
-                <div class="topic-list">
-                    <div class="topic-card" data-category="data">
-                        <h4>Dynamic Arrays</h4>
+                <div class="mini-card-grid">
+                    <article class="mini-card" data-category="data">
+                        <time>
+                            <strong>Array</strong>
+                            Fundamental
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/dynamic-arrays.html">Dynamic Arrays</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Arrays</span>
+                        </div>
                         <p>Creating, accessing, and manipulating dynamic arrays</p>
-                        <a href="topics/dynamic-arrays.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="data">
-                        <h4>Set Structures</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="data">
+                        <time>
+                            <strong>Set</strong>
+                            Core
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/set-structures.html">Set Structures</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Collections</span>
+                        </div>
                         <p>Working with sets, operations and implementation techniques</p>
-                        <a href="topics/set-structures.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="data">
-                        <h4>Map Structures</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="data">
+                        <time>
+                            <strong>Map</strong>
+                            Core
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/map-structures.html">Map Structures</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Key-Value</span>
+                        </div>
                         <p>Key-value pairs, hash maps, and dictionary implementations</p>
-                        <a href="topics/map-structures.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="data">
-                        <h4>Bit Manipulation</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="data">
+                        <time>
+                            <strong>Bit</strong>
+                            Optimization
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/bit-manipulation.html">Bit Manipulation</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Optimization</span>
+                        </div>
                         <p>Bit representation, operations, and optimization techniques</p>
-                        <a href="topics/bit-manipulation.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="data">
-                        <h4>Advanced Data Structures</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="data">
+                        <time>
+                            <strong>Advanced</strong>
+                            Expert
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/advanced-structures.html">Advanced Data Structures</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Specialized</span>
+                        </div>
                         <p>Iterators, ranges, and specialized data structures</p>
-                        <a href="topics/advanced-structures.html" class="btn btn-primary">Learn</a>
-                    </div>
+                    </article>
                 </div>
             </div>
 
             <!-- Graph Algorithms -->
-            <div class="topic-category" id="graphs">
+            <div class="topic-category mini-layout" id="graphs">
                 <h3>Graph Algorithms</h3>
-                <div class="topic-list">
-                    <div class="topic-card" data-category="graphs">
-                        <h4>Basics of Graphs</h4>
+                <div class="mini-card-grid">
+                    <article class="mini-card" data-category="graphs">
+                        <time>
+                            <strong>Graph</strong>
+                            Foundation
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/graph-basics.html">Basics of Graphs</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Fundamentals</span>
+                        </div>
                         <p>Graph terminology and representation techniques</p>
-                        <a href="topics/graph-basics.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="graphs">
-                        <h4>Graph Traversal</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="graphs">
+                        <time>
+                            <strong>Traversal</strong>
+                            Core
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/graph-traversal.html">Graph Traversal</a>
+                        </h3>
+                        <div class="tags">
+                            <span>DFS/BFS</span>
+                        </div>
                         <p>Depth-first search, breadth-first search and applications</p>
-                        <a href="topics/graph-traversal.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="graphs">
-                        <h4>Shortest Paths</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="graphs">
+                        <time>
+                            <strong>Path</strong>
+                            Important
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/shortest-paths.html">Shortest Paths</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Pathfinding</span>
+                        </div>
                         <p>Bellman-Ford, Dijkstra's, and Floyd-Warshall algorithms</p>
-                        <a href="topics/shortest-paths.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="graphs">
-                        <h4>Tree Algorithms</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="graphs">
+                        <time>
+                            <strong>Tree</strong>
+                            Core
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/tree-algorithms.html">Tree Algorithms</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Trees</span>
+                        </div>
                         <p>Tree traversal, diameter, paths and binary trees</p>
-                        <a href="topics/tree-algorithms.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="graphs">
-                        <h4>Spanning Trees</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="graphs">
+                        <time>
+                            <strong>Spanning</strong>
+                            Advanced
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/spanning-trees.html">Spanning Trees</a>
+                        </h3>
+                        <div class="tags">
+                            <span>MST</span>
+                        </div>
                         <p>Kruskal's algorithm, union-find, and Prim's algorithm</p>
-                        <a href="topics/spanning-trees.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="graphs">
-                        <h4>Directed Graphs</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="graphs">
+                        <time>
+                            <strong>Directed</strong>
+                            Advanced
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/directed-graphs.html">Directed Graphs</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Topological</span>
+                        </div>
                         <p>Topological sorting, dynamic programming, and cycle detection</p>
-                        <a href="topics/directed-graphs.html" class="btn btn-primary">Learn</a>
-                    </div>
+                    </article>
                 </div>
             </div>
 
             <!-- Advanced Topics -->
-            <div class="topic-category" id="advanced">
+            <div class="topic-category mini-layout" id="advanced">
                 <h3>Advanced Topics</h3>
-                <div class="topic-list">
-                    <div class="topic-card" data-category="advanced">
-                        <h4>Number Theory</h4>
+                <div class="mini-card-grid">
+                    <article class="mini-card" data-category="advanced">
+                        <time>
+                            <strong>Math</strong>
+                            Expert
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/number-theory.html">Number Theory</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Mathematics</span>
+                        </div>
                         <p>Primes, factors, modular arithmetic and equation solving</p>
-                        <a href="topics/number-theory.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="advanced">
-                        <h4>Combinatorics</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="advanced">
+                        <time>
+                            <strong>Math</strong>
+                            Expert
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/combinatorics.html">Combinatorics</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Counting</span>
+                        </div>
                         <p>Binomial coefficients, Catalan numbers, inclusion-exclusion</p>
-                        <a href="topics/combinatorics.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="advanced">
-                        <h4>Matrices</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="advanced">
+                        <time>
+                            <strong>Linear Algebra</strong>
+                            Expert
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/matrices.html">Matrices</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Linear Algebra</span>
+                        </div>
                         <p>Matrix operations, linear recurrences and graph representations</p>
-                        <a href="topics/matrices.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="advanced">
-                        <h4>Probability</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="advanced">
+                        <time>
+                            <strong>Statistics</strong>
+                            Expert
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/probability.html">Probability</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Statistics</span>
+                        </div>
                         <p>Calculation, events, random variables and randomized algorithms</p>
-                        <a href="topics/probability.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="advanced">
-                        <h4>Game Theory</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="advanced">
+                        <time>
+                            <strong>Game</strong>
+                            Expert
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/game-theory.html">Game Theory</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Game Theory</span>
+                        </div>
                         <p>Game states, Nim game, and the Sprague-Grundy theorem</p>
-                        <a href="topics/game-theory.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="advanced">
-                        <h4>String Algorithms</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="advanced">
+                        <time>
+                            <strong>String</strong>
+                            Expert
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/string-algorithms.html">String Algorithms</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Pattern Matching</span>
+                        </div>
                         <p>Trie structure, string hashing, and pattern matching</p>
-                        <a href="topics/string-algorithms.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="advanced">
-                        <h4>Square Root Algorithms</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="advanced">
+                        <time>
+                            <strong>Algorithm</strong>
+                            Expert
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/square-root-algorithms.html">Square Root Algorithms</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Optimization</span>
+                        </div>
                         <p>Combining algorithms, integer partitions, and Mo's algorithm</p>
-                        <a href="topics/square-root-algorithms.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="advanced">
-                        <h4>Advanced Segment Trees</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="advanced">
+                        <time>
+                            <strong>Data Structure</strong>
+                            Expert
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/advanced-segment-trees.html">Advanced Segment Trees</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Trees</span>
+                        </div>
                         <p>Lazy propagation, dynamic trees, and multi-dimensional structures</p>
-                        <a href="topics/advanced-segment-trees.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="advanced">
-                        <h4>Computational Geometry</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="advanced">
+                        <time>
+                            <strong>Geometry</strong>
+                            Expert
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/geometry.html">Computational Geometry</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Geometry</span>
+                        </div>
                         <p>Complex numbers, points and lines, polygon area calculation</p>
-                        <a href="topics/geometry.html" class="btn btn-primary">Learn</a>
-                    </div>
-                    <div class="topic-card" data-category="advanced">
-                        <h4>Sweep Line Algorithms</h4>
+                    </article>
+                    
+                    <article class="mini-card" data-category="advanced">
+                        <time>
+                            <strong>Algorithm</strong>
+                            Expert
+                        </time>
+                        <h3 class="mini-card-title">
+                            <a href="topics/sweep-line.html">Sweep Line Algorithms</a>
+                        </h3>
+                        <div class="tags">
+                            <span>Geometry</span>
+                        </div>
                         <p>Intersection points, closest pair, and convex hull problems</p>
-                        <a href="topics/sweep-line.html" class="btn btn-primary">Learn</a>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
@@ -245,12 +614,12 @@
                 <div class="footer-section">
                     <h3>progguide</h3>
                     <p>Learn programming the right way</p>
-                </div>
-                <div class="footer-section">
+                </div>                <div class="footer-section">
                     <h3>Quick Links</h3>
                     <ul>
                         <li><a href="index.html">Home</a></li>
                         <li><a href="topics.html">Topics</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
                         <li><a href="contact.html">Contact</a></li>
                     </ul>
                 </div>
@@ -267,5 +636,6 @@
     </footer>
 
     <script src="script.js"></script>
+    
 </body>
 </html>
