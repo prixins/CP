@@ -15,17 +15,29 @@
         <div class="container">
             <div class="logo">
                 <h1>progguide</h1>
-            </div>
-            <nav>
+            </div>            <nav>
                 <ul>
                     <li><a href="../index.html">Home</a></li>
                     <li><a href="../topics.html">Topics</a></li>
+                    <li><a href="../dashboard.html">Dashboard</a></li>
                     <li><a href="../contact.html">Contact</a></li>
+                    <li class="search-container">
+                        <div class="search-box">
+                            <input type="text" id="global-search" placeholder="Search topics..." autocomplete="off">
+                            <i class="fas fa-search search-icon"></i>
+                            <div id="search-results" class="search-results"></div>
+                        </div>
+                    </li>
                     <li>
                     <button class="theme-toggle" onclick="toggleTheme()">
                         <i class="fas fa-moon" id="theme-icon"></i>
                         <span id="theme-text">Dark</span>
                     </button>
+                    </li>
+                    <li>
+                        <a href="../login.html" class="btn btn-login" id="login-btn">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
                     </li>
                 </ul>
             </nav>
@@ -46,13 +58,17 @@
                     <span><i class="fas fa-code"></i> 3 examples</span>
                 </div>
                 
+                <br>
+
                 <div class="topic-intro">
-                    <p>Programming is the process of creating instructions for computers to execute. In this introduction, you'll learn about programming languages, how to write your first program, and the fundamental concepts that form the foundation of all programming.</p>
+                    <p>Programming is the process of creating instructions for computers to execute. In this, you'll learn about programming languages, how to write your first program, and the fundamental concepts that form the foundation of all programming.</p>
                 </div>
                 
+                <br>
+
                 <div class="topic-section">
                     <h3>What is Programming?</h3>
-                    <p>Programming is the art and science of solving problems by writing step-by-step instructions that a computer can understand and execute. These instructions, called code, tell the computer exactly what to do to accomplish a specific task.</p>
+                    <p>Programming is solving problems by writing step-by-step instructions that a computer can understand and execute. These instructions, called code, tell the computer exactly what to do to accomplish a specific task.</p>
                     
                     <div class="info-box">
                         <h4>Key Programming Concepts:</h4>
@@ -67,14 +83,18 @@
                 
                 <div class="topic-section">
                     <h3>Your First Program</h3>
-                    <p>Let's start with the traditional "Hello, World!" program in C++:</p>
+                    <p>Let's start with the base program in C++:</p>
                     
                     <pre><code class="language-cpp">
 #include <iostream>
 using namespace std;
 
 int main() {
-    cout << "Hello, World!" << endl;
+    ...
+    Code
+    ...
+    ...
+    // This is a comment (not executed by the program, it starts with // or /* and ends with */ in case of multi-line comments)
     return 0;
 }
                     </code></pre>
@@ -83,9 +103,9 @@ int main() {
                         <h4>Understanding the Code:</h4>
                         <ul>
                             <li><code>#include &lt;iostream&gt;</code> - Includes input/output functionality</li>
-                            <li><code>using namespace std;</code> - Allows us to use standard library functions</li>
+                            <li><code>using namespace std;</code> - īAllows us to use standard library functions</li>
                             <li><code>int main()</code> - The main function where program execution begins</li>
-                            <li><code>cout</code> - Outputs text to the console</li>
+                            <li><code>code</code> - This is where you write your program logic. The functions (like code snippet outsite main() is called from here either indirectly or directly to be executed) </li>
                             <li><code>return 0;</code> - Indicates successful program execution</li>
                         </ul>
                     </div>
@@ -102,20 +122,25 @@ using namespace std;
 int main() {
     string name;
     int age;
-    
-    cout << "Enter your name: ";
     cin >> name;
-    
-    cout << "Enter your age: ";
-    cin >> age;
-    
-    cout << "Hello " << name << "! You are " << age << " years old." << endl;
-    
+    cout << "Hello " << name << endl;
+
+    string s;
+    getline(cin, s);
+
     return 0;
 }
                     </code></pre>
+                     <div class="tip-box">
+                        <h4>Understanding the Code:</h4>
+                        <ul>
+                            <li><code>cin</code> - function to take input</li>
+                            <li><code>cout</code> - function to output data</li>
+                            <li><code>getline(cin, s)</code> - Reads an entire line of input including spaces</li>
+                         </ul>
+                    </div>
                 </div>
-                
+
                 <div class="topic-section">
                     <h3>Working with Numbers</h3>
                     <p>Programming often involves mathematical calculations:</p>
@@ -166,18 +191,7 @@ int main() {
                         </div>
                         <a href="https://codeforces.com/problemset/problem/1/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
                     </div>
-                    
-                    <div class="problem-card">
-                        <div class="difficulty beginner">Beginner</div>
-                        <h4>Hello World</h4>
-                        <p>Your first programming challenge - simply output "Hello World!"</p>
-                        <div class="tags">
-                            <span class="tag">Output</span>
-                            <span class="tag">Basics</span>
-                        </div>
-                        <a href="https://codeforces.com/problemset/problem/4/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
-                    </div>
-                    
+                                        
                     <div class="problem-card">
                         <div class="difficulty easy">Easy</div>
                         <h4>Way Too Long Words</h4>
@@ -191,7 +205,7 @@ int main() {
                 </div>
                 
                 <div class="practice-tips">
-                    <h4><i class="fas fa-lightbulb"></i> Getting Started Tips</h4>
+                    <h4><i class="fas fa-lightbulb"></i>Tips</h4>
                     <ul>
                         <li>Start with simple problems to build confidence</li>
                         <li>Read problem statements carefully</li>
