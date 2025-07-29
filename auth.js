@@ -1,4 +1,4 @@
-// Authentication functionality for progguide
+// Authentication functionality for owlingcode
 
 // Global variables
 let currentUser = null;
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Check if user is already authenticated
 function checkAuthState() {
-    const savedUser = localStorage.getItem('progguide_user');
+    const savedUser = localStorage.getItem('owlingcode_user');
     if (savedUser) {
         currentUser = JSON.parse(savedUser);
         showDashboard();
@@ -168,7 +168,7 @@ function simulateRegister(name, email, password) {
         };
         
         loginSuccess(user);
-        showNotification('Account created successfully! Welcome to progguide.', 'success');
+        showNotification('Account created successfully! Welcome to owlingcode.', 'success');
         
         // Reset button
         submitBtn.textContent = originalText;
@@ -249,7 +249,7 @@ function simulateGoogleLogin() {
 // Handle successful login
 function loginSuccess(user) {
     currentUser = user;
-    localStorage.setItem('progguide_user', JSON.stringify(user));
+    localStorage.setItem('owlingcode_user', JSON.stringify(user));
     
     // Show success notification
     showNotification(`Welcome ${user.name}!`, 'success');
@@ -264,7 +264,7 @@ function loginSuccess(user) {
 function logout() {
     if (confirm('Are you sure you want to logout?')) {
         currentUser = null;
-        localStorage.removeItem('progguide_user');
+        localStorage.removeItem('owlingcode_user');
         showLoginPrompt();
         showNotification('You have been logged out successfully', 'info');
     }

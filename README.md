@@ -1,7 +1,7 @@
-# progguide
+# owlingcode
 ## Introduction
 
-Welcome to the **progguide**! This guide is designed to help you navigate through programming concepts, tools, and best practices.
+Welcome to the **owlingcode**! This guide is designed to help you navigate through programming concepts, tools, and best practices.
 
 ## Table of Contents
 

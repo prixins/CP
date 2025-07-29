@@ -9,7 +9,7 @@ function updateGlobalLoginButton() {
     const loginBtn = document.getElementById('login-btn');
     if (!loginBtn) return;
     
-    const savedUser = localStorage.getItem('progguide_user');
+    const savedUser = localStorage.getItem('owlingcode_user');
     
     if (savedUser) {
         const user = JSON.parse(savedUser);
@@ -25,7 +25,7 @@ function updateGlobalLoginButton() {
 }
 
 function showGlobalUserMenu() {
-    const savedUser = localStorage.getItem('progguide_user');
+    const savedUser = localStorage.getItem('owlingcode_user');
     if (!savedUser) return;
     
     const user = JSON.parse(savedUser);
@@ -91,7 +91,7 @@ function showGlobalUserMenu() {
 
 function globalLogout() {
     if (confirm('Are you sure you want to logout?')) {
-        localStorage.removeItem('progguide_user');
+        localStorage.removeItem('owlingcode_user');
         showGlobalNotification('You have been logged out successfully', 'info');
         
         // Redirect to login page after a short delay
