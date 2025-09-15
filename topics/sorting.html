@@ -51,19 +51,179 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on sorting algorithms will cover:</p>
+                    <h3>Why Sorting Matters</h3>
+                    <p>Sorting is one of the most fundamental operations in computer science. It arranges data in a specific order, making it easier to search, analyze, and process. Many algorithms depend on sorted data to work efficiently.</p>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Benefits of Sorted Data:</h4>
                         <ul>
-                            <li>Bubble Sort, Selection Sort, Insertion Sort</li>
-                            <li>Merge Sort and Quick Sort</li>
-                            <li>Heap Sort and Counting Sort</li>
-                            <li>Binary Search implementation</li>
-                            <li>STL sorting functions</li>
-                            <li>Custom comparators</li>
-                            <li>Sorting stability and performance analysis</li>
+                            <li>Faster searching with binary search (O(log n) vs O(n))</li>
+                            <li>Easier to find duplicates or missing elements</li>
+                            <li>Better data visualization and analysis</li>
+                            <li>Required for many advanced algorithms</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Simple Sorting Algorithms</h3>
+                    <p>Let's start with basic sorting algorithms that are easy to understand and implement:</p>
+                    
+                    <h4>Bubble Sort</h4>
+                    <p>Repeatedly compares adjacent elements and swaps them if they're in the wrong order.</p>
+                    
+                    <pre><code class="language-cpp">
+void bubbleSort(vector&lt;int&gt;&amp; arr) {
+    int n = arr.size();
+    for (int i = 0; i &lt; n - 1; i++) {
+        for (int j = 0; j &lt; n - i - 1; j++) {
+            if (arr[j] &gt; arr[j + 1]) {
+                swap(arr[j], arr[j + 1]);
+            }
+        }
+    }
+}
+                    </code></pre>
+                    
+                    <h4>Selection Sort</h4>
+                    <p>Finds the minimum element and places it at the beginning, then repeats for the rest.</p>
+                    
+                    <pre><code class="language-cpp">
+void selectionSort(vector&lt;int&gt;&amp; arr) {
+    int n = arr.size();
+    for (int i = 0; i &lt; n - 1; i++) {
+        int minIndex = i;
+        for (int j = i + 1; j &lt; n; j++) {
+            if (arr[j] &lt; arr[minIndex]) {
+                minIndex = j;
+            }
+        }
+        swap(arr[i], arr[minIndex]);
+    }
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Efficient Sorting Algorithms</h3>
+                    <p>These algorithms are much faster for larger datasets:</p>
+                    
+                    <h4>Merge Sort</h4>
+                    <p>Divides the array into halves, sorts them recursively, then merges the sorted halves.</p>
+                    
+                    <pre><code class="language-cpp">
+void merge(vector&lt;int&gt;&amp; arr, int left, int mid, int right) {
+    vector&lt;int&gt; temp(right - left + 1);
+    int i = left, j = mid + 1, k = 0;
+    
+    while (i &lt;= mid &amp;&amp; j &lt;= right) {
+        if (arr[i] &lt;= arr[j]) {
+            temp[k++] = arr[i++];
+        } else {
+            temp[k++] = arr[j++];
+        }
+    }
+    
+    while (i &lt;= mid) temp[k++] = arr[i++];
+    while (j &lt;= right) temp[k++] = arr[j++];
+    
+    for (i = left; i &lt;= right; i++) {
+        arr[i] = temp[i - left];
+    }
+}
+
+void mergeSort(vector&lt;int&gt;&amp; arr, int left, int right) {
+    if (left &lt; right) {
+        int mid = left + (right - left) / 2;
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Using STL Sort</h3>
+                    <p>C++ provides highly optimized sorting functions in the Standard Template Library:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+
+int main() {
+    vector&lt;int&gt; arr = {64, 34, 25, 12, 22, 11, 90};
+    
+    // Sort in ascending order
+    sort(arr.begin(), arr.end());
+    
+    // Sort in descending order
+    sort(arr.begin(), arr.end(), greater&lt;int&gt;());
+    
+    // Custom comparator for sorting pairs by second element
+    vector&lt;pair&lt;int, int&gt;&gt; pairs = {{1, 5}, {2, 3}, {3, 8}};
+    sort(pairs.begin(), pairs.end(), [](const auto&amp; a, const auto&amp; b) {
+        return a.second &lt; b.second;
+    });
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Binary Search</h3>
+                    <p>Once data is sorted, we can use binary search to find elements efficiently:</p>
+                    
+                    <pre><code class="language-cpp">
+int binarySearch(vector&lt;int&gt;&amp; arr, int target) {
+    int left = 0, right = arr.size() - 1;
+    
+    while (left &lt;= right) {
+        int mid = left + (right - left) / 2;
+        
+        if (arr[mid] == target) {
+            return mid;  // Found target
+        } else if (arr[mid] &lt; target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    
+    return -1;  // Target not found
+}
+
+// Using STL binary search
+bool found = binary_search(arr.begin(), arr.end(), target);
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Time Complexity Comparison</h3>
+                    <div class="info-box">
+                        <h4>Algorithm Performance:</h4>
+                        <ul>
+                            <li><strong>Bubble Sort:</strong> O(n²) - Very slow for large data</li>
+                            <li><strong>Selection Sort:</strong> O(n²) - Slightly better than bubble sort</li>
+                            <li><strong>Insertion Sort:</strong> O(n²) - Good for small or nearly sorted data</li>
+                            <li><strong>Merge Sort:</strong> O(n log n) - Consistent performance</li>
+                            <li><strong>Quick Sort:</strong> O(n log n) average, O(n²) worst case</li>
+                            <li><strong>STL sort:</strong> O(n log n) - Highly optimized</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>When to Use Each Algorithm</h3>
+                    <div class="tip-box">
+                        <h4><i class="fas fa-lightbulb"></i> Choosing the Right Sort</h4>
+                        <ul>
+                            <li><strong>Small arrays (&lt; 10 elements):</strong> Insertion sort is often fastest</li>
+                            <li><strong>Nearly sorted data:</strong> Insertion sort performs well</li>
+                            <li><strong>General purpose:</strong> Use STL sort() - it's highly optimized</li>
+                            <li><strong>Stable sorting needed:</strong> Use stable_sort() to preserve equal elements' order</li>
+                            <li><strong>Custom sorting criteria:</strong> Use sort() with custom comparator</li>
                         </ul>
                     </div>
                 </div>

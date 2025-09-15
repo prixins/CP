@@ -51,19 +51,228 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on complete search will cover:</p>
+                    <h3>When to Use Complete Search</h3>
+                    <p>Complete search is ideal when:</p>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Good Candidates for Complete Search:</h4>
                         <ul>
-                            <li>Generating all subsets and permutations</li>
-                            <li>Backtracking algorithms</li>
-                            <li>Recursive search techniques</li>
-                            <li>Pruning and optimization</li>
-                            <li>N-Queens problem</li>
-                            <li>Sudoku solver</li>
-                            <li>When to use complete search vs. other approaches</li>
+                            <li>Small input size (typically n ≤ 20-25)</li>
+                            <li>No obvious pattern or mathematical formula</li>
+                            <li>All possible solutions must be examined</li>
+                            <li>Time limit allows for exponential algorithms</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Generating All Subsets</h3>
+                    <p>A subset is a collection of elements from a set. For a set of n elements, there are 2^n possible subsets:</p>
+                    
+                    <h4>Recursive Approach</h4>
+                    <pre><code class="language-cpp">
+void generateSubsets(vector&lt;int&gt;&amp; nums, vector&lt;int&gt;&amp; current, int index) {
+    // Base case: we've considered all elements
+    if (index == nums.size()) {
+        // Print or process the current subset
+        for (int x : current) {
+            cout &lt;&lt; x &lt;&lt; " ";
+        }
+        cout &lt;&lt; endl;
+        return;
+    }
+    
+    // Choice 1: Don't include nums[index]
+    generateSubsets(nums, current, index + 1);
+    
+    // Choice 2: Include nums[index]
+    current.push_back(nums[index]);
+    generateSubsets(nums, current, index + 1);
+    current.pop_back(); // Backtrack
+}
+
+// Usage
+vector&lt;int&gt; nums = {1, 2, 3};
+vector&lt;int&gt; current;
+generateSubsets(nums, current, 0);
+                    </code></pre>
+                    
+                    <h4>Bit Manipulation Approach</h4>
+                    <pre><code class="language-cpp">
+void generateSubsetsBit(vector&lt;int&gt;&amp; nums) {
+    int n = nums.size();
+    
+    // Iterate through all possible bitmasks
+    for (int mask = 0; mask &lt; (1 &lt;&lt; n); mask++) {
+        vector&lt;int&gt; subset;
+        
+        for (int i = 0; i &lt; n; i++) {
+            // Check if i-th bit is set
+            if (mask &amp; (1 &lt;&lt; i)) {
+                subset.push_back(nums[i]);
+            }
+        }
+        
+        // Process subset
+        for (int x : subset) {
+            cout &lt;&lt; x &lt;&lt; " ";
+        }
+        cout &lt;&lt; endl;
+    }
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Generating All Permutations</h3>
+                    <p>A permutation is an arrangement of elements. For n distinct elements, there are n! permutations:</p>
+                    
+                    <pre><code class="language-cpp">
+void generatePermutations(vector&lt;int&gt;&amp; nums, vector&lt;bool&gt;&amp; used, vector&lt;int&gt;&amp; current) {
+    if (current.size() == nums.size()) {
+        // We have a complete permutation
+        for (int x : current) {
+            cout &lt;&lt; x &lt;&lt; " ";
+        }
+        cout &lt;&lt; endl;
+        return;
+    }
+    
+    for (int i = 0; i &lt; nums.size(); i++) {
+        if (!used[i]) {
+            // Choose nums[i]
+            used[i] = true;
+            current.push_back(nums[i]);
+            
+            // Recurse
+            generatePermutations(nums, used, current);
+            
+            // Backtrack
+            current.pop_back();
+            used[i] = false;
+        }
+    }
+}
+
+// Using STL next_permutation (easier approach)
+void generatePermutationsSTL(vector&lt;int&gt; nums) {
+    sort(nums.begin(), nums.end());
+    do {
+        for (int x : nums) {
+            cout &lt;&lt; x &lt;&lt; " ";
+        }
+        cout &lt;&lt; endl;
+    } while (next_permutation(nums.begin(), nums.end()));
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Backtracking Template</h3>
+                    <p>Backtracking is a systematic way to explore all possibilities:</p>
+                    
+                    <pre><code class="language-cpp">
+void backtrack(State&amp; current, vector&lt;Solution&gt;&amp; solutions) {
+    if (isComplete(current)) {
+        solutions.push_back(current);
+        return;
+    }
+    
+    for (Choice choice : getPossibleChoices(current)) {
+        if (isValid(current, choice)) {
+            // Make the choice
+            makeChoice(current, choice);
+            
+            // Recurse
+            backtrack(current, solutions);
+            
+            // Undo the choice (backtrack)
+            undoChoice(current, choice);
+        }
+    }
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Example: N-Queens Problem</h3>
+                    <p>Place N queens on an N×N chessboard so that no two queens attack each other:</p>
+                    
+                    <pre><code class="language-cpp">
+class NQueens {
+    vector&lt;vector&lt;string&gt;&gt; solutions;
+    vector&lt;string&gt; board;
+    
+public:
+    vector&lt;vector&lt;string&gt;&gt; solveNQueens(int n) {
+        board = vector&lt;string&gt;(n, string(n, '.'));
+        backtrack(0, n);
+        return solutions;
+    }
+    
+private:
+    void backtrack(int row, int n) {
+        if (row == n) {
+            solutions.push_back(board);
+            return;
+        }
+        
+        for (int col = 0; col &lt; n; col++) {
+            if (isValid(row, col, n)) {
+                board[row][col] = 'Q';
+                backtrack(row + 1, n);
+                board[row][col] = '.';
+            }
+        }
+    }
+    
+    bool isValid(int row, int col, int n) {
+        // Check column
+        for (int i = 0; i &lt; row; i++) {
+            if (board[i][col] == 'Q') return false;
+        }
+        
+        // Check diagonal
+        for (int i = row - 1, j = col - 1; i &gt;= 0 &amp;&amp; j &gt;= 0; i--, j--) {
+            if (board[i][j] == 'Q') return false;
+        }
+        
+        // Check anti-diagonal
+        for (int i = row - 1, j = col + 1; i &gt;= 0 &amp;&amp; j &lt; n; i--, j++) {
+            if (board[i][j] == 'Q') return false;
+        }
+        
+        return true;
+    }
+};
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Optimization Techniques</h3>
+                    <p>Make complete search faster with these techniques:</p>
+                    
+                    <div class="tip-box">
+                        <h4><i class="fas fa-rocket"></i> Pruning Strategies</h4>
+                        <ul>
+                            <li><strong>Early termination:</strong> Stop exploring if current path can't lead to solution</li>
+                            <li><strong>Constraint checking:</strong> Validate constraints as early as possible</li>
+                            <li><strong>Ordering:</strong> Try most promising choices first</li>
+                            <li><strong>Memoization:</strong> Cache results of subproblems</li>
+                            <li><strong>Symmetry breaking:</strong> Avoid exploring symmetric states</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Time Complexity Analysis</h3>
+                    <div class="warning-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Complexity Warning</h4>
+                        <ul>
+                            <li><strong>Subsets:</strong> O(2^n) - doubles with each new element</li>
+                            <li><strong>Permutations:</strong> O(n!) - grows extremely fast</li>
+                            <li><strong>General backtracking:</strong> Often exponential</li>
+                            <li><strong>Rule of thumb:</strong> Complete search is usually feasible only for n ≤ 20-25</li>
                         </ul>
                     </div>
                 </div>

@@ -51,19 +51,246 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on graph basics will cover:</p>
+                    <h3>Graph Terminology</h3>
+                    <p>A graph G = (V, E) consists of a set of vertices (nodes) V and a set of edges E that connect pairs of vertices.</p>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Key Terms:</h4>
                         <ul>
-                            <li>Graph terminology and definitions</li>
-                            <li>Types of graphs (directed, undirected, weighted)</li>
-                            <li>Graph representation (adjacency matrix, adjacency list)</li>
-                            <li>Graph properties and characteristics</li>
-                            <li>Basic graph operations</li>
-                            <li>Graph input/output techniques</li>
-                            <li>Common graph problems introduction</li>
+                            <li><strong>Vertex/Node:</strong> Individual points in the graph</li>
+                            <li><strong>Edge:</strong> Connection between two vertices</li>
+                            <li><strong>Degree:</strong> Number of edges connected to a vertex</li>
+                            <li><strong>Path:</strong> Sequence of vertices connected by edges</li>
+                            <li><strong>Cycle:</strong> Path that starts and ends at the same vertex</li>
+                            <li><strong>Connected:</strong> Two vertices are connected if a path exists between them</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Types of Graphs</h3>
+                    
+                    <h4>Directed vs Undirected</h4>
+                    <p>In a <strong>directed graph</strong>, edges have direction. In an <strong>undirected graph</strong>, edges are bidirectional.</p>
+                    
+                    <pre><code class="language-cpp">// Directed graph example
+// Edge from A to B doesn't imply edge from B to A
+vector&lt;vector&lt;int&gt;&gt; directed_graph(n);
+directed_graph[a].push_back(b); // Only a -> b
+
+// Undirected graph example  
+// Edge between A and B implies both directions
+vector&lt;vector&lt;int&gt;&gt; undirected_graph(n);
+undirected_graph[a].push_back(b);
+undirected_graph[b].push_back(a); // Both a -> b and b -> a</code></pre>
+
+                    <h4>Weighted vs Unweighted</h4>
+                    <p><strong>Weighted graphs</strong> have values (weights) associated with edges, while <strong>unweighted graphs</strong> treat all edges equally.</p>
+                    
+                    <pre><code class="language-cpp">// Unweighted graph
+vector&lt;vector&lt;int&gt;&gt; unweighted(n);
+
+// Weighted graph using pairs (neighbor, weight)
+vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt; weighted(n);
+weighted[a].push_back({b, weight});</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Graph Representation</h3>
+                    
+                    <h4>Adjacency List (Recommended)</h4>
+                    <p>Most efficient for sparse graphs. Each vertex maintains a list of its neighbors.</p>
+                    
+                    <pre><code class="language-cpp">int n, m; // n vertices, m edges
+vector&lt;vector&lt;int&gt;&gt; adj(n + 1); // 1-indexed
+
+// Reading edges
+for (int i = 0; i < m; i++) {
+    int a, b;
+    cin >> a >> b;
+    adj[a].push_back(b);
+    adj[b].push_back(a); // For undirected graph
+}
+
+// Iterate through neighbors of vertex v
+for (int neighbor : adj[v]) {
+    // Process neighbor
+}</code></pre>
+
+                    <div class="tip-box">
+                        <h4>Memory Usage:</h4>
+                        <p>Adjacency list uses O(V + E) space, making it ideal for sparse graphs commonly found in competitive programming.</p>
+                    </div>
+
+                    <h4>Adjacency Matrix</h4>
+                    <p>Uses a 2D array where adj[i][j] = 1 if there's an edge from i to j.</p>
+                    
+                    <pre><code class="language-cpp">int n;
+vector&lt;vector&lt;int&gt;&gt; adj_matrix(n + 1, vector&lt;int&gt;(n + 1, 0));
+
+// Add edge
+adj_matrix[a][b] = 1;
+adj_matrix[b][a] = 1; // For undirected graph
+
+// Check if edge exists
+if (adj_matrix[a][b]) {
+    // Edge exists
+}</code></pre>
+
+                    <div class="warning-box">
+                        <h4>Space Complexity:</h4>
+                        <p>Adjacency matrix uses O(V²) space. Only use for dense graphs or when you need O(1) edge lookup.</p>
+                    </div>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Weighted Graph Representation</h3>
+                    
+                    <pre><code class="language-cpp">// Method 1: Vector of pairs
+vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt; adj(n + 1); // {neighbor, weight}
+
+// Add weighted edge
+adj[a].push_back({b, weight});
+adj[b].push_back({a, weight}); // For undirected
+
+// Method 2: Separate weight array (if needed)
+vector&lt;vector&lt;int&gt;&gt; adj(n + 1);
+map&lt;pair&lt;int, int&gt;, int&gt; edge_weight;
+
+adj[a].push_back(b);
+edge_weight[{a, b}] = weight;</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Common Graph Input Formats</h3>
+                    
+                    <h4>Standard Format</h4>
+                    <pre><code class="language-cpp">int n, m;
+cin >> n >> m; // vertices, edges
+
+vector&lt;vector&lt;int&gt;&gt; adj(n + 1);
+for (int i = 0; i < m; i++) {
+    int a, b;
+    cin >> a >> b;
+    adj[a].push_back(b);
+    adj[b].push_back(a);
+}</code></pre>
+
+                    <h4>Weighted Graph Input</h4>
+                    <pre><code class="language-cpp">int n, m;
+cin >> n >> m;
+
+vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt; adj(n + 1);
+for (int i = 0; i < m; i++) {
+    int a, b, w;
+    cin >> a >> b >> w;
+    adj[a].push_back({b, w});
+    adj[b].push_back({a, w});
+}</code></pre>
+
+                    <h4>Grid as Graph</h4>
+                    <pre><code class="language-cpp">int rows, cols;
+cin >> rows >> cols;
+
+vector&lt;string&gt; grid(rows);
+for (int i = 0; i < rows; i++) {
+    cin >> grid[i];
+}
+
+// 4-directional movement
+int dx[] = {-1, 1, 0, 0};
+int dy[] = {0, 0, -1, 1};
+
+bool isValid(int x, int y) {
+    return x >= 0 && x < rows && y >= 0 && y < cols && grid[x][y] != '#';
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Basic Graph Properties</h3>
+                    
+                    <pre><code class="language-cpp">// Calculate degree of each vertex
+vector&lt;int&gt; degree(n + 1, 0);
+for (int v = 1; v <= n; v++) {
+    degree[v] = adj[v].size();
+}
+
+// Check if graph is complete
+bool isComplete(int n, vector&lt;vector&lt;int&gt;&gt;& adj) {
+    for (int v = 1; v <= n; v++) {
+        if (adj[v].size() != n - 1) return false;
+    }
+    return true;
+}
+
+// Count edges in undirected graph
+int countEdges(vector&lt;vector&lt;int&gt;&gt;& adj) {
+    int edges = 0;
+    for (int v = 1; v <= n; v++) {
+        edges += adj[v].size();
+    }
+    return edges / 2; // Each edge counted twice
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Graph Construction Examples</h3>
+                    
+                    <h4>Building a Tree from Parent Array</h4>
+                    <pre><code class="language-cpp">vector&lt;int&gt; parent(n + 1);
+vector&lt;vector&lt;int&gt;&gt; tree(n + 1);
+
+for (int i = 2; i <= n; i++) {
+    cin >> parent[i]; // Parent of node i
+    tree[parent[i]].push_back(i);
+    tree[i].push_back(parent[i]);
+}</code></pre>
+
+                    <h4>Creating Graph from Edge List</h4>
+                    <pre><code class="language-cpp">struct Edge {
+    int from, to, weight;
+};
+
+vector&lt;Edge&gt; edges;
+vector&lt;vector&lt;int&gt;&gt; adj(n + 1);
+
+for (int i = 0; i < m; i++) {
+    int a, b, w;
+    cin >> a >> b >> w;
+    edges.push_back({a, b, w});
+    adj[a].push_back(b);
+    adj[b].push_back(a);
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Practical Tips</h3>
+                    
+                    <div class="tip-box">
+                        <h4>Memory Optimization:</h4>
+                        <ul>
+                            <li>Use adjacency list for sparse graphs (most competitive programming problems)</li>
+                            <li>Reserve capacity if you know the number of edges: <code>adj[v].reserve(expected_degree)</code></li>
+                            <li>Use 0-indexed or 1-indexed consistently throughout your solution</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Common Patterns:</h4>
+                        <ul>
+                            <li>Trees have exactly n-1 edges and no cycles</li>
+                            <li>In an undirected graph, sum of all degrees = 2 × number of edges</li>
+                            <li>A graph with n vertices and n or more edges must contain a cycle</li>
+                            <li>Maximum edges in simple undirected graph: n(n-1)/2</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>Common Mistakes:</h4>
+                        <ul>
+                            <li>Forgetting to add both directions for undirected graphs</li>
+                            <li>Using adjacency matrix for large sparse graphs (memory limit exceeded)</li>
+                            <li>Mixing 0-indexed and 1-indexed vertex numbering</li>
                         </ul>
                     </div>
                 </div>

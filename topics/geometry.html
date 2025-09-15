@@ -34,19 +34,357 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on computational geometry will cover:</p>
+                    <h3>Basic Geometric Structures</h3>
+                    <p>Let's start with fundamental geometric objects and operations:</p>
                     
-                    <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                    <h4>Point Structure</h4>
+                    <pre><code class="language-cpp">
+struct Point {
+    double x, y;
+    
+    Point(double x = 0, double y = 0) : x(x), y(y) {}
+    
+    Point operator+(const Point&amp; p) const { return {x + p.x, y + p.y}; }
+    Point operator-(const Point&amp; p) const { return {x - p.x, y - p.y}; }
+    Point operator*(double t) const { return {x * t, y * t}; }
+    Point operator/(double t) const { return {x / t, y / t}; }
+    
+    double dot(const Point&amp; p) const { return x * p.x + y * p.y; }
+    double cross(const Point&amp; p) const { return x * p.y - y * p.x; }
+    
+    double length() const { return sqrt(x * x + y * y); }
+    double length2() const { return x * x + y * y; } // Squared length
+    
+    Point normalize() const { 
+        double len = length();
+        return len > 0 ? *this / len : Point(0, 0);
+    }
+    
+    Point rotate(double angle) const {
+        double c = cos(angle), s = sin(angle);
+        return {x * c - y * s, x * s + y * c};
+    }
+};
+
+const double EPS = 1e-9;
+
+bool equal(double a, double b) {
+    return abs(a - b) < EPS;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Lines and Segments</h3>
+                    <p>Working with lines and line segments:</p>
+                    
+                    <h4>Line Representation</h4>
+                    <pre><code class="language-cpp">
+struct Line {
+    Point a, b; // Two points defining the line
+    
+    Line(Point a, Point b) : a(a), b(b) {}
+    
+    // Get direction vector
+    Point direction() const { return b - a; }
+    
+    // Check if point lies on line
+    bool contains(const Point&amp; p) const {
+        return equal((p - a).cross(direction()), 0);
+    }
+    
+    // Distance from point to line
+    double distanceToPoint(const Point&amp; p) const {
+        return abs((p - a).cross(direction())) / direction().length();
+    }
+    
+    // Project point onto line
+    Point project(const Point&amp; p) const {
+        Point d = direction();
+        double t = (p - a).dot(d) / d.dot(d);
+        return a + d * t;
+    }
+};
+
+// Line from equation ax + by + c = 0
+struct LineEquation {
+    double a, b, c;
+    
+    LineEquation(double a, double b, double c) : a(a), b(b), c(c) {}
+    
+    LineEquation(Point p1, Point p2) {
+        a = p2.y - p1.y;
+        b = p1.x - p2.x;
+        c = p2.x * p1.y - p1.x * p2.y;
+    }
+    
+    double evaluate(Point p) const {
+        return a * p.x + b * p.y + c;
+    }
+    
+    bool contains(Point p) const {
+        return equal(evaluate(p), 0);
+    }
+};
+                    </code></pre>
+                    
+                    <h4>Line Intersection</h4>
+                    <pre><code class="language-cpp">
+// Find intersection of two lines
+pair&lt;bool, Point&gt; lineIntersection(Line l1, Line l2) {
+    Point d1 = l1.direction(), d2 = l2.direction();
+    double cross = d1.cross(d2);
+    
+    // Lines are parallel
+    if(equal(cross, 0)) {
+        return {false, Point()};
+    }
+    
+    Point diff = l2.a - l1.a;
+    double t = diff.cross(d2) / cross;
+    
+    return {true, l1.a + d1 * t};
+}
+
+// Check if two segments intersect
+bool segmentsIntersect(Point a1, Point b1, Point a2, Point b2) {
+    Point d1 = b1 - a1, d2 = b2 - a2;
+    Point diff = a2 - a1;
+    
+    double cross = d1.cross(d2);
+    
+    if(equal(cross, 0)) {
+        // Parallel segments - check if they overlap
+        if(!equal(diff.cross(d1), 0)) return false; // Not collinear
+        
+        double t1 = diff.dot(d1) / d1.dot(d1);
+        double t2 = (diff + d2).dot(d1) / d1.dot(d1);
+        
+        if(t1 > t2) swap(t1, t2);
+        return t2 >= 0 && t1 <= 1;
+    }
+    
+    double t1 = diff.cross(d2) / cross;
+    double t2 = diff.cross(d1) / cross;
+    
+    return t1 >= 0 && t1 <= 1 && t2 >= 0 && t2 <= 1;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Polygon Operations</h3>
+                    <p>Working with polygons and calculating their properties:</p>
+                    
+                    <h4>Polygon Area</h4>
+                    <pre><code class="language-cpp">
+// Calculate polygon area using shoelace formula
+double polygonArea(vector&lt;Point&gt;&amp; polygon) {
+    double area = 0;
+    int n = polygon.size();
+    
+    for(int i = 0; i < n; i++) {
+        int j = (i + 1) % n;
+        area += polygon[i].cross(polygon[j]);
+    }
+    
+    return abs(area) / 2.0;
+}
+
+// Check if polygon is convex
+bool isConvex(vector&lt;Point&gt;&amp; polygon) {
+    int n = polygon.size();
+    if(n < 3) return false;
+    
+    bool positive = false, negative = false;
+    
+    for(int i = 0; i < n; i++) {
+        Point a = polygon[i];
+        Point b = polygon[(i + 1) % n];
+        Point c = polygon[(i + 2) % n];
+        
+        double cross = (b - a).cross(c - b);
+        
+        if(cross > EPS) positive = true;
+        if(cross < -EPS) negative = true;
+        
+        if(positive && negative) return false;
+    }
+    
+    return true;
+}
+                    </code></pre>
+                    
+                    <h4>Point in Polygon</h4>
+                    <pre><code class="language-cpp">
+// Check if point is inside polygon (ray casting algorithm)
+bool pointInPolygon(Point p, vector&lt;Point&gt;&amp; polygon) {
+    int n = polygon.size();
+    bool inside = false;
+    
+    for(int i = 0, j = n - 1; i < n; j = i++) {
+        Point pi = polygon[i], pj = polygon[j];
+        
+        if(((pi.y > p.y) != (pj.y > p.y)) &&
+           (p.x < (pj.x - pi.x) * (p.y - pi.y) / (pj.y - pi.y) + pi.x)) {
+            inside = !inside;
+        }
+    }
+    
+    return inside;
+}
+
+// Winding number algorithm (more robust)
+int windingNumber(Point p, vector&lt;Point&gt;&amp; polygon) {
+    int wn = 0;
+    int n = polygon.size();
+    
+    for(int i = 0; i < n; i++) {
+        Point a = polygon[i];
+        Point b = polygon[(i + 1) % n];
+        
+        if(a.y <= p.y) {
+            if(b.y > p.y) { // Upward crossing
+                if((b - a).cross(p - a) > 0) wn++;
+            }
+        } else {
+            if(b.y <= p.y) { // Downward crossing
+                if((b - a).cross(p - a) < 0) wn--;
+            }
+        }
+    }
+    
+    return wn;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Distance and Projections</h3>
+                    <p>Computing distances and projections between geometric objects:</p>
+                    
+                    <pre><code class="language-cpp">
+// Distance between two points
+double pointDistance(Point a, Point b) {
+    return (b - a).length();
+}
+
+// Distance from point to segment
+double pointToSegmentDistance(Point p, Point a, Point b) {
+    Point ap = p - a, ab = b - a;
+    
+    double t = ap.dot(ab) / ab.dot(ab);
+    t = max(0.0, min(1.0, t)); // Clamp to [0, 1]
+    
+    Point closest = a + ab * t;
+    return (p - closest).length();
+}
+
+// Distance between two segments
+double segmentDistance(Point a1, Point b1, Point a2, Point b2) {
+    // Check if segments intersect
+    if(segmentsIntersect(a1, b1, a2, b2)) return 0;
+    
+    // Check all endpoint to segment distances
+    double dist = pointToSegmentDistance(a1, a2, b2);
+    dist = min(dist, pointToSegmentDistance(b1, a2, b2));
+    dist = min(dist, pointToSegmentDistance(a2, a1, b1));
+    dist = min(dist, pointToSegmentDistance(b2, a1, b1));
+    
+    return dist;
+}
+
+// Closest pair of points (divide and conquer)
+double closestPairRec(vector&lt;Point&gt;&amp; px, vector&lt;Point&gt;&amp; py) {
+    int n = px.size();
+    if(n <= 3) {
+        double minDist = 1e18;
+        for(int i = 0; i < n; i++) {
+            for(int j = i + 1; j < n; j++) {
+                minDist = min(minDist, pointDistance(px[i], px[j]));
+            }
+        }
+        return minDist;
+    }
+    
+    int mid = n / 2;
+    Point midPoint = px[mid];
+    
+    vector&lt;Point&gt; pyl, pyr;
+    for(Point p : py) {
+        if(p.x <= midPoint.x) pyl.push_back(p);
+        else pyr.push_back(p);
+    }
+    
+    vector&lt;Point&gt; pxl(px.begin(), px.begin() + mid);
+    vector&lt;Point&gt; pxr(px.begin() + mid, px.end());
+    
+    double dl = closestPairRec(pxl, pyl);
+    double dr = closestPairRec(pxr, pyr);
+    double d = min(dl, dr);
+    
+    vector&lt;Point&gt; strip;
+    for(Point p : py) {
+        if(abs(p.x - midPoint.x) < d) {
+            strip.push_back(p);
+        }
+    }
+    
+    for(int i = 0; i < strip.size(); i++) {
+        for(int j = i + 1; j < strip.size() && (strip[j].y - strip[i].y) < d; j++) {
+            d = min(d, pointDistance(strip[i], strip[j]));
+        }
+    }
+    
+    return d;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Complex Numbers for Geometry</h3>
+                    <p>Using complex numbers can simplify many 2D geometric operations:</p>
+                    
+                    <pre><code class="language-cpp">
+typedef complex&lt;double&gt; Point2D;
+
+// Rotate point around origin by angle
+Point2D rotate(Point2D p, double angle) {
+    return p * polar(1.0, angle);
+}
+
+// Rotate point around center by angle
+Point2D rotateAround(Point2D p, Point2D center, double angle) {
+    return center + rotate(p - center, angle);
+}
+
+// Cross product using complex numbers
+double cross(Point2D a, Point2D b) {
+    return imag(conj(a) * b);
+}
+
+// Check if points are in counter-clockwise order
+bool ccw(Point2D a, Point2D b, Point2D c) {
+    return cross(b - a, c - a) > 0;
+}
+
+// Line intersection using complex numbers
+Point2D lineIntersection(Point2D a1, Point2D b1, Point2D a2, Point2D b2) {
+    Point2D d1 = b1 - a1, d2 = b2 - a2;
+    Point2D diff = a2 - a1;
+    
+    double t = cross(diff, d2) / cross(d1, d2);
+    return a1 + d1 * t;
+}
+                    </code></pre>
+                    
+                    <div class="tip-box">
+                        <h4><i class="fas fa-lightbulb"></i> Geometry Tips</h4>
                         <ul>
-                            <li>Complex numbers for 2D geometry</li>
-                            <li>Points, lines, and basic operations</li>
-                            <li>Polygon area calculation methods</li>
-                            <li>Line intersection algorithms</li>
-                            <li>Point-in-polygon tests</li>
-                            <li>Distance calculations and projections</li>
-                            <li>Coordinate geometry fundamentals</li>
+                            <li>Always use appropriate epsilon for floating-point comparisons</li>
+                            <li>Complex numbers can simplify rotation and geometric calculations</li>
+                            <li>Use integer coordinates when possible to avoid precision issues</li>
+                            <li>Cross product is key for many orientation and intersection problems</li>
                         </ul>
                     </div>
                 </div>

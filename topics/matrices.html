@@ -34,21 +34,229 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on matrices will cover:</p>
+                    <h3>What are Matrices?</h3>
+                    <p>A matrix is a rectangular array of numbers arranged in rows and columns. In competitive programming, matrices are powerful tools for solving linear recurrences, graph problems, and optimization tasks efficiently.</p>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Key Matrix Concepts:</h4>
                         <ul>
-                            <li>Matrix operations and properties</li>
-                            <li>Matrix exponentiation for recurrences</li>
-                            <li>Linear recurrence relations</li>
-                            <li>Adjacency matrix for graph problems</li>
-                            <li>Gaussian elimination basics</li>
-                            <li>Determinant calculation</li>
-                            <li>Applications in competitive programming</li>
+                            <li><strong>Dimensions:</strong> An m×n matrix has m rows and n columns</li>
+                            <li><strong>Square Matrix:</strong> Equal number of rows and columns</li>
+                            <li><strong>Identity Matrix:</strong> Square matrix with 1s on diagonal, 0s elsewhere</li>
+                            <li><strong>Zero Matrix:</strong> All elements are zero</li>
                         </ul>
                     </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Basic Matrix Operations</h3>
+                    <p>Let's implement fundamental matrix operations:</p>
+                    
+                    <h4>Matrix Representation</h4>
+                    <pre><code class="language-cpp">
+typedef vector&lt;vector&lt;long long&gt;&gt; Matrix;
+
+// Create a matrix with given dimensions
+Matrix createMatrix(int rows, int cols, long long value = 0) {
+    return Matrix(rows, vector&lt;long long&gt;(cols, value));
+}
+
+// Identity matrix
+Matrix identity(int n) {
+    Matrix result = createMatrix(n, n);
+    for(int i = 0; i &lt; n; i++) {
+        result[i][i] = 1;
+    }
+    return result;
+}
+                    </code></pre>
+                    
+                    <h4>Matrix Addition</h4>
+                    <pre><code class="language-cpp">
+Matrix add(Matrix A, Matrix B) {
+    int rows = A.size(), cols = A[0].size();
+    Matrix result = createMatrix(rows, cols);
+    
+    for(int i = 0; i &lt; rows; i++) {
+        for(int j = 0; j &lt; cols; j++) {
+            result[i][j] = A[i][j] + B[i][j];
+        }
+    }
+    return result;
+}
+                    </code></pre>
+                    
+                    <h4>Matrix Multiplication</h4>
+                    <pre><code class="language-cpp">
+Matrix multiply(Matrix A, Matrix B, long long mod = 1e9 + 7) {
+    int rows = A.size(), cols = B[0].size(), common = B.size();
+    Matrix result = createMatrix(rows, cols);
+    
+    for(int i = 0; i &lt; rows; i++) {
+        for(int j = 0; j &lt; cols; j++) {
+            for(int k = 0; k &lt; common; k++) {
+                result[i][j] = (result[i][j] + (A[i][k] * B[k][j]) % mod) % mod;
+            }
+        }
+    }
+    return result;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Matrix Exponentiation</h3>
+                    <p>Matrix exponentiation allows us to compute A^n efficiently in O(k³ log n) time, where k is the matrix dimension:</p>
+                    
+                    <pre><code class="language-cpp">
+Matrix matrixPower(Matrix base, long long exp, long long mod = 1e9 + 7) {
+    int n = base.size();
+    Matrix result = identity(n);
+    
+    while(exp > 0) {
+        if(exp & 1) {
+            result = multiply(result, base, mod);
+        }
+        base = multiply(base, base, mod);
+        exp >>= 1;
+    }
+    return result;
+}
+                    </code></pre>
+                    
+                    <div class="warning-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Important Notes</h4>
+                        <ul>
+                            <li>Always use modular arithmetic to prevent overflow</li>
+                            <li>Matrix multiplication is not commutative: A×B ≠ B×A</li>
+                            <li>Time complexity is O(k³) for k×k matrices</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Linear Recurrence Relations</h3>
+                    <p>Matrix exponentiation excels at solving linear recurrences like Fibonacci sequences:</p>
+                    
+                    <h4>Fibonacci with Matrix Exponentiation</h4>
+                    <pre><code class="language-cpp">
+long long fibonacci(long long n) {
+    if(n <= 1) return n;
+    
+    // Transition matrix for F(n) = F(n-1) + F(n-2)
+    Matrix transition = {{1, 1}, {1, 0}};
+    Matrix result = matrixPower(transition, n - 1);
+    
+    // [F(n), F(n-1)] = [F(1), F(0)] * transition^(n-1)
+    return result[0][0]; // F(n)
+}
+                    </code></pre>
+                    
+                    <h4>General Linear Recurrence</h4>
+                    <p>For recurrence: f(n) = c₁×f(n-1) + c₂×f(n-2) + ... + cₖ×f(n-k)</p>
+                    
+                    <pre><code class="language-cpp">
+// Solve f(n) = c[0]*f(n-1) + c[1]*f(n-2) + ... + c[k-1]*f(n-k)
+long long linearRecurrence(vector&lt;long long&gt; coeffs, vector&lt;long long&gt; initial, long long n) {
+    int k = coeffs.size();
+    if(n &lt; k) return initial[n];
+    
+    // Create transition matrix
+    Matrix transition = createMatrix(k, k);
+    for(int i = 0; i &lt; k; i++) {
+        transition[0][i] = coeffs[i];
+    }
+    for(int i = 1; i &lt; k; i++) {
+        transition[i][i-1] = 1;
+    }
+    
+    Matrix result = matrixPower(transition, n - k + 1);
+    
+    long long answer = 0;
+    for(int i = 0; i &lt; k; i++) {
+        answer = (answer + (result[0][i] * initial[k-1-i]) % MOD) % MOD;
+    }
+    return answer;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Graph Applications</h3>
+                    <p>Matrices are powerful for graph problems:</p>
+                    
+                    <h4>Counting Paths</h4>
+                    <p>If A is the adjacency matrix, then A^k gives the number of paths of length k between vertices:</p>
+                    
+                    <pre><code class="language-cpp">
+// Count paths of length k from vertex u to vertex v
+long long countPaths(vector&lt;vector&lt;int&gt;&gt;&amp; adj, int u, int v, int k) {
+    int n = adj.size();
+    Matrix adjMatrix = createMatrix(n, n);
+    
+    // Convert adjacency list to matrix
+    for(int i = 0; i &lt; n; i++) {
+        for(int neighbor : adj[i]) {
+            adjMatrix[i][neighbor] = 1;
+        }
+    }
+    
+    Matrix result = matrixPower(adjMatrix, k);
+    return result[u][v];
+}
+                    </code></pre>
+                    
+                    <div class="tip-box">
+                        <h4><i class="fas fa-lightbulb"></i> Matrix Applications</h4>
+                        <ul>
+                            <li><strong>Dynamic Programming:</strong> Optimize DP transitions</li>
+                            <li><strong>Graph Theory:</strong> Count paths, detect cycles</li>
+                            <li><strong>Number Theory:</strong> Fast exponentiation of recurrences</li>
+                            <li><strong>Geometry:</strong> Transformations and rotations</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Advanced Techniques</h3>
+                    <p>Some advanced matrix operations for competitive programming:</p>
+                    
+                    <h4>Matrix Determinant</h4>
+                    <pre><code class="language-cpp">
+long long determinant(Matrix A, long long mod = 1e9 + 7) {
+    int n = A.size();
+    long long det = 1;
+    
+    for(int i = 0; i &lt; n; i++) {
+        int pivot = -1;
+        for(int j = i; j &lt; n; j++) {
+            if(A[j][i] != 0) {
+                pivot = j;
+                break;
+            }
+        }
+        
+        if(pivot == -1) return 0; // Determinant is 0
+        
+        if(pivot != i) {
+            swap(A[i], A[pivot]);
+            det = (mod - det) % mod; // Change sign
+        }
+        
+        det = (det * A[i][i]) % mod;
+        
+        long long inv = modInverse(A[i][i], mod);
+        for(int j = i + 1; j &lt; n; j++) {
+            long long factor = (A[j][i] * inv) % mod;
+            for(int k = i; k &lt; n; k++) {
+                A[j][k] = (A[j][k] - (factor * A[i][k]) % mod + mod) % mod;
+            }
+        }
+    }
+    
+    return det;
+}
+                    </code></pre>
                 </div>
             </article>
             

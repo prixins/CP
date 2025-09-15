@@ -34,19 +34,477 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on combinatorics will cover:</p>
+                    <h3>Binomial Coefficients</h3>
+                    <p>Binomial coefficient C(n,k) represents the number of ways to choose k objects from n objects.</p>
+                    
+                    <h4>Basic Properties</h4>
+                    <div class="info-box">
+                        <h4>Key Formulas:</h4>
+                        <ul>
+                            <li>C(n,k) = n! / (k!(n-k)!)</li>
+                            <li>C(n,k) = C(n,n-k)</li>
+                            <li>C(n,k) = C(n-1,k-1) + C(n-1,k) (Pascal's identity)</li>
+                            <li>Σ C(n,k) = 2^n for k=0 to n</li>
+                        </ul>
+                    </div>
+
+                    <h4>Computing Binomial Coefficients</h4>
+                    <pre><code class="language-cpp">const int MOD = 1e9 + 7;
+
+// Method 1: Using factorials and modular inverse
+vector&lt;long long&gt; fact, inv_fact;
+
+void precompute_factorials(int n) {
+    fact.resize(n + 1);
+    inv_fact.resize(n + 1);
+    
+    fact[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        fact[i] = (fact[i - 1] * i) % MOD;
+    }
+    
+    inv_fact[n] = power(fact[n], MOD - 2, MOD); // Fermat's little theorem
+    for (int i = n - 1; i >= 0; i--) {
+        inv_fact[i] = (inv_fact[i + 1] * (i + 1)) % MOD;
+    }
+}
+
+long long nCr(int n, int r) {
+    if (r > n || r < 0) return 0;
+    return (fact[n] * inv_fact[r] % MOD) * inv_fact[n - r] % MOD;
+}
+
+// Method 2: Using Pascal's triangle (DP)
+vector&lt;vector&lt;long long&gt;&gt; pascal;
+
+void build_pascal(int n) {
+    pascal.assign(n + 1, vector&lt;long long&gt;(n + 1, 0));
+    
+    for (int i = 0; i <= n; i++) {
+        pascal[i][0] = pascal[i][i] = 1;
+        for (int j = 1; j < i; j++) {
+            pascal[i][j] = (pascal[i-1][j-1] + pascal[i-1][j]) % MOD;
+        }
+    }
+}
+
+// Method 3: Direct computation (for small values)
+long long nCr_direct(int n, int r) {
+    if (r > n - r) r = n - r; // Take advantage of symmetry
+    
+    long long result = 1;
+    for (int i = 0; i < r; i++) {
+        result = result * (n - i) / (i + 1);
+    }
+    return result;
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Permutations and Combinations</h3>
+                    
+                    <h4>Basic Counting Principles</h4>
+                    <pre><code class="language-cpp">// Permutations: P(n,r) = n!/(n-r)!
+long long nPr(int n, int r) {
+    if (r > n) return 0;
+    long long result = 1;
+    for (int i = 0; i < r; i++) {
+        result = (result * (n - i)) % MOD;
+    }
+    return result;
+}
+
+// Permutations with repetition
+long long permutations_with_repetition(vector&lt;int&gt;& counts) {
+    int n = 0;
+    for (int c : counts) n += c;
+    
+    long long result = fact[n];
+    for (int c : counts) {
+        result = (result * inv_fact[c]) % MOD;
+    }
+    return result;
+}
+
+// Circular permutations
+long long circular_permutations(int n) {
+    return fact[n - 1]; // Fix one object, arrange others
+}
+
+// Derangements (permutations with no fixed points)
+vector&lt;long long&gt; derangement;
+
+void compute_derangements(int n) {
+    derangement.resize(n + 1);
+    if (n >= 0) derangement[0] = 1;
+    if (n >= 1) derangement[1] = 0;
+    
+    for (int i = 2; i <= n; i++) {
+        derangement[i] = ((long long)(i - 1) * 
+                         (derangement[i - 1] + derangement[i - 2])) % MOD;
+    }
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Catalan Numbers</h3>
+                    <p>The nth Catalan number C_n counts many combinatorial structures, including valid parentheses sequences and binary trees.</p>
+                    
+                    <h4>Computing Catalan Numbers</h4>
+                    <pre><code class="language-cpp">// Formula: C_n = C(2n,n)/(n+1) = C(2n,n) - C(2n,n+1)
+vector&lt;long long&gt; catalan;
+
+void compute_catalan(int n) {
+    catalan.resize(n + 1);
+    catalan[0] = catalan[1] = 1;
+    
+    // Using recurrence: C_n = Σ(C_i * C_(n-1-i)) for i=0 to n-1
+    for (int i = 2; i <= n; i++) {
+        catalan[i] = 0;
+        for (int j = 0; j < i; j++) {
+            catalan[i] = (catalan[i] + catalan[j] * catalan[i - 1 - j]) % MOD;
+        }
+    }
+}
+
+// Using binomial coefficients
+long long catalan_formula(int n) {
+    return (nCr(2 * n, n) * power(n + 1, MOD - 2, MOD)) % MOD;
+}</code></pre>
+
+                    <div class="info-box">
+                        <h4>Catalan Number Applications:</h4>
+                        <ul>
+                            <li>Valid parentheses sequences of length 2n</li>
+                            <li>Binary trees with n+1 leaves</li>
+                            <li>Ways to triangulate a convex (n+2)-gon</li>
+                            <li>Monotonic lattice paths that don't cross diagonal</li>
+                            <li>Ways to associate n applications of binary operator</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Inclusion-Exclusion Principle</h3>
+                    <p>Used to count elements in union of sets by including individual sets, excluding pairwise intersections, including three-way intersections, etc.</p>
+                    
+                    <h4>Basic Implementation</h4>
+                    <pre><code class="language-cpp">// Count elements satisfying at least one of the conditions
+long long inclusion_exclusion(vector&lt;long long&gt;& single_counts,
+                             vector&lt;long long&gt;& pair_intersections,
+                             vector&lt;long long&gt;& triple_intersections,
+                             // ... more as needed
+                             ) {
+    long long result = 0;
+    
+    // Add individual sets
+    for (long long count : single_counts) {
+        result += count;
+    }
+    
+    // Subtract pairwise intersections
+    for (long long count : pair_intersections) {
+        result -= count;
+    }
+    
+    // Add triple intersections
+    for (long long count : triple_intersections) {
+        result += count;
+    }
+    
+    // Continue alternating...
+    return result;
+}
+
+// General inclusion-exclusion using bitmasks
+long long general_inclusion_exclusion(int n, function&lt;long long(int)&gt; get_intersection) {
+    long long result = 0;
+    
+    for (int mask = 1; mask < (1 << n); mask++) {
+        int bits = __builtin_popcount(mask);
+        long long intersection_size = get_intersection(mask);
+        
+        if (bits % 2 == 1) {
+            result += intersection_size;
+        } else {
+            result -= intersection_size;
+        }
+    }
+    
+    return result;
+}</code></pre>
+
+                    <h4>Classic Problem: Derangements using Inclusion-Exclusion</h4>
+                    <pre><code class="language-cpp">long long derangements_ie(int n) {
+    long long result = 0;
+    
+    for (int i = 0; i <= n; i++) {
+        long long term = nCr(n, i) * fact[n - i];
+        if (i % 2 == 0) {
+            result += term;
+        } else {
+            result -= term;
+        }
+        result = (result % MOD + MOD) % MOD;
+    }
+    
+    return result;
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Stirling Numbers</h3>
+                    
+                    <h4>Stirling Numbers of the Second Kind</h4>
+                    <p>S(n,k) counts the number of ways to partition n objects into k non-empty subsets.</p>
+                    
+                    <pre><code class="language-cpp">vector&lt;vector&lt;long long&gt;&gt; stirling2;
+
+void compute_stirling2(int n, int k) {
+    stirling2.assign(n + 1, vector&lt;long long&gt;(k + 1, 0));
+    
+    // Base cases
+    stirling2[0][0] = 1;
+    
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= min(i, k); j++) {
+            // S(n,k) = k*S(n-1,k) + S(n-1,k-1)
+            stirling2[i][j] = (j * stirling2[i-1][j] + stirling2[i-1][j-1]) % MOD;
+        }
+    }
+}
+
+// Using inclusion-exclusion formula
+long long stirling2_formula(int n, int k) {
+    long long result = 0;
+    
+    for (int i = 0; i <= k; i++) {
+        long long term = (nCr(k, i) * power(k - i, n, MOD)) % MOD;
+        if (i % 2 == 0) {
+            result = (result + term) % MOD;
+        } else {
+            result = (result - term + MOD) % MOD;
+        }
+    }
+    
+    return (result * inv_fact[k]) % MOD;
+}</code></pre>
+
+                    <h4>Stirling Numbers of the First Kind</h4>
+                    <p>s(n,k) counts the number of permutations of n elements with k cycles.</p>
+                    
+                    <pre><code class="language-cpp">vector&lt;vector&lt;long long&gt;&gt; stirling1;
+
+void compute_stirling1(int n, int k) {
+    stirling1.assign(n + 1, vector&lt;long long&gt;(k + 1, 0));
+    
+    stirling1[0][0] = 1;
+    
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= min(i, k); j++) {
+            // s(n,k) = (n-1)*s(n-1,k) + s(n-1,k-1)
+            stirling1[i][j] = ((long long)(i-1) * stirling1[i-1][j] + 
+                              stirling1[i-1][j-1]) % MOD;
+        }
+    }
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Bell Numbers</h3>
+                    <p>B(n) counts the number of ways to partition n objects into non-empty subsets.</p>
+                    
+                    <pre><code class="language-cpp">vector&lt;long long&gt; bell;
+
+void compute_bell(int n) {
+    // Bell numbers using Bell triangle
+    vector&lt;vector&lt;long long&gt;&gt; triangle(n + 1);
+    triangle[0] = {1};
+    
+    for (int i = 1; i <= n; i++) {
+        triangle[i].resize(i + 1);
+        triangle[i][0] = triangle[i-1][i-1]; // Start with last element of previous row
+        
+        for (int j = 1; j <= i; j++) {
+            triangle[i][j] = (triangle[i][j-1] + triangle[i-1][j-1]) % MOD;
+        }
+    }
+    
+    bell.resize(n + 1);
+    for (int i = 0; i <= n; i++) {
+        bell[i] = triangle[i][0];
+    }
+}
+
+// Bell numbers using Stirling numbers of second kind
+long long bell_from_stirling(int n) {
+    long long result = 0;
+    for (int k = 0; k <= n; k++) {
+        result = (result + stirling2[n][k]) % MOD;
+    }
+    return result;
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Burnside's Lemma</h3>
+                    <p>Counts the number of distinct objects under group actions (symmetries). Number of distinct colorings = (1/|G|) × Σ |Fix(g)| for all g in G.</p>
+                    
+                    <pre><code class="language-cpp">// Example: Count distinct necklaces with n beads and k colors
+long long count_necklaces(int n, int k) {
+    long long result = 0;
+    
+    // Identity: all k^n colorings are fixed
+    result += power(k, n, MOD);
+    
+    // Rotations by i positions (for i = 1 to n-1)
+    for (int i = 1; i < n; i++) {
+        int cycles = gcd(n, i);
+        result = (result + power(k, cycles, MOD)) % MOD;
+    }
+    
+    // Reflections (if n is even, there are different cases)
+    if (n % 2 == 0) {
+        // n/2 reflections through opposite vertices
+        result = (result + (long long)n/2 * power(k, n/2 + 1, MOD)) % MOD;
+        // n/2 reflections through opposite edge midpoints  
+        result = (result + (long long)n/2 * power(k, n/2, MOD)) % MOD;
+    } else {
+        // n reflections through vertex and opposite edge midpoint
+        result = (result + (long long)n * power(k, (n+1)/2, MOD)) % MOD;
+    }
+    
+    // Divide by total number of symmetries (2n for dihedral group)
+    return (result * power(2 * n, MOD - 2, MOD)) % MOD;
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Generating Functions</h3>
+                    <p>Generating functions encode sequences as coefficients of power series, useful for solving recurrence relations.</p>
+                    
+                    <h4>Basic Operations</h4>
+                    <pre><code class="language-cpp">// Represent polynomial as vector of coefficients
+vector&lt;long long&gt; multiply_polynomials(vector&lt;long long&gt; a, vector&lt;long long&gt; b) {
+    int n = a.size() + b.size() - 1;
+    vector&lt;long long&gt; result(n, 0);
+    
+    for (int i = 0; i < a.size(); i++) {
+        for (int j = 0; j < b.size(); j++) {
+            result[i + j] = (result[i + j] + a[i] * b[j]) % MOD;
+        }
+    }
+    
+    return result;
+}
+
+// Fibonacci using generating functions
+long long fibonacci_gf(int n) {
+    // F(x) = x / (1 - x - x²)
+    // Can be computed using matrix exponentiation or recurrence
+    if (n == 0) return 0;
+    if (n == 1) return 1;
+    
+    long long a = 0, b = 1;
+    for (int i = 2; i <= n; i++) {
+        long long c = (a + b) % MOD;
+        a = b;
+        b = c;
+    }
+    return b;
+}</code></pre>
+
+                    <div class="tip-box">
+                        <h4>Common Generating Functions:</h4>
+                        <ul>
+                            <li>1/(1-x) = 1 + x + x² + ... (geometric series)</li>
+                            <li>1/(1-x)² = 1 + 2x + 3x² + ... (positive integers)</li>
+                            <li>eˣ = 1 + x + x²/2! + x³/3! + ... (exponential)</li>
+                            <li>x/(1-x-x²) generates Fibonacci numbers</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Advanced Counting Techniques</h3>
+                    
+                    <h4>Stars and Bars</h4>
+                    <p>Count non-negative integer solutions to x₁ + x₂ + ... + xₖ = n</p>
+                    
+                    <pre><code class="language-cpp">// Number of ways to distribute n identical objects into k distinct boxes
+long long stars_and_bars(int n, int k) {
+    return nCr(n + k - 1, k - 1);
+}
+
+// With minimum constraints: each xᵢ ≥ mᵢ
+long long stars_bars_minimum(int n, int k, vector&lt;int&gt;& minimums) {
+    int total_minimum = 0;
+    for (int m : minimums) total_minimum += m;
+    
+    if (n < total_minimum) return 0;
+    
+    return nCr(n - total_minimum + k - 1, k - 1);
+}</code></pre>
+
+                    <h4>Partition Function</h4>
+                    <pre><code class="language-cpp">// Count partitions of n into distinct parts
+vector&lt;vector&lt;long long&gt;&gt; partition_distinct;
+
+void compute_partition_distinct(int n) {
+    partition_distinct.assign(n + 1, vector&lt;long long&gt;(n + 1, 0));
+    
+    // Base case: empty partition
+    for (int i = 0; i <= n; i++) {
+        partition_distinct[0][i] = 1;
+    }
+    
+    for (int num = 1; num <= n; num++) {
+        for (int sum = 0; sum <= n; sum++) {
+            // Don't include num
+            partition_distinct[sum][num] = partition_distinct[sum][num - 1];
+            
+            // Include num if possible
+            if (sum >= num) {
+                partition_distinct[sum][num] = (partition_distinct[sum][num] + 
+                                              partition_distinct[sum - num][num - 1]) % MOD;
+            }
+        }
+    }
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Practical Applications</h3>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Problem Types:</h4>
                         <ul>
-                            <li>Binomial coefficients and Pascal's triangle</li>
-                            <li>Catalan numbers and applications</li>
-                            <li>Inclusion-exclusion principle</li>
-                            <li>Permutations and combinations</li>
-                            <li>Generating functions basics</li>
-                            <li>Burnside's lemma for symmetry</li>
-                            <li>Derangements and stirling numbers</li>
+                            <li><strong>Path Counting:</strong> Grid paths, Catalan numbers</li>
+                            <li><strong>Arrangement Problems:</strong> Permutations, derangements</li>
+                            <li><strong>Selection Problems:</strong> Combinations, stars and bars</li>
+                            <li><strong>Partition Problems:</strong> Integer partitions, set partitions</li>
+                            <li><strong>Symmetry Problems:</strong> Burnside's lemma, Polya enumeration</li>
+                        </ul>
+                    </div>
+
+                    <div class="tip-box">
+                        <h4>Problem-Solving Strategy:</h4>
+                        <ul>
+                            <li>Identify if order matters (permutation vs combination)</li>
+                            <li>Check for restrictions or constraints</li>
+                            <li>Consider complementary counting</li>
+                            <li>Look for symmetries that can be exploited</li>
+                            <li>Break complex problems into simpler subproblems</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>Common Mistakes:</h4>
+                        <ul>
+                            <li>Confusing permutations with combinations</li>
+                            <li>Forgetting to handle modular arithmetic correctly</li>
+                            <li>Double-counting or missing cases in inclusion-exclusion</li>
+                            <li>Not considering edge cases (n=0, k=0, etc.)</li>
                         </ul>
                     </div>
                 </div>

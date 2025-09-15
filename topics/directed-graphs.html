@@ -51,19 +51,429 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on directed graphs will cover:</p>
+                    <h3>Directed Graph Fundamentals</h3>
+                    <p>Directed graphs (digraphs) have edges with direction, creating unique properties and algorithms different from undirected graphs. Understanding topological ordering and strong connectivity is crucial.</p>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Key Concepts:</h4>
                         <ul>
-                            <li>Topological sorting algorithms</li>
-                            <li>Strongly connected components (Kosaraju's algorithm)</li>
-                            <li>Cycle detection in directed graphs</li>
-                            <li>Dynamic programming on DAGs</li>
-                            <li>Longest paths in DAGs</li>
-                            <li>2-SAT problem introduction</li>
-                            <li>Applications in scheduling and dependencies</li>
+                            <li><strong>DAG:</strong> Directed Acyclic Graph - no cycles</li>
+                            <li><strong>Topological Order:</strong> Linear ordering respecting edge directions</li>
+                            <li><strong>SCC:</strong> Strongly Connected Component - mutual reachability</li>
+                            <li><strong>In-degree/Out-degree:</strong> Number of incoming/outgoing edges</li>
+                        </ul>
+                    </div>
+                    
+                    <h4>Basic Operations</h4>
+                    <pre><code class="language-cpp">
+// Directed graph representation
+vector&lt;vector&lt;int&gt;&gt; adj; // Adjacency list
+vector&lt;int&gt; indegree, outdegree;
+
+void addDirectedEdge(int u, int v) {
+    adj[u].push_back(v);
+    outdegree[u]++;
+    indegree[v]++;
+}
+
+// Check if edge exists
+bool hasEdge(int u, int v) {
+    return find(adj[u].begin(), adj[u].end(), v) != adj[u].end();
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Topological Sorting</h3>
+                    <p>Topological sorting produces a linear ordering of vertices where for every directed edge u→v, u appears before v in the ordering. Only possible for DAGs.</p>
+                    
+                    <h4>Kahn's Algorithm (BFS-based)</h4>
+                    <pre><code class="language-cpp">
+// Kahn's algorithm for topological sorting
+vector&lt;int&gt; topologicalSortKahn(int n, vector&lt;vector&lt;int&gt;&gt;&amp; adj) {
+    vector&lt;int&gt; indegree(n, 0);
+    
+    // Calculate indegrees
+    for(int u = 0; u < n; u++) {
+        for(int v : adj[u]) {
+            indegree[v]++;
+        }
+    }
+    
+    queue&lt;int&gt; q;
+    
+    // Add vertices with indegree 0
+    for(int i = 0; i < n; i++) {
+        if(indegree[i] == 0) {
+            q.push(i);
+        }
+    }
+    
+    vector&lt;int&gt; topoOrder;
+    
+    while(!q.empty()) {
+        int u = q.front();
+        q.pop();
+        topoOrder.push_back(u);
+        
+        // Remove u and decrease indegree of neighbors
+        for(int v : adj[u]) {
+            indegree[v]--;
+            if(indegree[v] == 0) {
+                q.push(v);
+            }
+        }
+    }
+    
+    // Check if topological sort is possible (no cycles)
+    if(topoOrder.size() != n) {
+        return {}; // Cycle detected
+    }
+    
+    return topoOrder;
+}
+                    </code></pre>
+                    
+                    <h4>DFS-based Topological Sort</h4>
+                    <pre><code class="language-cpp">
+vector&lt;int&gt; topoOrder;
+vector&lt;int&gt; color; // 0: white, 1: gray, 2: black
+bool hasCycle = false;
+
+void topoDFS(int u, vector&lt;vector&lt;int&gt;&gt;&amp; adj) {
+    color[u] = 1; // Mark as gray (visiting)
+    
+    for(int v : adj[u]) {
+        if(color[v] == 1) {
+            hasCycle = true; // Back edge found (cycle)
+            return;
+        }
+        if(color[v] == 0) {
+            topoDFS(v, adj);
+        }
+    }
+    
+    color[u] = 2; // Mark as black (finished)
+    topoOrder.push_back(u);
+}
+
+vector&lt;int&gt; topologicalSortDFS(int n, vector&lt;vector&lt;int&gt;&gt;&amp; adj) {
+    color.assign(n, 0);
+    topoOrder.clear();
+    hasCycle = false;
+    
+    for(int i = 0; i < n; i++) {
+        if(color[i] == 0) {
+            topoDFS(i, adj);
+            if(hasCycle) return {}; // Cycle detected
+        }
+    }
+    
+    reverse(topoOrder.begin(), topoOrder.end());
+    return topoOrder;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Strongly Connected Components</h3>
+                    <p>A strongly connected component is a maximal set of vertices where every vertex is reachable from every other vertex in the same component.</p>
+                    
+                    <h4>Kosaraju's Algorithm</h4>
+                    <pre><code class="language-cpp">
+class StronglyConnectedComponents {
+private:
+    int n;
+    vector&lt;vector&lt;int&gt;&gt; adj, radj; // Original and reverse graph
+    vector&lt;bool&gt; visited;
+    vector&lt;int&gt; order, component;
+    int numComponents;
+    
+    void dfs1(int u) {
+        visited[u] = true;
+        for(int v : adj[u]) {
+            if(!visited[v]) {
+                dfs1(v);
+            }
+        }
+        order.push_back(u);
+    }
+    
+    void dfs2(int u, int comp) {
+        component[u] = comp;
+        for(int v : radj[u]) {
+            if(component[v] == -1) {
+                dfs2(v, comp);
+            }
+        }
+    }
+    
+public:
+    StronglyConnectedComponents(int n) : n(n), adj(n), radj(n) {}
+    
+    void addEdge(int u, int v) {
+        adj[u].push_back(v);
+        radj[v].push_back(u); // Reverse edge
+    }
+    
+    void findSCCs() {
+        // Step 1: Get finishing order using DFS on original graph
+        visited.assign(n, false);
+        order.clear();
+        
+        for(int i = 0; i < n; i++) {
+            if(!visited[i]) {
+                dfs1(i);
+            }
+        }
+        
+        // Step 2: DFS on reverse graph in reverse finishing order
+        component.assign(n, -1);
+        numComponents = 0;
+        
+        reverse(order.begin(), order.end());
+        
+        for(int u : order) {
+            if(component[u] == -1) {
+                dfs2(u, numComponents++);
+            }
+        }
+    }
+    
+    int getComponent(int u) { return component[u]; }
+    int getNumComponents() { return numComponents; }
+    
+    vector&lt;vector&lt;int&gt;&gt; getComponentGroups() {
+        vector&lt;vector&lt;int&gt;&gt; groups(numComponents);
+        for(int i = 0; i < n; i++) {
+            groups[component[i]].push_back(i);
+        }
+        return groups;
+    }
+    
+    // Build condensation graph (DAG of SCCs)
+    vector&lt;vector&lt;int&gt;&gt; getCondensationGraph() {
+        vector&lt;vector&lt;int&gt;&gt; condAdj(numComponents);
+        set&lt;pair&lt;int, int&gt;&gt; edges;
+        
+        for(int u = 0; u < n; u++) {
+            for(int v : adj[u]) {
+                int compU = component[u], compV = component[v];
+                if(compU != compV && edges.find({compU, compV}) == edges.end()) {
+                    condAdj[compU].push_back(compV);
+                    edges.insert({compU, compV});
+                }
+            }
+        }
+        
+        return condAdj;
+    }
+};
+                    </code></pre>
+                    
+                    <h4>Tarjan's Algorithm (Alternative)</h4>
+                    <pre><code class="language-cpp">
+class TarjanSCC {
+private:
+    int n, timer, sccCount;
+    vector&lt;vector&lt;int&gt;&gt; adj;
+    vector&lt;int&gt; low, disc, sccId;
+    vector&lt;bool&gt; onStack;
+    stack&lt;int&gt; st;
+    
+    void tarjanDFS(int u) {
+        low[u] = disc[u] = timer++;
+        st.push(u);
+        onStack[u] = true;
+        
+        for(int v : adj[u]) {
+            if(disc[v] == -1) {
+                tarjanDFS(v);
+                low[u] = min(low[u], low[v]);
+            } else if(onStack[v]) {
+                low[u] = min(low[u], disc[v]);
+            }
+        }
+        
+        // Root of SCC
+        if(low[u] == disc[u]) {
+            while(true) {
+                int v = st.top();
+                st.pop();
+                onStack[v] = false;
+                sccId[v] = sccCount;
+                if(v == u) break;
+            }
+            sccCount++;
+        }
+    }
+    
+public:
+    TarjanSCC(int n, vector&lt;vector&lt;int&gt;&gt;&amp; graph) : n(n), adj(graph), timer(0), sccCount(0) {
+        low.assign(n, -1);
+        disc.assign(n, -1);
+        sccId.assign(n, -1);
+        onStack.assign(n, false);
+        
+        for(int i = 0; i < n; i++) {
+            if(disc[i] == -1) {
+                tarjanDFS(i);
+            }
+        }
+    }
+    
+    int getComponentId(int u) { return sccId[u]; }
+    int getNumComponents() { return sccCount; }
+};
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Dynamic Programming on DAGs</h3>
+                    <p>DAGs enable efficient DP solutions since we can process vertices in topological order:</p>
+                    
+                    <h4>Longest Path in DAG</h4>
+                    <pre><code class="language-cpp">
+// Longest path in weighted DAG
+vector&lt;long long&gt; longestPathDAG(int n, vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt;&amp; adj) {
+    vector&lt;int&gt; topoOrder = topologicalSortKahn(n, convertToUnweighted(adj));
+    if(topoOrder.empty()) return {}; // Not a DAG
+    
+    vector&lt;long long&gt; dist(n, LLONG_MIN);
+    dist[topoOrder[0]] = 0; // Start from first vertex in topo order
+    
+    for(int u : topoOrder) {
+        if(dist[u] == LLONG_MIN) continue;
+        
+        for(auto&amp; edge : adj[u]) {
+            int v = edge.first;
+            int weight = edge.second;
+            dist[v] = max(dist[v], dist[u] + weight);
+        }
+    }
+    
+    return dist;
+}
+
+// Count number of paths in DAG
+vector&lt;long long&gt; countPathsDAG(int n, vector&lt;vector&lt;int&gt;&gt;&amp; adj, int source) {
+    vector&lt;int&gt; topoOrder = topologicalSortDFS(n, adj);
+    if(topoOrder.empty()) return {}; // Not a DAG
+    
+    vector&lt;long long&gt; pathCount(n, 0);
+    pathCount[source] = 1;
+    
+    for(int u : topoOrder) {
+        for(int v : adj[u]) {
+            pathCount[v] += pathCount[u];
+        }
+    }
+    
+    return pathCount;
+}
+
+// DP on DAG: Maximum sum path
+long long maxSumPathDAG(int n, vector&lt;vector&lt;int&gt;&gt;&amp; adj, vector&lt;int&gt;&amp; values) {
+    vector&lt;int&gt; topoOrder = topologicalSortDFS(n, adj);
+    if(topoOrder.empty()) return LLONG_MIN; // Not a DAG
+    
+    vector&lt;long long&gt; dp(n, LLONG_MIN);
+    
+    // Initialize all vertices (they can be starting points)
+    for(int i = 0; i < n; i++) {
+        dp[i] = values[i];
+    }
+    
+    long long maxSum = *max_element(values.begin(), values.end());
+    
+    for(int u : topoOrder) {
+        if(dp[u] == LLONG_MIN) continue;
+        
+        for(int v : adj[u]) {
+            dp[v] = max(dp[v], dp[u] + values[v]);
+            maxSum = max(maxSum, dp[v]);
+        }
+    }
+    
+    return maxSum;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Cycle Detection</h3>
+                    <p>Detecting cycles in directed graphs using DFS color coding:</p>
+                    
+                    <pre><code class="language-cpp">
+// Cycle detection using DFS colors
+bool hasCycleDirected(int n, vector&lt;vector&lt;int&gt;&gt;&amp; adj) {
+    vector&lt;int&gt; color(n, 0); // 0: white, 1: gray, 2: black
+    
+    function&lt;bool(int)&gt; dfs = [&](int u) -> bool {
+        color[u] = 1; // Mark as gray
+        
+        for(int v : adj[u]) {
+            if(color[v] == 1) return true; // Back edge (cycle)
+            if(color[v] == 0 && dfs(v)) return true;
+        }
+        
+        color[u] = 2; // Mark as black
+        return false;
+    };
+    
+    for(int i = 0; i < n; i++) {
+        if(color[i] == 0 && dfs(i)) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+// Find all vertices in cycles
+vector&lt;bool&gt; findVerticesInCycles(int n, vector&lt;vector&lt;int&gt;&gt;&gt;&amp; adj) {
+    vector&lt;int&gt; color(n, 0);
+    vector&lt;bool&gt; inCycle(n, false);
+    vector&lt;int&gt; parent(n, -1);
+    
+    function&lt;void(int, int)&gt; dfs = [&](int u, int cycleStart) {
+        color[u] = 1;
+        
+        for(int v : adj[u]) {
+            if(color[v] == 1) {
+                // Found cycle, mark all vertices from v to u
+                int curr = u;
+                while(curr != v) {
+                    inCycle[curr] = true;
+                    curr = parent[curr];
+                }
+                inCycle[v] = true;
+            } else if(color[v] == 0) {
+                parent[v] = u;
+                dfs(v, cycleStart);
+            }
+        }
+        
+        color[u] = 2;
+    };
+    
+    for(int i = 0; i < n; i++) {
+        if(color[i] == 0) {
+            dfs(i, -1);
+        }
+    }
+    
+    return inCycle;
+}
+                    </code></pre>
+                    
+                    <div class="tip-box">
+                        <h4><i class="fas fa-lightbulb"></i> Directed Graph Applications</h4>
+                        <ul>
+                            <li><strong>Task Scheduling:</strong> Use topological sort for dependency resolution</li>
+                            <li><strong>Circuit Analysis:</strong> SCCs help identify strongly connected circuits</li>
+                            <li><strong>Web Crawling:</strong> Find strongly connected web page clusters</li>
+                            <li><strong>Social Networks:</strong> Identify communities using SCC decomposition</li>
                         </ul>
                     </div>
                 </div>

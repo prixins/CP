@@ -51,19 +51,482 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on number theory will cover:</p>
+                    <h3>Prime Numbers</h3>
+                    <p>A prime number is a natural number greater than 1 that has no positive divisors other than 1 and itself.</p>
                     
+                    <h4>Primality Testing</h4>
+                    <pre><code class="language-cpp">bool isPrime(long long n) {
+    if (n <= 1) return false;
+    if (n <= 3) return true;
+    if (n % 2 == 0 || n % 3 == 0) return false;
+    
+    // Check for divisors from 5 to sqrt(n)
+    for (long long i = 5; i * i <= n; i += 6) {
+        if (n % i == 0 || n % (i + 2) == 0) {
+            return false;
+        }
+    }
+    return true;
+}</code></pre>
+
+                    <h4>Sieve of Eratosthenes</h4>
+                    <pre><code class="language-cpp">vector&lt;bool&gt; sieve(int n) {
+    vector&lt;bool&gt; is_prime(n + 1, true);
+    is_prime[0] = is_prime[1] = false;
+    
+    for (int i = 2; i * i <= n; i++) {
+        if (is_prime[i]) {
+            for (int j = i * i; j <= n; j += i) {
+                is_prime[j] = false;
+            }
+        }
+    }
+    return is_prime;
+}
+
+// Get list of primes up to n
+vector&lt;int&gt; getPrimes(int n) {
+    vector&lt;bool&gt; is_prime = sieve(n);
+    vector&lt;int&gt; primes;
+    
+    for (int i = 2; i <= n; i++) {
+        if (is_prime[i]) {
+            primes.push_back(i);
+        }
+    }
+    return primes;
+}</code></pre>
+
+                    <div class="tip-box">
+                        <h4>Sieve Optimization:</h4>
+                        <p>Time complexity: O(n log log n). Space: O(n). For n ≤ 10^7, sieve is very efficient.</p>
+                    </div>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Prime Factorization</h3>
+                    
+                    <h4>Trial Division Method</h4>
+                    <pre><code class="language-cpp">vector&lt;pair&lt;int, int&gt;&gt; factorize(int n) {
+    vector&lt;pair&lt;int, int&gt;&gt; factors; // {prime, power}
+    
+    // Check for factor 2
+    if (n % 2 == 0) {
+        int power = 0;
+        while (n % 2 == 0) {
+            n /= 2;
+            power++;
+        }
+        factors.push_back({2, power});
+    }
+    
+    // Check for odd factors
+    for (int i = 3; i * i <= n; i += 2) {
+        if (n % i == 0) {
+            int power = 0;
+            while (n % i == 0) {
+                n /= i;
+                power++;
+            }
+            factors.push_back({i, power});
+        }
+    }
+    
+    // If n is still > 1, then it's a prime
+    if (n > 1) {
+        factors.push_back({n, 1});
+    }
+    
+    return factors;
+}</code></pre>
+
+                    <h4>Factorization using Precomputed Primes</h4>
+                    <pre><code class="language-cpp">vector&lt;int&gt; primes; // Precomputed primes
+
+vector&lt;pair&lt;int, int&gt;&gt; fastFactorize(long long n) {
+    vector&lt;pair&lt;int, int&gt;&gt; factors;
+    
+    for (int p : primes) {
+        if ((long long)p * p > n) break;
+        
+        if (n % p == 0) {
+            int power = 0;
+            while (n % p == 0) {
+                n /= p;
+                power++;
+            }
+            factors.push_back({p, power});
+        }
+    }
+    
+    if (n > 1) {
+        factors.push_back({(int)n, 1});
+    }
+    
+    return factors;
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>GCD and LCM</h3>
+                    
+                    <h4>Euclidean Algorithm for GCD</h4>
+                    <pre><code class="language-cpp">// Recursive GCD
+int gcd(int a, int b) {
+    return b == 0 ? a : gcd(b, a % b);
+}
+
+// Iterative GCD
+int gcd_iterative(int a, int b) {
+    while (b != 0) {
+        int temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
+}
+
+// LCM using GCD
+long long lcm(int a, int b) {
+    return (long long)a * b / gcd(a, b);
+}</code></pre>
+
+                    <h4>Extended Euclidean Algorithm</h4>
+                    <pre><code class="language-cpp">// Returns gcd(a, b) and finds x, y such that ax + by = gcd(a, b)
+int extendedGCD(int a, int b, int& x, int& y) {
+    if (b == 0) {
+        x = 1;
+        y = 0;
+        return a;
+    }
+    
+    int x1, y1;
+    int gcd = extendedGCD(b, a % b, x1, y1);
+    
+    x = y1;
+    y = x1 - (a / b) * y1;
+    
+    return gcd;
+}</code></pre>
+
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Properties:</h4>
                         <ul>
-                            <li>Prime numbers and factorization</li>
-                            <li>Greatest Common Divisor (GCD) and LCM</li>
-                            <li>Modular arithmetic and properties</li>
-                            <li>Fermat's little theorem and Euler's theorem</li>
-                            <li>Chinese Remainder Theorem</li>
-                            <li>Linear Diophantine equations</li>
-                            <li>Fast exponentiation and modular inverse</li>
+                            <li>gcd(a, b) = gcd(b, a % b)</li>
+                            <li>lcm(a, b) = a * b / gcd(a, b)</li>
+                            <li>gcd(a, b) * lcm(a, b) = a * b</li>
+                            <li>gcd(a, 0) = a</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Modular Arithmetic</h3>
+                    
+                    <h4>Basic Operations</h4>
+                    <pre><code class="language-cpp">const int MOD = 1e9 + 7;
+
+// Safe modular addition
+int addMod(int a, int b) {
+    return ((a % MOD) + (b % MOD)) % MOD;
+}
+
+// Safe modular subtraction
+int subMod(int a, int b) {
+    return ((a % MOD) - (b % MOD) + MOD) % MOD;
+}
+
+// Safe modular multiplication
+long long mulMod(long long a, long long b) {
+    return ((a % MOD) * (b % MOD)) % MOD;
+}</code></pre>
+
+                    <h4>Fast Modular Exponentiation</h4>
+                    <pre><code class="language-cpp">long long fastPower(long long base, long long exp, long long mod) {
+    long long result = 1;
+    base %= mod;
+    
+    while (exp > 0) {
+        if (exp & 1) {
+            result = (result * base) % mod;
+        }
+        base = (base * base) % mod;
+        exp >>= 1;
+    }
+    
+    return result;
+}
+
+// Alternative using bit manipulation
+long long power(long long a, long long b, long long m = MOD) {
+    long long res = 1;
+    a %= m;
+    while (b > 0) {
+        if (b & 1) res = res * a % m;
+        a = a * a % m;
+        b >>= 1;
+    }
+    return res;
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Modular Inverse</h3>
+                    
+                    <h4>Using Fermat's Little Theorem</h4>
+                    <p>If p is prime and gcd(a, p) = 1, then a^(p-1) ≡ 1 (mod p), so a^(p-2) ≡ a^(-1) (mod p)</p>
+                    
+                    <pre><code class="language-cpp">long long modInverse(long long a, long long p) {
+    // Only works when p is prime
+    return fastPower(a, p - 2, p);
+}
+
+// Modular division: (a / b) mod p = (a * b^(-1)) mod p
+long long modDivision(long long a, long long b, long long p) {
+    return (a * modInverse(b, p)) % p;
+}</code></pre>
+
+                    <h4>Using Extended Euclidean Algorithm</h4>
+                    <pre><code class="language-cpp">long long modInverseExt(long long a, long long m) {
+    int x, y;
+    int g = extendedGCD(a, m, x, y);
+    
+    if (g != 1) {
+        return -1; // Inverse doesn't exist
+    }
+    
+    return (x % m + m) % m;
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Euler's Totient Function</h3>
+                    <p>φ(n) counts the positive integers up to n that are coprime to n.</p>
+                    
+                    <pre><code class="language-cpp">// Calculate φ(n) for single number
+int phi(int n) {
+    int result = n;
+    
+    for (int p = 2; p * p <= n; p++) {
+        if (n % p == 0) {
+            // Remove all factors of p
+            while (n % p == 0) {
+                n /= p;
+            }
+            // Multiply result by (1 - 1/p)
+            result -= result / p;
+        }
+    }
+    
+    // If n has a prime factor greater than sqrt(n)
+    if (n > 1) {
+        result -= result / n;
+    }
+    
+    return result;
+}
+
+// Compute φ(i) for all i from 1 to n using sieve
+vector&lt;int&gt; phiSieve(int n) {
+    vector&lt;int&gt; phi(n + 1);
+    
+    // Initialize phi[i] = i
+    for (int i = 1; i <= n; i++) {
+        phi[i] = i;
+    }
+    
+    // Apply Euler's formula
+    for (int i = 2; i <= n; i++) {
+        if (phi[i] == i) { // i is prime
+            for (int j = i; j <= n; j += i) {
+                phi[j] -= phi[j] / i;
+            }
+        }
+    }
+    
+    return phi;
+}</code></pre>
+
+                    <div class="info-box">
+                        <h4>Euler's Theorem:</h4>
+                        <p>If gcd(a, n) = 1, then a^φ(n) ≡ 1 (mod n)</p>
+                        <p>This generalizes Fermat's Little Theorem.</p>
+                    </div>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Chinese Remainder Theorem</h3>
+                    <p>Solves system of congruences: x ≡ a₁ (mod m₁), x ≡ a₂ (mod m₂), ..., x ≡ aₖ (mod mₖ)</p>
+                    
+                    <pre><code class="language-cpp">// Solve x ≡ a (mod m) and x ≡ b (mod n) where gcd(m, n) = 1
+long long crt(long long a, long long m, long long b, long long n) {
+    int x, y;
+    int g = extendedGCD(m, n, x, y);
+    
+    if (g != 1) {
+        return -1; // No solution if m and n are not coprime
+    }
+    
+    long long result = ((a * n % (m * n)) * y % (m * n) + 
+                       (b * m % (m * n)) * x % (m * n)) % (m * n);
+    
+    return (result + m * n) % (m * n);
+}
+
+// General CRT for multiple congruences
+pair&lt;long long, long long&gt; crtGeneral(vector&lt;long long&gt; a, vector&lt;long long&gt; m) {
+    int n = a.size();
+    long long a1 = a[0], m1 = m[0];
+    
+    for (int i = 1; i < n; i++) {
+        long long a2 = a[i], m2 = m[i];
+        int x, y;
+        long long g = extendedGCD(m1, m2, x, y);
+        
+        if ((a2 - a1) % g != 0) {
+            return {-1, -1}; // No solution
+        }
+        
+        long long lcm = m1 / g * m2;
+        a1 = ((a1 + m1 * ((a2 - a1) / g) % (lcm / m1) * x) % lcm + lcm) % lcm;
+        m1 = lcm;
+    }
+    
+    return {a1, m1}; // x ≡ a1 (mod m1)
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Linear Diophantine Equations</h3>
+                    <p>Equation of the form ax + by = c has integer solutions if and only if gcd(a, b) divides c.</p>
+                    
+                    <pre><code class="language-cpp">bool solveDiophantine(int a, int b, int c, int& x, int& y) {
+    int g = extendedGCD(abs(a), abs(b), x, y);
+    
+    if (c % g != 0) {
+        return false; // No solution
+    }
+    
+    // Scale the solution
+    x *= c / g;
+    y *= c / g;
+    
+    // Handle negative coefficients
+    if (a < 0) x = -x;
+    if (b < 0) y = -y;
+    
+    return true;
+}
+
+// Find all solutions in a range
+void findAllSolutions(int a, int b, int c, int minx, int maxx) {
+    int x, y;
+    if (!solveDiophantine(a, b, c, x, y)) {
+        cout << "No solution" << endl;
+        return;
+    }
+    
+    int g = gcd(abs(a), abs(b));
+    int dx = b / g;  // Step for x
+    int dy = -a / g; // Step for y
+    
+    // Find the range of valid k values
+    // x + k * dx should be in [minx, maxx]
+    int k_min = (minx - x + dx - 1) / dx; // Ceiling division
+    int k_max = (maxx - x) / dx;          // Floor division
+    
+    for (int k = k_min; k <= k_max; k++) {
+        int sol_x = x + k * dx;
+        int sol_y = y + k * dy;
+        cout << "Solution: x = " << sol_x << ", y = " << sol_y << endl;
+    }
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Number Theory Applications</h3>
+                    
+                    <h4>Counting Divisors</h4>
+                    <pre><code class="language-cpp">int countDivisors(int n) {
+    int count = 0;
+    for (int i = 1; i * i <= n; i++) {
+        if (n % i == 0) {
+            if (i * i == n) {
+                count++; // Perfect square
+            } else {
+                count += 2; // i and n/i are both divisors
+            }
+        }
+    }
+    return count;
+}
+
+// Using prime factorization: if n = p₁^a₁ * p₂^a₂ * ... * pₖ^aₖ
+// then number of divisors = (a₁ + 1) * (a₂ + 1) * ... * (aₖ + 1)
+int countDivisorsFromFactors(vector&lt;pair&lt;int, int&gt;&gt; factors) {
+    int count = 1;
+    for (auto [prime, power] : factors) {
+        count *= (power + 1);
+    }
+    return count;
+}</code></pre>
+
+                    <h4>Sum of Divisors</h4>
+                    <pre><code class="language-cpp">long long sumDivisors(int n) {
+    long long sum = 0;
+    for (int i = 1; i * i <= n; i++) {
+        if (n % i == 0) {
+            sum += i;
+            if (i != n / i) {
+                sum += n / i;
+            }
+        }
+    }
+    return sum;
+}
+
+// Using prime factorization: sum = ∏(pᵢ^(aᵢ+1) - 1)/(pᵢ - 1)
+long long sumDivisorsFromFactors(vector&lt;pair&lt;int, int&gt;&gt; factors) {
+    long long sum = 1;
+    for (auto [p, a] : factors) {
+        long long term = (fastPower(p, a + 1, MOD) - 1 + MOD) % MOD;
+        term = (term * modInverse(p - 1, MOD)) % MOD;
+        sum = (sum * term) % MOD;
+    }
+    return sum;
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Practical Tips</h3>
+                    
+                    <div class="tip-box">
+                        <h4>Performance Tips:</h4>
+                        <ul>
+                            <li>Precompute primes using sieve for multiple queries</li>
+                            <li>Use fast exponentiation for large powers</li>
+                            <li>Cache results of expensive computations like φ(n)</li>
+                            <li>Use long long to avoid overflow in intermediate calculations</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>Common Pitfalls:</h4>
+                        <ul>
+                            <li>Integer overflow in modular multiplication</li>
+                            <li>Forgetting to take modulo in intermediate steps</li>
+                            <li>Division by zero when computing modular inverse</li>
+                            <li>Not checking if modular inverse exists</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Key Formulas:</h4>
+                        <ul>
+                            <li>φ(p^k) = p^k - p^(k-1) for prime p</li>
+                            <li>φ(mn) = φ(m)φ(n) if gcd(m,n) = 1</li>
+                            <li>Σφ(d) = n for all divisors d of n</li>
+                            <li>a^φ(n) ≡ 1 (mod n) if gcd(a,n) = 1</li>
                         </ul>
                     </div>
                 </div>

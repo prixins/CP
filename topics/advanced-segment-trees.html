@@ -34,21 +34,393 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on advanced segment trees will cover:</p>
+                    <h3>Lazy Propagation</h3>
+                    <p>Lazy propagation allows efficient range updates in O(log n) time by deferring updates until necessary.</p>
+                    
+                    <div class="code-block">
+<pre><code class="language-cpp">
+struct LazySegTree {
+    vector<long long> tree, lazy;
+    int n;
+    
+    LazySegTree(vector<int>& arr) {
+        n = arr.size();
+        tree.assign(4 * n, 0);
+        lazy.assign(4 * n, 0);
+        build(arr, 1, 0, n - 1);
+    }
+    
+    void build(vector<int>& arr, int node, int start, int end) {
+        if (start == end) {
+            tree[node] = arr[start];
+        } else {
+            int mid = (start + end) / 2;
+            build(arr, 2 * node, start, mid);
+            build(arr, 2 * node + 1, mid + 1, end);
+            tree[node] = tree[2 * node] + tree[2 * node + 1];
+        }
+    }
+    
+    void push(int node, int start, int end) {
+        if (lazy[node] != 0) {
+            tree[node] += lazy[node] * (end - start + 1);
+            if (start != end) {
+                lazy[2 * node] += lazy[node];
+                lazy[2 * node + 1] += lazy[node];
+            }
+            lazy[node] = 0;
+        }
+    }
+    
+    void updateRange(int node, int start, int end, int l, int r, int val) {
+        push(node, start, end);
+        if (start > r || end < l) return;
+        
+        if (start >= l && end <= r) {
+            lazy[node] += val;
+            push(node, start, end);
+            return;
+        }
+        
+        int mid = (start + end) / 2;
+        updateRange(2 * node, start, mid, l, r, val);
+        updateRange(2 * node + 1, mid + 1, end, l, r, val);
+        
+        push(2 * node, start, mid);
+        push(2 * node + 1, mid + 1, end);
+        tree[node] = tree[2 * node] + tree[2 * node + 1];
+    }
+    
+    long long queryRange(int node, int start, int end, int l, int r) {
+        if (start > r || end < l) return 0;
+        
+        push(node, start, end);
+        if (start >= l && end <= r) return tree[node];
+        
+        int mid = (start + end) / 2;
+        return queryRange(2 * node, start, mid, l, r) +
+               queryRange(2 * node + 1, mid + 1, end, l, r);
+    }
+    
+    void update(int l, int r, int val) {
+        updateRange(1, 0, n - 1, l, r, val);
+    }
+    
+    long long query(int l, int r) {
+        return queryRange(1, 0, n - 1, l, r);
+    }
+};
+</code></pre>
+                    </div>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Key Points:</h4>
                         <ul>
-                            <li>Lazy propagation for range updates</li>
-                            <li>Persistent segment trees</li>
-                            <li>Dynamic segment trees</li>
-                            <li>2D segment trees and applications</li>
-                            <li>Segment tree with coordinate compression</li>
-                            <li>Merge sort tree</li>
-                            <li>Fractional cascading basics</li>
+                            <li>Push operation propagates lazy values</li>
+                            <li>Range updates in O(log n) time</li>
+                            <li>Supports addition, multiplication, and assignment</li>
                         </ul>
                     </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Persistent Segment Trees</h3>
+                    <p>Persistent segment trees maintain multiple versions of the tree, allowing queries on historical states.</p>
+                    
+                    <div class="code-block">
+<pre><code class="language-cpp">
+struct PersistentSegTree {
+    struct Node {
+        int val, left, right;
+        Node() : val(0), left(-1), right(-1) {}
+        Node(int v) : val(v), left(-1), right(-1) {}
+    };
+    
+    vector<Node> nodes;
+    vector<int> roots;
+    int nodeCount, n;
+    
+    PersistentSegTree(vector<int>& arr) {
+        n = arr.size();
+        nodeCount = 0;
+        nodes.reserve(20 * n); // Estimate space
+        roots.push_back(build(arr, 0, n - 1));
+    }
+    
+    int build(vector<int>& arr, int start, int end) {
+        int node = nodeCount++;
+        nodes.push_back(Node());
+        
+        if (start == end) {
+            nodes[node].val = arr[start];
+        } else {
+            int mid = (start + end) / 2;
+            nodes[node].left = build(arr, start, mid);
+            nodes[node].right = build(arr, mid + 1, end);
+            nodes[node].val = nodes[nodes[node].left].val + 
+                             nodes[nodes[node].right].val;
+        }
+        return node;
+    }
+    
+    int update(int prevRoot, int start, int end, int idx, int val) {
+        int node = nodeCount++;
+        nodes.push_back(Node());
+        
+        if (start == end) {
+            nodes[node].val = val;
+        } else {
+            int mid = (start + end) / 2;
+            if (idx <= mid) {
+                nodes[node].left = update(nodes[prevRoot].left, start, mid, idx, val);
+                nodes[node].right = nodes[prevRoot].right;
+            } else {
+                nodes[node].left = nodes[prevRoot].left;
+                nodes[node].right = update(nodes[prevRoot].right, mid + 1, end, idx, val);
+            }
+            nodes[node].val = nodes[nodes[node].left].val + 
+                             nodes[nodes[node].right].val;
+        }
+        return node;
+    }
+    
+    int query(int root, int start, int end, int l, int r) {
+        if (start > r || end < l) return 0;
+        if (start >= l && end <= r) return nodes[root].val;
+        
+        int mid = (start + end) / 2;
+        return query(nodes[root].left, start, mid, l, r) +
+               query(nodes[root].right, mid + 1, end, l, r);
+    }
+    
+    void updateVersion(int idx, int val) {
+        int newRoot = update(roots.back(), 0, n - 1, idx, val);
+        roots.push_back(newRoot);
+    }
+    
+    int queryVersion(int version, int l, int r) {
+        return query(roots[version], 0, n - 1, l, r);
+    }
+};
+</code></pre>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>2D Segment Trees</h3>
+                    <p>2D segment trees handle range queries and updates on 2D arrays efficiently.</p>
+                    
+                    <div class="code-block">
+<pre><code class="language-cpp">
+struct SegTree2D {
+    vector<vector<int>> tree;
+    int n, m;
+    
+    SegTree2D(vector<vector<int>>& matrix) {
+        n = matrix.size();
+        m = matrix[0].size();
+        tree.assign(4 * n, vector<int>(4 * m, 0));
+        build_x(matrix, 1, 0, n - 1);
+    }
+    
+    void build_y(vector<vector<int>>& matrix, int vx, int lx, int rx, 
+                 int vy, int ly, int ry) {
+        if (ly == ry) {
+            if (lx == rx) {
+                tree[vx][vy] = matrix[lx][ly];
+            } else {
+                tree[vx][vy] = tree[2*vx][vy] + tree[2*vx+1][vy];
+            }
+        } else {
+            int my = (ly + ry) / 2;
+            build_y(matrix, vx, lx, rx, 2*vy, ly, my);
+            build_y(matrix, vx, lx, rx, 2*vy+1, my+1, ry);
+            tree[vx][vy] = tree[vx][2*vy] + tree[vx][2*vy+1];
+        }
+    }
+    
+    void build_x(vector<vector<int>>& matrix, int vx, int lx, int rx) {
+        if (lx != rx) {
+            int mx = (lx + rx) / 2;
+            build_x(matrix, 2*vx, lx, mx);
+            build_x(matrix, 2*vx+1, mx+1, rx);
+        }
+        build_y(matrix, vx, lx, rx, 1, 0, m-1);
+    }
+    
+    int sum_y(int vx, int vy, int tly, int try_, int ly, int ry) {
+        if (ly > ry) return 0;
+        if (ly == tly && try_ == ry) return tree[vx][vy];
+        
+        int tmy = (tly + try_) / 2;
+        return sum_y(vx, 2*vy, tly, tmy, ly, min(ry, tmy)) +
+               sum_y(vx, 2*vy+1, tmy+1, try_, max(ly, tmy+1), ry);
+    }
+    
+    int sum_x(int vx, int tlx, int trx, int lx, int rx, int ly, int ry) {
+        if (lx > rx) return 0;
+        if (lx == tlx && trx == rx) return sum_y(vx, 1, 0, m-1, ly, ry);
+        
+        int tmx = (tlx + trx) / 2;
+        return sum_x(2*vx, tlx, tmx, lx, min(rx, tmx), ly, ry) +
+               sum_x(2*vx+1, tmx+1, trx, max(lx, tmx+1), rx, ly, ry);
+    }
+    
+    int query(int x1, int y1, int x2, int y2) {
+        return sum_x(1, 0, n-1, x1, x2, y1, y2);
+    }
+};
+</code></pre>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Merge Sort Tree</h3>
+                    <p>Merge sort tree stores sorted arrays at each node, enabling efficient range queries with binary search.</p>
+                    
+                    <div class="code-block">
+<pre><code class="language-cpp">
+struct MergeSortTree {
+    vector<vector<int>> tree;
+    int n;
+    
+    MergeSortTree(vector<int>& arr) {
+        n = arr.size();
+        tree.resize(4 * n);
+        build(arr, 1, 0, n - 1);
+    }
+    
+    void build(vector<int>& arr, int node, int start, int end) {
+        if (start == end) {
+            tree[node] = {arr[start]};
+        } else {
+            int mid = (start + end) / 2;
+            build(arr, 2 * node, start, mid);
+            build(arr, 2 * node + 1, mid + 1, end);
+            
+            // Merge sorted arrays
+            merge(tree[2 * node].begin(), tree[2 * node].end(),
+                  tree[2 * node + 1].begin(), tree[2 * node + 1].end(),
+                  back_inserter(tree[node]));
+        }
+    }
+    
+    int query(int node, int start, int end, int l, int r, int k) {
+        if (start > r || end < l) return 0;
+        if (start >= l && end <= r) {
+            return upper_bound(tree[node].begin(), tree[node].end(), k) 
+                   - tree[node].begin();
+        }
+        
+        int mid = (start + end) / 2;
+        return query(2 * node, start, mid, l, r, k) +
+               query(2 * node + 1, mid + 1, end, l, r, k);
+    }
+    
+    // Count elements <= k in range [l, r]
+    int countLE(int l, int r, int k) {
+        return query(1, 0, n - 1, l, r, k);
+    }
+    
+    // Count elements in range [l, r] with value in [a, b]
+    int countRange(int l, int r, int a, int b) {
+        return countLE(l, r, b) - countLE(l, r, a - 1);
+    }
+};
+</code></pre>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Dynamic Segment Trees</h3>
+                    <p>Dynamic segment trees create nodes only when needed, useful for large coordinate ranges.</p>
+                    
+                    <div class="code-block">
+<pre><code class="language-cpp">
+struct DynamicSegTree {
+    struct Node {
+        int val, left, right;
+        Node() : val(0), left(-1), right(-1) {}
+    };
+    
+    vector<Node> nodes;
+    int nodeCount, maxCoord;
+    
+    DynamicSegTree(int maxC) : maxCoord(maxC), nodeCount(1) {
+        nodes.push_back(Node());
+    }
+    
+    void update(int node, int start, int end, int idx, int val) {
+        if (start == end) {
+            nodes[node].val += val;
+            return;
+        }
+        
+        int mid = (start + end) / 2;
+        if (idx <= mid) {
+            if (nodes[node].left == -1) {
+                nodes[node].left = nodeCount++;
+                nodes.push_back(Node());
+            }
+            update(nodes[node].left, start, mid, idx, val);
+        } else {
+            if (nodes[node].right == -1) {
+                nodes[node].right = nodeCount++;
+                nodes.push_back(Node());
+            }
+            update(nodes[node].right, mid + 1, end, idx, val);
+        }
+        
+        int leftVal = (nodes[node].left != -1) ? nodes[nodes[node].left].val : 0;
+        int rightVal = (nodes[node].right != -1) ? nodes[nodes[node].right].val : 0;
+        nodes[node].val = leftVal + rightVal;
+    }
+    
+    int query(int node, int start, int end, int l, int r) {
+        if (node == -1 || start > r || end < l) return 0;
+        if (start >= l && end <= r) return nodes[node].val;
+        
+        int mid = (start + end) / 2;
+        return query(nodes[node].left, start, mid, l, r) +
+               query(nodes[node].right, mid + 1, end, l, r);
+    }
+    
+    void update(int idx, int val) {
+        update(0, 0, maxCoord, idx, val);
+    }
+    
+    int query(int l, int r) {
+        return query(0, 0, maxCoord, l, r);
+    }
+};
+</code></pre>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Advanced Applications</h3>
+                    
+                    <div class="warning-box">
+                        <h4>⚠️ Implementation Tips</h4>
+                        <ul>
+                            <li>Memory management crucial for persistent trees</li>
+                            <li>Use coordinate compression for large ranges</li>
+                            <li>Consider memory vs time tradeoffs</li>
+                            <li>Test with small cases first</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h4>Common Applications:</h4>
+                        <ul>
+                            <li>Version control queries (persistent)</li>
+                            <li>2D range sum queries (2D segment trees)</li>
+                            <li>Offline query processing (merge sort tree)</li>
+                            <li>Large coordinate compression (dynamic)</li>
+                            <li>Range update with lazy propagation</li>
+                        </ul>
+                    </div>
+                </div>
                 </div>
             </article>
             

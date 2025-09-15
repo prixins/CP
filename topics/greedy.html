@@ -51,21 +51,369 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on greedy algorithms will cover:</p>
+                    <h3>What is a Greedy Algorithm?</h3>
+                    <p>A greedy algorithm makes the best choice at each step without considering future consequences. The key insight is that local optimality can sometimes lead to global optimality.</p>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Greedy Algorithm Characteristics:</h4>
                         <ul>
-                            <li>Coin change problem</li>
-                            <li>Activity selection and scheduling</li>
-                            <li>Huffman coding</li>
-                            <li>Fractional knapsack</li>
-                            <li>Tasks and deadlines</li>
-                            <li>Greedy vs Dynamic Programming</li>
-                            <li>When greedy algorithms work and when they don't</li>
+                            <li><strong>Greedy Choice Property:</strong> A global optimum can be reached by making locally optimal choices</li>
+                            <li><strong>Optimal Substructure:</strong> An optimal solution contains optimal solutions to subproblems</li>
+                            <li><strong>No Backtracking:</strong> Once a choice is made, it's never reconsidered</li>
                         </ul>
                     </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Activity Selection Problem</h3>
+                    <p>Select the maximum number of activities that don't overlap:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+struct Activity {
+    int start, finish;
+    int id;
+};
+
+int activitySelection(vector&lt;Activity&gt;&amp; activities) {
+    // Sort by finish time (greedy choice)
+    sort(activities.begin(), activities.end(), 
+         [](const Activity&amp; a, const Activity&amp; b) {
+             return a.finish &lt; b.finish;
+         });
+    
+    int count = 1; // First activity is always selected
+    int lastFinish = activities[0].finish;
+    
+    cout &lt;&lt; "Selected activities: " &lt;&lt; activities[0].id &lt;&lt; " ";
+    
+    for (int i = 1; i &lt; activities.size(); i++) {
+        // If this activity starts after the last selected activity finishes
+        if (activities[i].start &gt;= lastFinish) {
+            cout &lt;&lt; activities[i].id &lt;&lt; " ";
+            lastFinish = activities[i].finish;
+            count++;
+        }
+    }
+    cout &lt;&lt; endl;
+    
+    return count;
+}
+
+int main() {
+    vector&lt;Activity&gt; activities = {
+        {1, 4, 1}, {3, 5, 2}, {0, 6, 3}, 
+        {5, 7, 4}, {3, 9, 5}, {5, 9, 6}, 
+        {6, 10, 7}, {8, 11, 8}, {8, 12, 9}, 
+        {2, 14, 10}, {12, 16, 11}
+    };
+    
+    int maxActivities = activitySelection(activities);
+    cout &lt;&lt; "Maximum activities: " &lt;&lt; maxActivities &lt;&lt; endl;
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Fractional Knapsack Problem</h3>
+                    <p>Maximize value in a knapsack where items can be broken into fractions:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+struct Item {
+    int weight, value;
+    double ratio;
+    
+    Item(int w, int v) : weight(w), value(v) {
+        ratio = (double)value / weight;
+    }
+};
+
+double fractionalKnapsack(vector&lt;Item&gt;&amp; items, int capacity) {
+    // Sort by value-to-weight ratio (greedy choice)
+    sort(items.begin(), items.end(), 
+         [](const Item&amp; a, const Item&amp; b) {
+             return a.ratio &gt; b.ratio;
+         });
+    
+    double totalValue = 0.0;
+    int currentWeight = 0;
+    
+    for (const Item&amp; item : items) {
+        if (currentWeight + item.weight &lt;= capacity) {
+            // Take the whole item
+            currentWeight += item.weight;
+            totalValue += item.value;
+            cout &lt;&lt; "Take full item: weight=" &lt;&lt; item.weight 
+                 &lt;&lt; ", value=" &lt;&lt; item.value &lt;&lt; endl;
+        } else {
+            // Take fraction of the item
+            int remainingCapacity = capacity - currentWeight;
+            double fraction = (double)remainingCapacity / item.weight;
+            totalValue += item.value * fraction;
+            cout &lt;&lt; "Take " &lt;&lt; fraction &lt;&lt; " of item: weight=" 
+                 &lt;&lt; item.weight &lt;&lt; ", value=" &lt;&lt; item.value &lt;&lt; endl;
+            break;
+        }
+    }
+    
+    return totalValue;
+}
+
+int main() {
+    vector&lt;Item&gt; items = {
+        Item(10, 60), Item(20, 100), Item(30, 120)
+    };
+    int capacity = 50;
+    
+    double maxValue = fractionalKnapsack(items, capacity);
+    cout &lt;&lt; "Maximum value: " &lt;&lt; maxValue &lt;&lt; endl;
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Job Scheduling with Deadlines</h3>
+                    <p>Schedule jobs to maximize profit while meeting deadlines:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+struct Job {
+    char id;
+    int deadline, profit;
+};
+
+vector&lt;char&gt; jobScheduling(vector&lt;Job&gt;&amp; jobs) {
+    // Sort by profit in descending order (greedy choice)
+    sort(jobs.begin(), jobs.end(), 
+         [](const Job&amp; a, const Job&amp; b) {
+             return a.profit &gt; b.profit;
+         });
+    
+    // Find maximum deadline
+    int maxDeadline = 0;
+    for (const Job&amp; job : jobs) {
+        maxDeadline = max(maxDeadline, job.deadline);
+    }
+    
+    // Create a schedule array
+    vector&lt;char&gt; schedule(maxDeadline, '0');
+    vector&lt;bool&gt; slot(maxDeadline, false);
+    
+    int totalProfit = 0;
+    
+    for (const Job&amp; job : jobs) {
+        // Find a free slot for this job (from deadline-1 to 0)
+        for (int j = min(maxDeadline, job.deadline) - 1; j &gt;= 0; j--) {
+            if (!slot[j]) {
+                slot[j] = true;
+                schedule[j] = job.id;
+                totalProfit += job.profit;
+                break;
+            }
+        }
+    }
+    
+    cout &lt;&lt; "Total profit: " &lt;&lt; totalProfit &lt;&lt; endl;
+    return schedule;
+}
+
+int main() {
+    vector&lt;Job&gt; jobs = {
+        {'a', 2, 100}, {'b', 1, 19}, {'c', 2, 27},
+        {'d', 1, 25}, {'e', 3, 15}
+    };
+    
+    vector&lt;char&gt; schedule = jobScheduling(jobs);
+    
+    cout &lt;&lt; "Job sequence: ";
+    for (char job : schedule) {
+        if (job != '0') {
+            cout &lt;&lt; job &lt;&lt; " ";
+        }
+    }
+    cout &lt;&lt; endl;
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Coin Change (Greedy Approach)</h3>
+                    <p>Find minimum coins needed for a given amount (works for certain coin systems):</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;vector&gt;
+
+vector&lt;int&gt; coinChangeGreedy(vector&lt;int&gt;&amp; coins, int amount) {
+    vector&lt;int&gt; result;
+    
+    // Sort coins in descending order
+    sort(coins.begin(), coins.end(), greater&lt;int&gt;());
+    
+    for (int coin : coins) {
+        while (amount &gt;= coin) {
+            result.push_back(coin);
+            amount -= coin;
+        }
+    }
+    
+    if (amount == 0) {
+        return result;
+    } else {
+        return {}; // No solution possible
+    }
+}
+
+int main() {
+    // This works for canonical coin systems (like US coins: 25, 10, 5, 1)
+    vector&lt;int&gt; coins = {25, 10, 5, 1};
+    int amount = 67;
+    
+    vector&lt;int&gt; result = coinChangeGreedy(coins, amount);
+    
+    if (!result.empty()) {
+        cout &lt;&lt; "Coins needed: ";
+        for (int coin : result) {
+            cout &lt;&lt; coin &lt;&lt; " ";
+        }
+        cout &lt;&lt; endl;
+        cout &lt;&lt; "Total coins: " &lt;&lt; result.size() &lt;&lt; endl;
+    } else {
+        cout &lt;&lt; "No solution found" &lt;&lt; endl;
+    }
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Huffman Coding</h3>
+                    <p>Create optimal prefix-free codes for data compression:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;queue&gt;
+#include &lt;unordered_map&gt;
+
+struct HuffmanNode {
+    char ch;
+    int freq;
+    HuffmanNode* left;
+    HuffmanNode* right;
+    
+    HuffmanNode(char c, int f) : ch(c), freq(f), left(nullptr), right(nullptr) {}
+    HuffmanNode(int f) : ch(0), freq(f), left(nullptr), right(nullptr) {}
+};
+
+struct Compare {
+    bool operator()(HuffmanNode* a, HuffmanNode* b) {
+        return a-&gt;freq &gt; b-&gt;freq; // Min heap
+    }
+};
+
+void generateCodes(HuffmanNode* root, string code, unordered_map&lt;char, string&gt;&amp; codes) {
+    if (!root) return;
+    
+    if (root-&gt;ch != 0) { // Leaf node
+        codes[root-&gt;ch] = code.empty() ? "0" : code;
+        return;
+    }
+    
+    generateCodes(root-&gt;left, code + "0", codes);
+    generateCodes(root-&gt;right, code + "1", codes);
+}
+
+unordered_map&lt;char, string&gt; huffmanCoding(const string&amp; text) {
+    // Count frequencies
+    unordered_map&lt;char, int&gt; freq;
+    for (char c : text) {
+        freq[c]++;
+    }
+    
+    // Create priority queue
+    priority_queue&lt;HuffmanNode*, vector&lt;HuffmanNode*&gt;, Compare&gt; pq;
+    
+    for (auto&amp; pair : freq) {
+        pq.push(new HuffmanNode(pair.first, pair.second));
+    }
+    
+    // Build Huffman tree
+    while (pq.size() &gt; 1) {
+        HuffmanNode* right = pq.top(); pq.pop();
+        HuffmanNode* left = pq.top(); pq.pop();
+        
+        HuffmanNode* merged = new HuffmanNode(left-&gt;freq + right-&gt;freq);
+        merged-&gt;left = left;
+        merged-&gt;right = right;
+        
+        pq.push(merged);
+    }
+    
+    // Generate codes
+    unordered_map&lt;char, string&gt; codes;
+    generateCodes(pq.top(), "", codes);
+    
+    return codes;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>When Greedy Works vs When It Doesn't</h3>
+                    <div class="info-box">
+                        <h4>Greedy Works For:</h4>
+                        <ul>
+                            <li>Activity selection</li>
+                            <li>Fractional knapsack</li>
+                            <li>Huffman coding</li>
+                            <li>Minimum spanning tree (Kruskal's, Prim's)</li>
+                            <li>Dijkstra's shortest path</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Greedy Fails For:</h4>
+                        <ul>
+                            <li><strong>0/1 Knapsack:</strong> Items cannot be broken</li>
+                            <li><strong>Longest path problem:</strong> Local choices don't guarantee global optimum</li>
+                            <li><strong>Some coin systems:</strong> Greedy doesn't always give minimum coins</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Greedy Algorithm Template</h3>
+                    <pre><code class="language-cpp">
+// General greedy algorithm structure
+template&lt;typename T&gt;
+Solution greedyAlgorithm(vector&lt;T&gt;&amp; elements) {
+    // 1. Sort elements by greedy criteria
+    sort(elements.begin(), elements.end(), greedyComparator);
+    
+    Solution solution;
+    
+    // 2. Make greedy choices
+    for (const T&amp; element : elements) {
+        if (isSafe(solution, element)) {
+            solution.add(element);
+        }
+    }
+    
+    return solution;
+}
+                    </code></pre>
                 </div>
             </article>
             

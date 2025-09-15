@@ -51,19 +51,366 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on shortest paths will cover:</p>
+                    <h3>Types of Shortest Path Problems</h3>
+                    <p>Different shortest path algorithms solve different variants of the problem:</p>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Algorithm Selection Guide:</h4>
                         <ul>
-                            <li>Bellman-Ford algorithm for negative weights</li>
-                            <li>Dijkstra's algorithm for non-negative weights</li>
-                            <li>Floyd-Warshall algorithm for all pairs</li>
-                            <li>Single-source vs all-pairs shortest paths</li>
-                            <li>Handling negative cycles</li>
-                            <li>Path reconstruction techniques</li>
-                            <li>Applications in real-world problems</li>
+                            <li><strong>Dijkstra:</strong> Single-source, non-negative weights, O((V+E)log V)</li>
+                            <li><strong>Bellman-Ford:</strong> Single-source, negative weights, O(VE)</li>
+                            <li><strong>Floyd-Warshall:</strong> All-pairs, negative weights, O(V³)</li>
+                            <li><strong>BFS:</strong> Unweighted graphs, O(V+E)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Dijkstra's Algorithm</h3>
+                    <p>Finds shortest paths from a source vertex to all other vertices in graphs with non-negative weights:</p>
+                    
+                    <pre><code class="language-cpp">
+const int INF = 1e9;
+
+vector&lt;int&gt; dijkstra(int start, vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt;&amp; adj) {
+    int n = adj.size();
+    vector&lt;int&gt; dist(n, INF);
+    priority_queue&lt;pair&lt;int, int&gt;, vector&lt;pair&lt;int, int&gt;&gt;, greater&gt; pq;
+    
+    dist[start] = 0;
+    pq.push({0, start});
+    
+    while(!pq.empty()) {
+        int d = pq.top().first;
+        int u = pq.top().second;
+        pq.pop();
+        
+        if(d > dist[u]) continue; // Skip outdated entries
+        
+        for(auto&amp; edge : adj[u]) {
+            int v = edge.first;
+            int weight = edge.second;
+            
+            if(dist[u] + weight < dist[v]) {
+                dist[v] = dist[u] + weight;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+    
+    return dist;
+}
+
+// Dijkstra with path reconstruction
+pair&lt;vector&lt;int&gt;, vector&lt;int&gt;&gt; dijkstraWithPath(int start, vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt;&amp; adj) {
+    int n = adj.size();
+    vector&lt;int&gt; dist(n, INF);
+    vector&lt;int&gt; parent(n, -1);
+    priority_queue&lt;pair&lt;int, int&gt;, vector&lt;pair&lt;int, int&gt;&gt;, greater&gt; pq;
+    
+    dist[start] = 0;
+    pq.push({0, start});
+    
+    while(!pq.empty()) {
+        int d = pq.top().first;
+        int u = pq.top().second;
+        pq.pop();
+        
+        if(d > dist[u]) continue;
+        
+        for(auto&amp; edge : adj[u]) {
+            int v = edge.first;
+            int weight = edge.second;
+            
+            if(dist[u] + weight < dist[v]) {
+                dist[v] = dist[u] + weight;
+                parent[v] = u;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+    
+    return {dist, parent};
+}
+
+// Reconstruct path from start to target
+vector&lt;int&gt; reconstructPath(int start, int target, vector&lt;int&gt;&amp; parent) {
+    vector&lt;int&gt; path;
+    for(int v = target; v != -1; v = parent[v]) {
+        path.push_back(v);
+    }
+    reverse(path.begin(), path.end());
+    
+    if(path.empty() || path[0] != start) {
+        return {}; // No path exists
+    }
+    return path;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Bellman-Ford Algorithm</h3>
+                    <p>Handles negative edge weights and detects negative cycles:</p>
+                    
+                    <pre><code class="language-cpp">
+// Bellman-Ford algorithm
+pair&lt;vector&lt;long long&gt;, bool&gt; bellmanFord(int start, int n, vector&lt;tuple&lt;int, int, int&gt;&gt;&amp; edges) {
+    vector&lt;long long&gt; dist(n, LLONG_MAX);
+    dist[start] = 0;
+    
+    // Relax edges V-1 times
+    for(int i = 0; i < n - 1; i++) {
+        for(auto&amp; edge : edges) {
+            int u, v, weight;
+            tie(u, v, weight) = edge;
+            
+            if(dist[u] != LLONG_MAX && dist[u] + weight < dist[v]) {
+                dist[v] = dist[u] + weight;
+            }
+        }
+    }
+    
+    // Check for negative cycles
+    bool hasNegativeCycle = false;
+    for(auto&amp; edge : edges) {
+        int u, v, weight;
+        tie(u, v, weight) = edge;
+        
+        if(dist[u] != LLONG_MAX && dist[u] + weight < dist[v]) {
+            hasNegativeCycle = true;
+            break;
+        }
+    }
+    
+    return {dist, hasNegativeCycle};
+}
+
+// SPFA (Shortest Path Faster Algorithm) - optimized Bellman-Ford
+vector&lt;long long&gt; spfa(int start, vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt;&amp; adj) {
+    int n = adj.size();
+    vector&lt;long long&gt; dist(n, LLONG_MAX);
+    vector&lt;bool&gt; inQueue(n, false);
+    vector&lt;int&gt; count(n, 0); // Number of times each vertex is relaxed
+    
+    queue&lt;int&gt; q;
+    dist[start] = 0;
+    q.push(start);
+    inQueue[start] = true;
+    
+    while(!q.empty()) {
+        int u = q.front();
+        q.pop();
+        inQueue[u] = false;
+        
+        for(auto&amp; edge : adj[u]) {
+            int v = edge.first;
+            int weight = edge.second;
+            
+            if(dist[u] + weight < dist[v]) {
+                dist[v] = dist[u] + weight;
+                if(!inQueue[v]) {
+                    q.push(v);
+                    inQueue[v] = true;
+                    count[v]++;
+                    
+                    // Negative cycle detection
+                    if(count[v] >= n) {
+                        return {}; // Negative cycle detected
+                    }
+                }
+            }
+        }
+    }
+    
+    return dist;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Floyd-Warshall Algorithm</h3>
+                    <p>Finds shortest paths between all pairs of vertices:</p>
+                    
+                    <pre><code class="language-cpp">
+// Floyd-Warshall for all-pairs shortest paths
+vector&lt;vector&lt;long long&gt;&gt; floydWarshall(vector&lt;vector&lt;long long&gt;&gt;&amp; graph) {
+    int n = graph.size();
+    vector&lt;vector&lt;long long&gt;&gt; dist = graph;
+    
+    // Initialize diagonal to 0
+    for(int i = 0; i < n; i++) {
+        dist[i][i] = 0;
+    }
+    
+    // Floyd-Warshall main loop
+    for(int k = 0; k < n; k++) {
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                if(dist[i][k] != LLONG_MAX && dist[k][j] != LLONG_MAX) {
+                    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+                }
+            }
+        }
+    }
+    
+    return dist;
+}
+
+// Floyd-Warshall with path reconstruction
+pair&lt;vector&lt;vector&lt;long long&gt;&gt;, vector&lt;vector&lt;int&gt;&gt;&gt; floydWarshallWithPath(vector&lt;vector&lt;long long&gt;&gt;&amp; graph) {
+    int n = graph.size();
+    vector&lt;vector&lt;long long&gt;&gt; dist = graph;
+    vector&lt;vector&lt;int&gt;&gt; next(n, vector&lt;int&gt;(n, -1));
+    
+    // Initialize next matrix
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            if(graph[i][j] != LLONG_MAX && i != j) {
+                next[i][j] = j;
+            }
+        }
+        dist[i][i] = 0;
+    }
+    
+    for(int k = 0; k < n; k++) {
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                if(dist[i][k] != LLONG_MAX && dist[k][j] != LLONG_MAX &&
+                   dist[i][k] + dist[k][j] < dist[i][j]) {
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                    next[i][j] = next[i][k];
+                }
+            }
+        }
+    }
+    
+    return {dist, next};
+}
+
+// Reconstruct path using Floyd-Warshall next matrix
+vector&lt;int&gt; reconstructFloydPath(int start, int end, vector&lt;vector&lt;int&gt;&gt;&amp; next) {
+    if(next[start][end] == -1) return {}; // No path
+    
+    vector&lt;int&gt; path = {start};
+    while(start != end) {
+        start = next[start][end];
+        path.push_back(start);
+    }
+    return path;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Advanced Shortest Path Problems</h3>
+                    
+                    <h4>K Shortest Paths</h4>
+                    <p>Find the k shortest paths between two vertices:</p>
+                    
+                    <pre><code class="language-cpp">
+// Yen's algorithm for K shortest paths
+vector&lt;vector&lt;int&gt;&gt; kShortestPaths(int start, int end, int k, 
+                                  vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt;&amp; adj) {
+    vector&lt;vector&lt;int&gt;&gt; paths;
+    priority_queue&lt;pair&lt;int, vector&lt;int&gt;&gt;, 
+                   vector&lt;pair&lt;int, vector&lt;int&gt;&gt;&gt;,
+                   greater&gt; candidates;
+    
+    // Find shortest path
+    auto [dist, parent] = dijkstraWithPath(start, adj);
+    if(dist[end] == INF) return paths; // No path exists
+    
+    vector&lt;int&gt; shortestPath = reconstructPath(start, end, parent);
+    paths.push_back(shortestPath);
+    
+    for(int k_i = 1; k_i < k; k_i++) {
+        vector&lt;int&gt; prevPath = paths.back();
+        
+        for(int i = 0; i < prevPath.size() - 1; i++) {
+            // Remove edge and find alternative path
+            vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt; modifiedAdj = adj;
+            
+            // Remove edges used in previous paths
+            for(auto&amp; path : paths) {
+                if(path.size() > i && equal(path.begin(), path.begin() + i + 1, 
+                                          prevPath.begin())) {
+                    int u = path[i], v = path[i + 1];
+                    // Remove edge u -> v from modifiedAdj
+                    removeEdge(modifiedAdj, u, v);
+                }
+            }
+            
+            auto [newDist, newParent] = dijkstraWithPath(prevPath[i], modifiedAdj);
+            if(newDist[end] != INF) {
+                vector&lt;int&gt; spurPath = reconstructPath(prevPath[i], end, newParent);
+                vector&lt;int&gt; fullPath(prevPath.begin(), prevPath.begin() + i);
+                fullPath.insert(fullPath.end(), spurPath.begin(), spurPath.end());
+                
+                int pathCost = calculatePathCost(fullPath, adj);
+                candidates.push({pathCost, fullPath});
+            }
+        }
+        
+        if(candidates.empty()) break;
+        
+        paths.push_back(candidates.top().second);
+        candidates.pop();
+    }
+    
+    return paths;
+}
+                    </code></pre>
+                    
+                    <h4>Shortest Path with Constraints</h4>
+                    <pre><code class="language-cpp">
+// Shortest path with exactly k edges
+vector&lt;int&gt; shortestPathKEdges(int start, int end, int k, 
+                               vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt;&amp; adj) {
+    int n = adj.size();
+    vector&lt;vector&lt;int&gt;&gt; dp(k + 1, vector&lt;int&gt;(n, INF));
+    vector&lt;vector&lt;int&gt;&gt; parent(k + 1, vector&lt;int&gt;(n, -1));
+    
+    dp[0][start] = 0;
+    
+    for(int edges = 1; edges <= k; edges++) {
+        for(int u = 0; u < n; u++) {
+            if(dp[edges - 1][u] == INF) continue;
+            
+            for(auto&amp; edge : adj[u]) {
+                int v = edge.first;
+                int weight = edge.second;
+                
+                if(dp[edges - 1][u] + weight < dp[edges][v]) {
+                    dp[edges][v] = dp[edges - 1][u] + weight;
+                    parent[edges][v] = u;
+                }
+            }
+        }
+    }
+    
+    // Reconstruct path
+    vector&lt;int&gt; path;
+    int curr = end, edgeCount = k;
+    
+    while(curr != -1 && edgeCount >= 0) {
+        path.push_back(curr);
+        curr = parent[edgeCount][curr];
+        edgeCount--;
+    }
+    
+    reverse(path.begin(), path.end());
+    return path;
+}
+                    </code></pre>
+                    
+                    <div class="tip-box">
+                        <h4><i class="fas fa-lightbulb"></i> Algorithm Selection Tips</h4>
+                        <ul>
+                            <li>Use BFS for unweighted graphs - it's the fastest</li>
+                            <li>Dijkstra is best for non-negative weights and sparse graphs</li>
+                            <li>Use Bellman-Ford when you need to detect negative cycles</li>
+                            <li>Floyd-Warshall is ideal for dense graphs and all-pairs queries</li>
                         </ul>
                     </div>
                 </div>

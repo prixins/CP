@@ -34,19 +34,258 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on probability will cover:</p>
+                    <h3>Basic Probability Concepts</h3>
+                    <p>Probability measures the likelihood of events occurring, ranging from 0 (impossible) to 1 (certain):</p>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Fundamental Rules:</h4>
                         <ul>
-                            <li>Basic probability calculation</li>
-                            <li>Conditional probability and Bayes' theorem</li>
-                            <li>Random variables and expectation</li>
-                            <li>Probability distributions</li>
-                            <li>Markov chains basics</li>
-                            <li>Randomized algorithms</li>
-                            <li>Monte Carlo methods</li>
+                            <li><strong>Addition Rule:</strong> P(A ∪ B) = P(A) + P(B) - P(A ∩ B)</li>
+                            <li><strong>Multiplication Rule:</strong> P(A ∩ B) = P(A) × P(B|A)</li>
+                            <li><strong>Complement:</strong> P(A') = 1 - P(A)</li>
+                            <li><strong>Independence:</strong> P(A ∩ B) = P(A) × P(B)</li>
+                        </ul>
+                    </div>
+                    
+                    <h4>Basic Probability Calculation</h4>
+                    <pre><code class="language-cpp">
+// Calculate probability as fraction and convert to decimal
+double probability(long long favorable, long long total) {
+    return (double)favorable / total;
+}
+
+// Calculate combinations C(n,r) = n!/(r!(n-r)!)
+long long combination(int n, int r) {
+    if(r > n || r < 0) return 0;
+    if(r == 0 || r == n) return 1;
+    
+    long long result = 1;
+    for(int i = 0; i < r; i++) {
+        result = result * (n - i) / (i + 1);
+    }
+    return result;
+}
+
+// Probability of exactly k successes in n trials
+double binomialProbability(int n, int k, double p) {
+    return combination(n, k) * pow(p, k) * pow(1-p, n-k);
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Conditional Probability</h3>
+                    <p>The probability of event A given that event B has occurred: P(A|B) = P(A ∩ B) / P(B)</p>
+                    
+                    <h4>Bayes' Theorem</h4>
+                    <p>P(A|B) = P(B|A) × P(A) / P(B)</p>
+                    
+                    <pre><code class="language-cpp">
+// Bayes' theorem implementation
+double bayesTheorem(double priorA, double likelihoodB_given_A, double marginalB) {
+    return (likelihoodB_given_A * priorA) / marginalB;
+}
+
+// Example: Medical test accuracy
+double medicalDiagnosis(double diseaseRate, double testAccuracy, double falsePositiveRate) {
+    // P(Disease|Positive Test)
+    double priorDisease = diseaseRate;
+    double likelihoodPositive_given_Disease = testAccuracy;
+    double marginalPositive = testAccuracy * diseaseRate + falsePositiveRate * (1 - diseaseRate);
+    
+    return bayesTheorem(priorDisease, likelihoodPositive_given_Disease, marginalPositive);
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Expected Value and Variance</h3>
+                    <p>Expected value is the average outcome of a random variable over many trials:</p>
+                    
+                    <pre><code class="language-cpp">
+// Calculate expected value for discrete random variable
+double expectedValue(vector&lt;double&gt;&amp; values, vector&lt;double&gt;&amp; probabilities) {
+    double expected = 0.0;
+    for(int i = 0; i < values.size(); i++) {
+        expected += values[i] * probabilities[i];
+    }
+    return expected;
+}
+
+// Calculate variance: E[X²] - (E[X])²
+double variance(vector&lt;double&gt;&amp; values, vector&lt;double&gt;&amp; probabilities) {
+    double mean = expectedValue(values, probabilities);
+    double expectedSquare = 0.0;
+    
+    for(int i = 0; i < values.size(); i++) {
+        expectedSquare += values[i] * values[i] * probabilities[i];
+    }
+    
+    return expectedSquare - mean * mean;
+}
+
+// Linearity of expectation: E[X + Y] = E[X] + E[Y]
+double linearExpectation(vector&lt;double&gt;&amp; expectations) {
+    double total = 0.0;
+    for(double exp : expectations) {
+        total += exp;
+    }
+    return total;
+}
+                    </code></pre>
+                    
+                    <div class="tip-box">
+                        <h4><i class="fas fa-lightbulb"></i> Linearity of Expectation</h4>
+                        <p>This powerful property works even when random variables are not independent. It's often used to solve complex probability problems by breaking them into simpler parts.</p>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Common Probability Distributions</h3>
+                    
+                    <h4>Geometric Distribution</h4>
+                    <p>Probability of first success on the k-th trial: P(X = k) = (1-p)^(k-1) × p</p>
+                    
+                    <pre><code class="language-cpp">
+// Geometric distribution - probability of first success on k-th trial
+double geometricProbability(int k, double p) {
+    return pow(1 - p, k - 1) * p;
+}
+
+// Expected value of geometric distribution: 1/p
+double geometricExpectedValue(double p) {
+    return 1.0 / p;
+}
+                    </code></pre>
+                    
+                    <h4>Poisson Distribution</h4>
+                    <p>Models the number of events in a fixed interval: P(X = k) = (λ^k × e^(-λ)) / k!</p>
+                    
+                    <pre><code class="language-cpp">
+// Poisson distribution
+double poissonProbability(int k, double lambda) {
+    double result = exp(-lambda);
+    for(int i = 1; i <= k; i++) {
+        result *= lambda / i;
+    }
+    return result;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Randomized Algorithms</h3>
+                    <p>Algorithms that use random choices during execution:</p>
+                    
+                    <h4>Random Number Generation</h4>
+                    <pre><code class="language-cpp">
+#include &lt;random&gt;
+
+class RandomGenerator {
+private:
+    mt19937 rng;
+    
+public:
+    RandomGenerator() : rng(chrono::steady_clock::now().time_since_epoch().count()) {}
+    
+    // Random integer in range [a, b]
+    int randomInt(int a, int b) {
+        uniform_int_distribution&lt;int&gt; dist(a, b);
+        return dist(rng);
+    }
+    
+    // Random double in range [0, 1)
+    double randomDouble() {
+        uniform_real_distribution&lt;double&gt; dist(0.0, 1.0);
+        return dist(rng);
+    }
+    
+    // Random permutation
+    void randomShuffle(vector&lt;int&gt;&amp; arr) {
+        shuffle(arr.begin(), arr.end(), rng);
+    }
+};
+                    </code></pre>
+                    
+                    <h4>Monte Carlo Method</h4>
+                    <p>Estimate π using random points in a unit square:</p>
+                    
+                    <pre><code class="language-cpp">
+double estimatePi(int numSamples) {
+    RandomGenerator rng;
+    int insideCircle = 0;
+    
+    for(int i = 0; i < numSamples; i++) {
+        double x = rng.randomDouble() * 2 - 1; // [-1, 1)
+        double y = rng.randomDouble() * 2 - 1; // [-1, 1)
+        
+        if(x * x + y * y <= 1.0) {
+            insideCircle++;
+        }
+    }
+    
+    return 4.0 * insideCircle / numSamples;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Markov Chains</h3>
+                    <p>A sequence of random states where the next state depends only on the current state:</p>
+                    
+                    <pre><code class="language-cpp">
+// Simple Markov chain simulation
+class MarkovChain {
+private:
+    vector&lt;vector&lt;double&gt;&gt; transitionMatrix;
+    int numStates;
+    RandomGenerator rng;
+    
+public:
+    MarkovChain(vector&lt;vector&lt;double&gt;&gt;&amp; transitions) 
+        : transitionMatrix(transitions), numStates(transitions.size()) {}
+    
+    // Simulate one step
+    int nextState(int currentState) {
+        double rand = rng.randomDouble();
+        double cumulative = 0.0;
+        
+        for(int i = 0; i < numStates; i++) {
+            cumulative += transitionMatrix[currentState][i];
+            if(rand <= cumulative) {
+                return i;
+            }
+        }
+        return numStates - 1; // Fallback
+    }
+    
+    // Calculate steady-state probabilities (simplified)
+    vector&lt;double&gt; steadyState(int iterations = 10000) {
+        vector&lt;double&gt; currentProbs(numStates, 1.0 / numStates);
+        
+        for(int iter = 0; iter < iterations; iter++) {
+            vector&lt;double&gt; nextProbs(numStates, 0.0);
+            
+            for(int i = 0; i < numStates; i++) {
+                for(int j = 0; j < numStates; j++) {
+                    nextProbs[j] += currentProbs[i] * transitionMatrix[i][j];
+                }
+            }
+            currentProbs = nextProbs;
+        }
+        
+        return currentProbs;
+    }
+};
+                    </code></pre>
+                    
+                    <div class="warning-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Common Pitfalls</h4>
+                        <ul>
+                            <li>Confusing P(A|B) with P(B|A) - they're usually different!</li>
+                            <li>Assuming independence when events are correlated</li>
+                            <li>Forgetting to normalize probabilities (they should sum to 1)</li>
+                            <li>Using inappropriate distributions for the problem</li>
                         </ul>
                     </div>
                 </div>

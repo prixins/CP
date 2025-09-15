@@ -51,19 +51,410 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on graph traversal will cover:</p>
+                    <h3>Depth-First Search (DFS)</h3>
+                    <p>DFS explores as far as possible along each branch before backtracking. It uses a stack (implicit with recursion or explicit).</p>
+                    
+                    <h4>Basic DFS Implementation</h4>
+                    <pre><code class="language-cpp">vector&lt;vector&lt;int&gt;&gt; adj;
+vector&lt;bool&gt; visited;
+
+void dfs(int v) {
+    visited[v] = true;
+    cout << v << " "; // Process vertex
+    
+    for (int neighbor : adj[v]) {
+        if (!visited[neighbor]) {
+            dfs(neighbor);
+        }
+    }
+}
+
+// Usage
+int n = 5;
+adj.resize(n + 1);
+visited.resize(n + 1, false);
+
+// Start DFS from vertex 1
+dfs(1);</code></pre>
+
+                    <h4>Iterative DFS</h4>
+                    <pre><code class="language-cpp">void dfs_iterative(int start) {
+    stack&lt;int&gt; st;
+    vector&lt;bool&gt; visited(n + 1, false);
+    
+    st.push(start);
+    
+    while (!st.empty()) {
+        int v = st.top();
+        st.pop();
+        
+        if (visited[v]) continue;
+        
+        visited[v] = true;
+        cout << v << " ";
+        
+        // Add neighbors in reverse order for same traversal as recursive
+        for (int i = adj[v].size() - 1; i >= 0; i--) {
+            int neighbor = adj[v][i];
+            if (!visited[neighbor]) {
+                st.push(neighbor);
+            }
+        }
+    }
+}</code></pre>
+
+                    <div class="info-box">
+                        <h4>DFS Properties:</h4>
+                        <ul>
+                            <li><strong>Time Complexity:</strong> O(V + E)</li>
+                            <li><strong>Space Complexity:</strong> O(V) for recursion stack</li>
+                            <li><strong>Use Cases:</strong> Cycle detection, topological sort, strongly connected components</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Breadth-First Search (BFS)</h3>
+                    <p>BFS explores all vertices at the current depth before moving to vertices at the next depth level. It uses a queue.</p>
+                    
+                    <h4>Basic BFS Implementation</h4>
+                    <pre><code class="language-cpp">void bfs(int start) {
+    queue&lt;int&gt; q;
+    vector&lt;bool&gt; visited(n + 1, false);
+    
+    q.push(start);
+    visited[start] = true;
+    
+    while (!q.empty()) {
+        int v = q.front();
+        q.pop();
+        
+        cout << v << " "; // Process vertex
+        
+        for (int neighbor : adj[v]) {
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                q.push(neighbor);
+            }
+        }
+    }
+}</code></pre>
+
+                    <h4>BFS with Distance Calculation</h4>
+                    <pre><code class="language-cpp">vector&lt;int&gt; bfs_distance(int start) {
+    vector&lt;int&gt; dist(n + 1, -1); // -1 means not visited
+    queue&lt;int&gt; q;
+    
+    q.push(start);
+    dist[start] = 0;
+    
+    while (!q.empty()) {
+        int v = q.front();
+        q.pop();
+        
+        for (int neighbor : adj[v]) {
+            if (dist[neighbor] == -1) { // Not visited
+                dist[neighbor] = dist[v] + 1;
+                q.push(neighbor);
+            }
+        }
+    }
+    
+    return dist; // Returns shortest distance to all vertices
+}</code></pre>
+
+                    <div class="tip-box">
+                        <h4>BFS for Shortest Path:</h4>
+                        <p>In unweighted graphs, BFS guarantees the shortest path from source to all other vertices.</p>
+                    </div>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Connected Components</h3>
+                    <p>Find all connected components in an undirected graph using DFS or BFS.</p>
+                    
+                    <pre><code class="language-cpp">vector&lt;vector&lt;int&gt;&gt; components;
+vector&lt;bool&gt; visited;
+
+void dfs_component(int v, vector&lt;int&gt;& component) {
+    visited[v] = true;
+    component.push_back(v);
+    
+    for (int neighbor : adj[v]) {
+        if (!visited[neighbor]) {
+            dfs_component(neighbor, component);
+        }
+    }
+}
+
+void find_components() {
+    visited.assign(n + 1, false);
+    components.clear();
+    
+    for (int v = 1; v <= n; v++) {
+        if (!visited[v]) {
+            vector&lt;int&gt; component;
+            dfs_component(v, component);
+            components.push_back(component);
+        }
+    }
+    
+    cout << "Number of components: " << components.size() << endl;
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Cycle Detection</h3>
+                    
+                    <h4>Cycle Detection in Undirected Graph</h4>
+                    <pre><code class="language-cpp">bool has_cycle_undirected() {
+    vector&lt;bool&gt; visited(n + 1, false);
+    
+    function&lt;bool(int, int)&gt; dfs = [&](int v, int parent) -> bool {
+        visited[v] = true;
+        
+        for (int neighbor : adj[v]) {
+            if (neighbor == parent) continue; // Skip parent edge
+            
+            if (visited[neighbor] || dfs(neighbor, v)) {
+                return true; // Cycle found
+            }
+        }
+        return false;
+    };
+    
+    for (int v = 1; v <= n; v++) {
+        if (!visited[v] && dfs(v, -1)) {
+            return true;
+        }
+    }
+    return false;
+}</code></pre>
+
+                    <h4>Cycle Detection in Directed Graph</h4>
+                    <pre><code class="language-cpp">bool has_cycle_directed() {
+    vector&lt;int&gt; color(n + 1, 0); // 0 = white, 1 = gray, 2 = black
+    
+    function&lt;bool(int)&gt; dfs = [&](int v) -> bool {
+        color[v] = 1; // Mark as gray (being processed)
+        
+        for (int neighbor : adj[v]) {
+            if (color[neighbor] == 1) { // Back edge to gray vertex
+                return true; // Cycle found
+            }
+            if (color[neighbor] == 0 && dfs(neighbor)) {
+                return true;
+            }
+        }
+        
+        color[v] = 2; // Mark as black (fully processed)
+        return false;
+    };
+    
+    for (int v = 1; v <= n; v++) {
+        if (color[v] == 0 && dfs(v)) {
+            return true;
+        }
+    }
+    return false;
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Topological Sorting</h3>
+                    <p>Linear ordering of vertices in a directed acyclic graph (DAG) such that for every directed edge (u, v), u comes before v in the ordering.</p>
+                    
+                    <h4>DFS-based Topological Sort</h4>
+                    <pre><code class="language-cpp">vector&lt;int&gt; topological_sort() {
+    vector&lt;bool&gt; visited(n + 1, false);
+    stack&lt;int&gt; result;
+    
+    function&lt;void(int)&gt; dfs = [&](int v) {
+        visited[v] = true;
+        
+        for (int neighbor : adj[v]) {
+            if (!visited[neighbor]) {
+                dfs(neighbor);
+            }
+        }
+        
+        result.push(v); // Add to result after processing all descendants
+    };
+    
+    for (int v = 1; v <= n; v++) {
+        if (!visited[v]) {
+            dfs(v);
+        }
+    }
+    
+    vector&lt;int&gt; topo_order;
+    while (!result.empty()) {
+        topo_order.push_back(result.top());
+        result.pop();
+    }
+    
+    return topo_order;
+}</code></pre>
+
+                    <h4>Kahn's Algorithm (BFS-based)</h4>
+                    <pre><code class="language-cpp">vector&lt;int&gt; kahn_topological_sort() {
+    vector&lt;int&gt; in_degree(n + 1, 0);
+    
+    // Calculate in-degrees
+    for (int v = 1; v <= n; v++) {
+        for (int neighbor : adj[v]) {
+            in_degree[neighbor]++;
+        }
+    }
+    
+    queue&lt;int&gt; q;
+    for (int v = 1; v <= n; v++) {
+        if (in_degree[v] == 0) {
+            q.push(v);
+        }
+    }
+    
+    vector&lt;int&gt; result;
+    while (!q.empty()) {
+        int v = q.front();
+        q.pop();
+        result.push_back(v);
+        
+        for (int neighbor : adj[v]) {
+            in_degree[neighbor]--;
+            if (in_degree[neighbor] == 0) {
+                q.push(neighbor);
+            }
+        }
+    }
+    
+    // Check if graph has cycle
+    if (result.size() != n) {
+        return {}; // Graph has cycle, no topological ordering
+    }
+    
+    return result;
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Bipartite Graph Detection</h3>
+                    <p>A bipartite graph can be colored with two colors such that no two adjacent vertices have the same color.</p>
+                    
+                    <pre><code class="language-cpp">bool is_bipartite() {
+    vector&lt;int&gt; color(n + 1, -1); // -1 = uncolored, 0 = color1, 1 = color2
+    
+    function&lt;bool(int, int)&gt; dfs = [&](int v, int c) -> bool {
+        color[v] = c;
+        
+        for (int neighbor : adj[v]) {
+            if (color[neighbor] == -1) {
+                if (!dfs(neighbor, 1 - c)) {
+                    return false;
+                }
+            } else if (color[neighbor] == c) {
+                return false; // Same color as current vertex
+            }
+        }
+        return true;
+    };
+    
+    for (int v = 1; v <= n; v++) {
+        if (color[v] == -1) {
+            if (!dfs(v, 0)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+// Get the two sets of a bipartite graph
+pair&lt;vector&lt;int&gt;, vector&lt;int&gt;&gt; get_bipartite_sets() {
+    vector&lt;int&gt; color(n + 1, -1);
+    vector&lt;int&gt; set1, set2;
+    
+    // Assume graph is bipartite (check first with is_bipartite())
+    function&lt;void(int, int)&gt; dfs = [&](int v, int c) {
+        color[v] = c;
+        if (c == 0) set1.push_back(v);
+        else set2.push_back(v);
+        
+        for (int neighbor : adj[v]) {
+            if (color[neighbor] == -1) {
+                dfs(neighbor, 1 - c);
+            }
+        }
+    };
+    
+    for (int v = 1; v <= n; v++) {
+        if (color[v] == -1) {
+            dfs(v, 0);
+        }
+    }
+    
+    return {set1, set2};
+}</code></pre>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Graph Traversal Applications</h3>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>DFS Applications:</h4>
                         <ul>
-                            <li>Depth-First Search (DFS) implementation and applications</li>
-                            <li>Breadth-First Search (BFS) implementation and applications</li>
-                            <li>Connected components and reachability</li>
-                            <li>Cycle detection in graphs</li>
+                            <li>Finding connected components</li>
+                            <li>Cycle detection</li>
                             <li>Topological sorting</li>
-                            <li>Graph coloring basics</li>
+                            <li>Finding strongly connected components</li>
+                            <li>Solving maze problems</li>
+                            <li>Finding bridges and articulation points</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>BFS Applications:</h4>
+                        <ul>
+                            <li>Shortest path in unweighted graphs</li>
+                            <li>Level-order traversal</li>
+                            <li>Finding minimum spanning tree (Prim's algorithm)</li>
                             <li>Bipartite graph detection</li>
+                            <li>Web crawling</li>
+                            <li>Social networking (degrees of separation)</li>
+                        </ul>
+                    </div>
+
+                    <div class="tip-box">
+                        <h4>Choosing Between DFS and BFS:</h4>
+                        <ul>
+                            <li>Use <strong>DFS</strong> when you need to explore all possibilities or detect cycles</li>
+                            <li>Use <strong>BFS</strong> when you need shortest paths or level-wise processing</li>
+                            <li>DFS uses less memory (except for recursion stack)</li>
+                            <li>BFS guarantees shortest path in unweighted graphs</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="topic-section">
+                    <h3>Implementation Tips</h3>
+                    
+                    <div class="warning-box">
+                        <h4>Common Pitfalls:</h4>
+                        <ul>
+                            <li>Stack overflow with deep recursion in DFS - use iterative version for large graphs</li>
+                            <li>Forgetting to mark vertices as visited before adding to queue in BFS</li>
+                            <li>Not handling disconnected components</li>
+                            <li>Incorrect parent tracking in undirected graph cycle detection</li>
+                        </ul>
+                    </div>
+
+                    <div class="tip-box">
+                        <h4>Optimization Tips:</h4>
+                        <ul>
+                            <li>Use vectors instead of arrays for better performance</li>
+                            <li>Reserve space for containers when size is known</li>
+                            <li>Use early termination when possible</li>
+                            <li>Consider iterative DFS for very deep graphs</li>
                         </ul>
                     </div>
                 </div>

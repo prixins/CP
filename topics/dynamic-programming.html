@@ -34,20 +34,323 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on dynamic programming will cover:</p>
+                    <h3>Understanding Dynamic Programming</h3>
+                    <p>Dynamic Programming (DP) works on problems that have:</p>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>DP Requirements:</h4>
                         <ul>
-                            <li>Fibonacci sequence and memoization</li>
-                            <li>Longest increasing subsequence</li>
-                            <li>0/1 Knapsack problem</li>
-                            <li>Edit distance and string algorithms</li>
-                            <li>Coin change variations</li>
-                            <li>Matrix chain multiplication</li>
-                            <li>Top-down vs Bottom-up approaches</li>
+                            <li><strong>Optimal Substructure:</strong> Optimal solution contains optimal solutions to subproblems</li>
+                            <li><strong>Overlapping Subproblems:</strong> Same subproblems are solved multiple times</li>
+                            <li><strong>Principle of Optimality:</strong> An optimal sequence of decisions has optimal subsequences</li>
                         </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Fibonacci Sequence - Introduction to DP</h3>
+                    <p>Let's start with the classic Fibonacci example to understand DP concepts:</p>
+                    
+                    <h4>Naive Recursive Solution (Inefficient)</h4>
+                    <pre><code class="language-cpp">
+int fibRecursive(int n) {
+    if (n &lt;= 1) return n;
+    return fibRecursive(n-1) + fibRecursive(n-2);
+}
+// Time Complexity: O(2^n) - Very slow!
+                    </code></pre>
+                    
+                    <h4>Memoization (Top-Down DP)</h4>
+                    <pre><code class="language-cpp">
+#include &lt;vector&gt;
+
+vector&lt;int&gt; memo;
+
+int fibMemo(int n) {
+    if (n &lt;= 1) return n;
+    if (memo[n] != -1) return memo[n]; // Already computed
+    
+    memo[n] = fibMemo(n-1) + fibMemo(n-2);
+    return memo[n];
+}
+
+int fibonacci(int n) {
+    memo.assign(n+1, -1);
+    return fibMemo(n);
+}
+// Time Complexity: O(n), Space: O(n)
+                    </code></pre>
+                    
+                    <h4>Tabulation (Bottom-Up DP)</h4>
+                    <pre><code class="language-cpp">
+int fibDP(int n) {
+    if (n &lt;= 1) return n;
+    
+    vector&lt;int&gt; dp(n+1);
+    dp[0] = 0;
+    dp[1] = 1;
+    
+    for (int i = 2; i &lt;= n; i++) {
+        dp[i] = dp[i-1] + dp[i-2];
+    }
+    
+    return dp[n];
+}
+// Time Complexity: O(n), Space: O(n)
+
+// Space-optimized version
+int fibOptimized(int n) {
+    if (n &lt;= 1) return n;
+    
+    int prev2 = 0, prev1 = 1;
+    for (int i = 2; i &lt;= n; i++) {
+        int curr = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = curr;
+    }
+    
+    return prev1;
+}
+// Time Complexity: O(n), Space: O(1)
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Coin Change Problem</h3>
+                    <p>Find the minimum coins needed to make a given amount:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+int coinChange(vector&lt;int&gt;&amp; coins, int amount) {
+    vector&lt;int&gt; dp(amount + 1, amount + 1); // Initialize with impossible value
+    dp[0] = 0; // Base case: 0 coins needed for amount 0
+    
+    for (int i = 1; i &lt;= amount; i++) {
+        for (int coin : coins) {
+            if (coin &lt;= i) {
+                dp[i] = min(dp[i], dp[i - coin] + 1);
+            }
+        }
+    }
+    
+    return dp[amount] &gt; amount ? -1 : dp[amount];
+}
+
+// Count number of ways to make amount
+int coinChangeWays(vector&lt;int&gt;&amp; coins, int amount) {
+    vector&lt;int&gt; dp(amount + 1, 0);
+    dp[0] = 1; // One way to make 0: use no coins
+    
+    for (int coin : coins) {
+        for (int i = coin; i &lt;= amount; i++) {
+            dp[i] += dp[i - coin];
+        }
+    }
+    
+    return dp[amount];
+}
+
+int main() {
+    vector&lt;int&gt; coins = {1, 3, 4};
+    int amount = 6;
+    
+    cout &lt;&lt; "Min coins needed: " &lt;&lt; coinChange(coins, amount) &lt;&lt; endl; // 2 (3+3)
+    cout &lt;&lt; "Ways to make amount: " &lt;&lt; coinChangeWays(coins, amount) &lt;&lt; endl;
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>0/1 Knapsack Problem</h3>
+                    <p>Maximize value in a knapsack with weight constraint:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+int knapsack(vector&lt;int&gt;&amp; weights, vector&lt;int&gt;&amp; values, int W) {
+    int n = weights.size();
+    vector&lt;vector&lt;int&gt;&gt; dp(n + 1, vector&lt;int&gt;(W + 1, 0));
+    
+    for (int i = 1; i &lt;= n; i++) {
+        for (int w = 1; w &lt;= W; w++) {
+            if (weights[i-1] &lt;= w) {
+                // Either take item or don't take it
+                dp[i][w] = max(dp[i-1][w], 
+                              dp[i-1][w - weights[i-1]] + values[i-1]);
+            } else {
+                dp[i][w] = dp[i-1][w]; // Can't take this item
+            }
+        }
+    }
+    
+    return dp[n][W];
+}
+
+// Space-optimized version (1D array)
+int knapsackOptimized(vector&lt;int&gt;&amp; weights, vector&lt;int&gt;&amp; values, int W) {
+    vector&lt;int&gt; dp(W + 1, 0);
+    
+    for (int i = 0; i &lt; weights.size(); i++) {
+        // Iterate backwards to avoid using updated values
+        for (int w = W; w &gt;= weights[i]; w--) {
+            dp[w] = max(dp[w], dp[w - weights[i]] + values[i]);
+        }
+    }
+    
+    return dp[W];
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Longest Increasing Subsequence (LIS)</h3>
+                    <p>Find the length of the longest increasing subsequence:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+// O(n^2) DP solution
+int lisDP(vector&lt;int&gt;&amp; nums) {
+    int n = nums.size();
+    vector&lt;int&gt; dp(n, 1); // dp[i] = length of LIS ending at i
+    
+    for (int i = 1; i &lt; n; i++) {
+        for (int j = 0; j &lt; i; j++) {
+            if (nums[j] &lt; nums[i]) {
+                dp[i] = max(dp[i], dp[j] + 1);
+            }
+        }
+    }
+    
+    return *max_element(dp.begin(), dp.end());
+}
+
+// O(n log n) Binary Search solution
+int lisBinarySearch(vector&lt;int&gt;&amp; nums) {
+    vector&lt;int&gt; tails;
+    
+    for (int num : nums) {
+        auto it = lower_bound(tails.begin(), tails.end(), num);
+        
+        if (it == tails.end()) {
+            tails.push_back(num);
+        } else {
+            *it = num;
+        }
+    }
+    
+    return tails.size();
+}
+
+// Reconstruct the actual LIS
+vector&lt;int&gt; reconstructLIS(vector&lt;int&gt;&amp; nums) {
+    int n = nums.size();
+    vector&lt;int&gt; dp(n, 1);
+    vector&lt;int&gt; parent(n, -1);
+    
+    int maxLength = 1, maxIndex = 0;
+    
+    for (int i = 1; i &lt; n; i++) {
+        for (int j = 0; j &lt; i; j++) {
+            if (nums[j] &lt; nums[i] &amp;&amp; dp[j] + 1 &gt; dp[i]) {
+                dp[i] = dp[j] + 1;
+                parent[i] = j;
+            }
+        }
+        
+        if (dp[i] &gt; maxLength) {
+            maxLength = dp[i];
+            maxIndex = i;
+        }
+    }
+    
+    // Reconstruct LIS
+    vector&lt;int&gt; lis;
+    for (int i = maxIndex; i != -1; i = parent[i]) {
+        lis.push_back(nums[i]);
+    }
+    
+    reverse(lis.begin(), lis.end());
+    return lis;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Edit Distance (Levenshtein Distance)</h3>
+                    <p>Minimum operations to transform one string to another:</p>
+                    
+                    <pre><code class="language-cpp">
+int editDistance(string word1, string word2) {
+    int m = word1.length(), n = word2.length();
+    vector&lt;vector&lt;int&gt;&gt; dp(m + 1, vector&lt;int&gt;(n + 1));
+    
+    // Initialize base cases
+    for (int i = 0; i &lt;= m; i++) {
+        dp[i][0] = i; // Delete all characters
+    }
+    for (int j = 0; j &lt;= n; j++) {
+        dp[0][j] = j; // Insert all characters
+    }
+    
+    for (int i = 1; i &lt;= m; i++) {
+        for (int j = 1; j &lt;= n; j++) {
+            if (word1[i-1] == word2[j-1]) {
+                dp[i][j] = dp[i-1][j-1]; // No operation needed
+            } else {
+                dp[i][j] = 1 + min({
+                    dp[i-1][j],     // Delete
+                    dp[i][j-1],     // Insert
+                    dp[i-1][j-1]    // Replace
+                });
+            }
+        }
+    }
+    
+    return dp[m][n];
+}
+
+int main() {
+    string word1 = "horse";
+    string word2 = "ros";
+    cout &lt;&lt; "Edit distance: " &lt;&lt; editDistance(word1, word2) &lt;&lt; endl; // 3
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Common DP Patterns</h3>
+                    <div class="info-box">
+                        <h4>Popular DP Types:</h4>
+                        <ul>
+                            <li><strong>Linear DP:</strong> Problems on arrays/strings (LIS, Coin Change)</li>
+                            <li><strong>2D DP:</strong> Grid problems, string matching (Edit Distance, LCS)</li>
+                            <li><strong>Tree DP:</strong> Problems on trees (Tree diameter, Maximum path sum)</li>
+                            <li><strong>Digit DP:</strong> Counting numbers with certain properties</li>
+                            <li><strong>Bitmask DP:</strong> Subset problems with small n (&lt; 20)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>DP Strategy</h3>
+                    <div class="tip-box">
+                        <h4><i class="fas fa-lightbulb"></i> How to Approach DP Problems</h4>
+                        <ol>
+                            <li><strong>Define the state:</strong> What does dp[i] represent?</li>
+                            <li><strong>Find the recurrence:</strong> How to compute dp[i] from previous states?</li>
+                            <li><strong>Initialize base cases:</strong> What are the starting values?</li>
+                            <li><strong>Determine the order:</strong> In what order to fill the DP table?</li>
+                            <li><strong>Optimize space:</strong> Can you reduce space complexity?</li>
+                        </ol>
                     </div>
                 </div>
             </article>

@@ -34,19 +34,604 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on string algorithms will cover:</p>
+                    <h3>String Hashing</h3>
+                    <p>String hashing converts strings to integers for fast comparison and substring operations:</p>
                     
+                    <pre><code class="language-cpp">
+#include &lt;vector&gt;
+#include &lt;string&gt;
+
+class StringHash {
+private:
+    static const int MOD = 1e9 + 7;
+    static const int BASE = 31;
+    vector&lt;long long&gt; hash_values;
+    vector&lt;long long&gt; base_powers;
+    
+public:
+    StringHash(const string&amp; s) {
+        int n = s.length();
+        hash_values.resize(n + 1, 0);
+        base_powers.resize(n + 1, 1);
+        
+        // Precompute hash values and base powers
+        for (int i = 0; i &lt; n; i++) {
+            hash_values[i + 1] = (hash_values[i] * BASE + (s[i] - 'a' + 1)) % MOD;
+            base_powers[i + 1] = (base_powers[i] * BASE) % MOD;
+        }
+    }
+    
+    // Get hash of substring from l to r (inclusive)
+    long long getHash(int l, int r) {
+        long long result = hash_values[r + 1] - (hash_values[l] * base_powers[r - l + 1]) % MOD;
+        return (result % MOD + MOD) % MOD;
+    }
+    
+    // Check if two substrings are equal
+    bool areEqual(int l1, int r1, int l2, int r2) {
+        return getHash(l1, r1) == getHash(l2, r2);
+    }
+};
+
+// Find all occurrences of pattern in text using rolling hash
+vector&lt;int&gt; rabinKarp(const string&amp; text, const string&amp; pattern) {
+    vector&lt;int&gt; occurrences;
+    int n = text.length(), m = pattern.length();
+    
+    if (m &gt; n) return occurrences;
+    
+    StringHash textHash(text);
+    StringHash patternHash(pattern);
+    
+    long long patternHashValue = patternHash.getHash(0, m - 1);
+    
+    for (int i = 0; i &lt;= n - m; i++) {
+        if (textHash.getHash(i, i + m - 1) == patternHashValue) {
+            occurrences.push_back(i);
+        }
+    }
+    
+    return occurrences;
+}
+
+int main() {
+    string text = "ababcababa";
+    string pattern = "aba";
+    
+    vector&lt;int&gt; positions = rabinKarp(text, pattern);
+    
+    cout &lt;&lt; "Pattern found at positions: ";
+    for (int pos : positions) {
+        cout &lt;&lt; pos &lt;&lt; " ";
+    }
+    cout &lt;&lt; endl;
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Trie Data Structure</h3>
+                    <p>Trie (Prefix Tree) efficiently stores and searches strings with common prefixes:</p>
+                    
+                    <pre><code class="language-cpp">
+class TrieNode {
+public:
+    TrieNode* children[26];
+    bool isEndOfWord;
+    int wordCount;
+    
+    TrieNode() {
+        for (int i = 0; i &lt; 26; i++) {
+            children[i] = nullptr;
+        }
+        isEndOfWord = false;
+        wordCount = 0;
+    }
+};
+
+class Trie {
+private:
+    TrieNode* root;
+    
+public:
+    Trie() {
+        root = new TrieNode();
+    }
+    
+    void insert(const string&amp; word) {
+        TrieNode* node = root;
+        for (char c : word) {
+            int index = c - 'a';
+            if (node-&gt;children[index] == nullptr) {
+                node-&gt;children[index] = new TrieNode();
+            }
+            node = node-&gt;children[index];
+        }
+        node-&gt;isEndOfWord = true;
+        node-&gt;wordCount++;
+    }
+    
+    bool search(const string&amp; word) {
+        TrieNode* node = root;
+        for (char c : word) {
+            int index = c - 'a';
+            if (node-&gt;children[index] == nullptr) {
+                return false;
+            }
+            node = node-&gt;children[index];
+        }
+        return node-&gt;isEndOfWord;
+    }
+    
+    bool startsWith(const string&amp; prefix) {
+        TrieNode* node = root;
+        for (char c : prefix) {
+            int index = c - 'a';
+            if (node-&gt;children[index] == nullptr) {
+                return false;
+            }
+            node = node-&gt;children[index];
+        }
+        return true;
+    }
+    
+    // Count words with given prefix
+    int countWordsWithPrefix(const string&amp; prefix) {
+        TrieNode* node = root;
+        for (char c : prefix) {
+            int index = c - 'a';
+            if (node-&gt;children[index] == nullptr) {
+                return 0;
+            }
+            node = node-&gt;children[index];
+        }
+        
+        return countWords(node);
+    }
+    
+private:
+    int countWords(TrieNode* node) {
+        if (!node) return 0;
+        
+        int count = node-&gt;isEndOfWord ? node-&gt;wordCount : 0;
+        for (int i = 0; i &lt; 26; i++) {
+            count += countWords(node-&gt;children[i]);
+        }
+        return count;
+    }
+};
+
+int main() {
+    Trie trie;
+    
+    trie.insert("apple");
+    trie.insert("app");
+    trie.insert("application");
+    trie.insert("apply");
+    
+    cout &lt;&lt; "Search 'app': " &lt;&lt; trie.search("app") &lt;&lt; endl; // true
+    cout &lt;&lt; "Search 'appl': " &lt;&lt; trie.search("appl") &lt;&lt; endl; // false
+    cout &lt;&lt; "Starts with 'app': " &lt;&lt; trie.startsWith("app") &lt;&lt; endl; // true
+    cout &lt;&lt; "Words with prefix 'app': " &lt;&lt; trie.countWordsWithPrefix("app") &lt;&lt; endl; // 4
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>KMP Algorithm</h3>
+                    <p>Knuth-Morris-Pratt algorithm for efficient pattern matching:</p>
+                    
+                    <pre><code class="language-cpp">
+// Compute LPS (Longest Proper Prefix which is also Suffix) array
+vector&lt;int&gt; computeLPS(const string&amp; pattern) {
+    int m = pattern.length();
+    vector&lt;int&gt; lps(m, 0);
+    int len = 0; // Length of previous longest prefix suffix
+    int i = 1;
+    
+    while (i &lt; m) {
+        if (pattern[i] == pattern[len]) {
+            len++;
+            lps[i] = len;
+            i++;
+        } else {
+            if (len != 0) {
+                len = lps[len - 1];
+            } else {
+                lps[i] = 0;
+                i++;
+            }
+        }
+    }
+    
+    return lps;
+}
+
+// KMP pattern searching
+vector&lt;int&gt; KMPSearch(const string&amp; text, const string&amp; pattern) {
+    vector&lt;int&gt; occurrences;
+    int n = text.length();
+    int m = pattern.length();
+    
+    vector&lt;int&gt; lps = computeLPS(pattern);
+    
+    int i = 0; // Index for text
+    int j = 0; // Index for pattern
+    
+    while (i &lt; n) {
+        if (pattern[j] == text[i]) {
+            i++;
+            j++;
+        }
+        
+        if (j == m) {
+            occurrences.push_back(i - j);
+            j = lps[j - 1];
+        } else if (i &lt; n &amp;&amp; pattern[j] != text[i]) {
+            if (j != 0) {
+                j = lps[j - 1];
+            } else {
+                i++;
+            }
+        }
+    }
+    
+    return occurrences;
+}
+
+int main() {
+    string text = "ABABDABACDABABCABCABCABCABC";
+    string pattern = "ABABCABCABCABC";
+    
+    vector&lt;int&gt; positions = KMPSearch(text, pattern);
+    
+    cout &lt;&lt; "Pattern found at positions: ";
+    for (int pos : positions) {
+        cout &lt;&lt; pos &lt;&lt; " ";
+    }
+    cout &lt;&lt; endl;
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Z Algorithm</h3>
+                    <p>Z algorithm for finding all occurrences of pattern in linear time:</p>
+                    
+                    <pre><code class="language-cpp">
+// Compute Z array
+vector&lt;int&gt; computeZ(const string&amp; s) {
+    int n = s.length();
+    vector&lt;int&gt; z(n);
+    z[0] = n;
+    
+    int l = 0, r = 0;
+    for (int i = 1; i &lt; n; i++) {
+        if (i &lt;= r) {
+            z[i] = min(r - i + 1, z[i - l]);
+        }
+        
+        while (i + z[i] &lt; n &amp;&amp; s[z[i]] == s[i + z[i]]) {
+            z[i]++;
+        }
+        
+        if (i + z[i] - 1 &gt; r) {
+            l = i;
+            r = i + z[i] - 1;
+        }
+    }
+    
+    return z;
+}
+
+// Find pattern using Z algorithm
+vector&lt;int&gt; zSearch(const string&amp; text, const string&amp; pattern) {
+    string combined = pattern + "$" + text;
+    vector&lt;int&gt; z = computeZ(combined);
+    
+    vector&lt;int&gt; occurrences;
+    int patternLen = pattern.length();
+    
+    for (int i = patternLen + 1; i &lt; combined.length(); i++) {
+        if (z[i] == patternLen) {
+            occurrences.push_back(i - patternLen - 1);
+        }
+    }
+    
+    return occurrences;
+}
+
+// Longest Common Prefix using Z algorithm
+int longestCommonPrefix(const string&amp; s1, const string&amp; s2) {
+    string combined = s1 + "$" + s2;
+    vector&lt;int&gt; z = computeZ(combined);
+    
+    int maxLCP = 0;
+    for (int i = s1.length() + 1; i &lt; combined.length(); i++) {
+        maxLCP = max(maxLCP, z[i]);
+    }
+    
+    return maxLCP;
+}
+
+int main() {
+    string text = "abaaabaaaba";
+    string pattern = "aaba";
+    
+    vector&lt;int&gt; positions = zSearch(text, pattern);
+    
+    cout &lt;&lt; "Pattern found at positions: ";
+    for (int pos : positions) {
+        cout &lt;&lt; pos &lt;&lt; " ";
+    }
+    cout &lt;&lt; endl;
+    
+    cout &lt;&lt; "LCP of 'abcdef' and 'abcxyz': " 
+         &lt;&lt; longestCommonPrefix("abcdef", "abcxyz") &lt;&lt; endl; // 3
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Palindrome Algorithms</h3>
+                    <p>Efficient algorithms for palindrome detection and counting:</p>
+                    
+                    <pre><code class="language-cpp">
+// Manacher's algorithm for finding all palindromes
+vector&lt;int&gt; manacher(string s) {
+    // Transform string: "abc" -&gt; "^#a#b#c#$"
+    string T = "^#";
+    for (char c : s) {
+        T += c;
+        T += '#';
+    }
+    T += '$';
+    
+    int n = T.length();
+    vector&lt;int&gt; P(n, 0);
+    int center = 0, right = 0;
+    
+    for (int i = 1; i &lt; n - 1; i++) {
+        int mirror = 2 * center - i;
+        
+        if (i &lt; right) {
+            P[i] = min(right - i, P[mirror]);
+        }
+        
+        // Try to expand palindrome centered at i
+        while (T[i + 1 + P[i]] == T[i - 1 - P[i]]) {
+            P[i]++;
+        }
+        
+        // If palindrome centered at i extends past right, adjust center and right
+        if (i + P[i] &gt; right) {
+            center = i;
+            right = i + P[i];
+        }
+    }
+    
+    return P;
+}
+
+// Find longest palindromic substring
+string longestPalindrome(string s) {
+    vector&lt;int&gt; P = manacher(s);
+    
+    int maxLen = 0, centerIndex = 0;
+    for (int i = 1; i &lt; P.size() - 1; i++) {
+        if (P[i] &gt; maxLen) {
+            maxLen = P[i];
+            centerIndex = i;
+        }
+    }
+    
+    int start = (centerIndex - maxLen) / 2;
+    return s.substr(start, maxLen);
+}
+
+// Count palindromic substrings
+int countPalindromes(string s) {
+    vector&lt;int&gt; P = manacher(s);
+    
+    int count = 0;
+    for (int i = 1; i &lt; P.size() - 1; i++) {
+        count += (P[i] + 1) / 2;
+    }
+    
+    return count;
+}
+
+// Simple palindrome check for substring
+bool isPalindrome(const string&amp; s, int l, int r) {
+    while (l &lt; r) {
+        if (s[l] != s[r]) return false;
+        l++;
+        r--;
+    }
+    return true;
+}
+
+// Expand around centers approach
+int expandAroundCenter(const string&amp; s, int left, int right) {
+    while (left &gt;= 0 &amp;&amp; right &lt; s.length() &amp;&amp; s[left] == s[right]) {
+        left--;
+        right++;
+    }
+    return right - left - 1;
+}
+
+string longestPalindromeSimple(string s) {
+    if (s.empty()) return "";
+    
+    int start = 0, maxLen = 1;
+    
+    for (int i = 0; i &lt; s.length(); i++) {
+        // Odd length palindromes
+        int len1 = expandAroundCenter(s, i, i);
+        // Even length palindromes
+        int len2 = expandAroundCenter(s, i, i + 1);
+        
+        int len = max(len1, len2);
+        if (len &gt; maxLen) {
+            maxLen = len;
+            start = i - (len - 1) / 2;
+        }
+    }
+    
+    return s.substr(start, maxLen);
+}
+
+int main() {
+    string s = "babad";
+    
+    cout &lt;&lt; "Longest palindrome in '" &lt;&lt; s &lt;&lt; "': " 
+         &lt;&lt; longestPalindrome(s) &lt;&lt; endl;
+    
+    cout &lt;&lt; "Number of palindromic substrings: " 
+         &lt;&lt; countPalindromes(s) &lt;&lt; endl;
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Suffix Array</h3>
+                    <p>Suffix arrays provide efficient solutions for many string problems:</p>
+                    
+                    <pre><code class="language-cpp">
+// Build suffix array using counting sort
+vector&lt;int&gt; buildSuffixArray(string s) {
+    s += "$"; // Add sentinel
+    int n = s.length();
+    
+    vector&lt;int&gt; sa(n), rank(n), tmp(n);
+    
+    // Initial ranking based on characters
+    for (int i = 0; i &lt; n; i++) {
+        sa[i] = i;
+        rank[i] = s[i];
+    }
+    
+    for (int k = 1; k &lt; n; k &lt;&lt;= 1) {
+        // Sort by (rank[i], rank[i+k])
+        sort(sa.begin(), sa.end(), [&amp;](int i, int j) {
+            if (rank[i] != rank[j]) return rank[i] &lt; rank[j];
+            int ri = (i + k &lt; n) ? rank[i + k] : -1;
+            int rj = (j + k &lt; n) ? rank[j + k] : -1;
+            return ri &lt; rj;
+        });
+        
+        // Update ranks
+        tmp[sa[0]] = 0;
+        for (int i = 1; i &lt; n; i++) {
+            tmp[sa[i]] = tmp[sa[i-1]];
+            int pi = sa[i-1], ci = sa[i];
+            if (rank[pi] &lt; rank[ci] || 
+                (rank[pi] == rank[ci] &amp;&amp; 
+                 ((pi + k &lt; n ? rank[pi + k] : -1) &lt; 
+                  (ci + k &lt; n ? rank[ci + k] : -1)))) {
+                tmp[sa[i]]++;
+            }
+        }
+        
+        rank = tmp;
+    }
+    
+    return sa;
+}
+
+// Build LCP (Longest Common Prefix) array
+vector&lt;int&gt; buildLCPArray(const string&amp; s, const vector&lt;int&gt;&amp; sa) {
+    int n = s.length();
+    vector&lt;int&gt; rank(n), lcp(n - 1);
+    
+    for (int i = 0; i &lt; n; i++) {
+        rank[sa[i]] = i;
+    }
+    
+    int k = 0;
+    for (int i = 0; i &lt; n; i++) {
+        if (rank[i] == n - 1) {
+            k = 0;
+            continue;
+        }
+        
+        int j = sa[rank[i] + 1];
+        while (i + k &lt; n &amp;&amp; j + k &lt; n &amp;&amp; s[i + k] == s[j + k]) {
+            k++;
+        }
+        
+        lcp[rank[i]] = k;
+        if (k &gt; 0) k--;
+    }
+    
+    return lcp;
+}
+
+// Count distinct substrings using suffix array
+long long countDistinctSubstrings(const string&amp; s) {
+    vector&lt;int&gt; sa = buildSuffixArray(s);
+    vector&lt;int&gt; lcp = buildLCPArray(s + "$", sa);
+    
+    int n = s.length();
+    long long total = (long long)n * (n + 1) / 2;
+    
+    for (int x : lcp) {
+        total -= x;
+    }
+    
+    return total;
+}
+
+int main() {
+    string s = "banana";
+    
+    vector&lt;int&gt; sa = buildSuffixArray(s);
+    vector&lt;int&gt; lcp = buildLCPArray(s + "$", sa);
+    
+    cout &lt;&lt; "Suffix Array: ";
+    for (int i : sa) {
+        cout &lt;&lt; i &lt;&lt; " ";
+    }
+    cout &lt;&lt; endl;
+    
+    cout &lt;&lt; "Distinct substrings: " &lt;&lt; countDistinctSubstrings(s) &lt;&lt; endl;
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>String Algorithm Applications</h3>
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Common Use Cases:</h4>
                         <ul>
-                            <li>Trie data structure and applications</li>
-                            <li>String hashing techniques</li>
-                            <li>KMP (Knuth-Morris-Pratt) algorithm</li>
-                            <li>Z-algorithm for pattern matching</li>
-                            <li>Suffix arrays and LCP arrays</li>
-                            <li>Rabin-Karp algorithm</li>
-                            <li>Palindrome detection algorithms</li>
+                            <li><strong>Pattern Matching:</strong> Find occurrences of patterns in text</li>
+                            <li><strong>Text Processing:</strong> Autocomplete, spell checkers</li>
+                            <li><strong>Bioinformatics:</strong> DNA sequence analysis</li>
+                            <li><strong>Data Compression:</strong> Huffman coding, LZ77</li>
+                            <li><strong>Search Engines:</strong> Full-text search and indexing</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <h4><i class="fas fa-lightbulb"></i> Algorithm Selection Guide</h4>
+                        <ul>
+                            <li><strong>Single pattern matching:</strong> KMP or Z algorithm</li>
+                            <li><strong>Multiple pattern matching:</strong> Aho-Corasick algorithm</li>
+                            <li><strong>Substring queries:</strong> String hashing</li>
+                            <li><strong>Prefix/suffix operations:</strong> Trie data structure</li>
+                            <li><strong>Complex string queries:</strong> Suffix arrays</li>
                         </ul>
                     </div>
                 </div>

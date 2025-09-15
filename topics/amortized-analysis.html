@@ -34,19 +34,378 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on amortized analysis will cover:</p>
+                    <h3>Two Pointer Technique</h3>
+                    <p>Two pointers technique uses two indices to efficiently solve problems in O(n) time that might otherwise require O(n²).</p>
+                    
+                    <div class="code-block">
+<pre><code class="language-cpp">
+// Two Sum in sorted array
+vector<int> twoSum(vector<int>& nums, int target) {
+    int left = 0, right = nums.size() - 1;
+    
+    while (left < right) {
+        int sum = nums[left] + nums[right];
+        if (sum == target) {
+            return {left, right};
+        } else if (sum < target) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+    return {-1, -1};
+}
+
+// Remove duplicates from sorted array
+int removeDuplicates(vector<int>& nums) {
+    if (nums.empty()) return 0;
+    
+    int writePos = 0;
+    for (int readPos = 1; readPos < nums.size(); readPos++) {
+        if (nums[readPos] != nums[writePos]) {
+            writePos++;
+            nums[writePos] = nums[readPos];
+        }
+    }
+    return writePos + 1;
+}
+
+// Container with most water
+int maxArea(vector<int>& height) {
+    int left = 0, right = height.size() - 1;
+    int maxWater = 0;
+    
+    while (left < right) {
+        int water = min(height[left], height[right]) * (right - left);
+        maxWater = max(maxWater, water);
+        
+        if (height[left] < height[right]) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+    return maxWater;
+}
+</code></pre>
+                    </div>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Key Insight:</h4>
+                        <p>Each element is visited at most once by each pointer, giving O(n) total complexity despite nested loops.</p>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Sliding Window Technique</h3>
+                    <p>Sliding window maintains a window of elements and efficiently updates as the window moves.</p>
+                    
+                    <div class="code-block">
+<pre><code class="language-cpp">
+// Maximum sum subarray of size k
+int maxSumSubarray(vector<int>& nums, int k) {
+    int windowSum = 0;
+    
+    // Calculate sum of first window
+    for (int i = 0; i < k; i++) {
+        windowSum += nums[i];
+    }
+    
+    int maxSum = windowSum;
+    
+    // Slide the window
+    for (int i = k; i < nums.size(); i++) {
+        windowSum = windowSum - nums[i - k] + nums[i];
+        maxSum = max(maxSum, windowSum);
+    }
+    
+    return maxSum;
+}
+
+// Longest substring with at most k distinct characters
+int lengthOfLongestSubstringKDistinct(string s, int k) {
+    unordered_map<char, int> charCount;
+    int left = 0, maxLen = 0;
+    
+    for (int right = 0; right < s.length(); right++) {
+        charCount[s[right]]++;
+        
+        while (charCount.size() > k) {
+            charCount[s[left]]--;
+            if (charCount[s[left]] == 0) {
+                charCount.erase(s[left]);
+            }
+            left++;
+        }
+        
+        maxLen = max(maxLen, right - left + 1);
+    }
+    
+    return maxLen;
+}
+
+// Minimum window substring
+string minWindow(string s, string t) {
+    unordered_map<char, int> tCount, windowCount;
+    
+    for (char c : t) tCount[c]++;
+    
+    int left = 0, minLen = INT_MAX, minStart = 0;
+    int required = tCount.size(), formed = 0;
+    
+    for (int right = 0; right < s.length(); right++) {
+        char c = s[right];
+        windowCount[c]++;
+        
+        if (tCount.count(c) && windowCount[c] == tCount[c]) {
+            formed++;
+        }
+        
+        while (left <= right && formed == required) {
+            if (right - left + 1 < minLen) {
+                minLen = right - left + 1;
+                minStart = left;
+            }
+            
+            char leftChar = s[left];
+            windowCount[leftChar]--;
+            if (tCount.count(leftChar) && windowCount[leftChar] < tCount[leftChar]) {
+                formed--;
+            }
+            left++;
+        }
+    }
+    
+    return minLen == INT_MAX ? "" : s.substr(minStart, minLen);
+}
+</code></pre>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Stack-Based Amortized Analysis</h3>
+                    <p>Stack operations have amortized O(1) complexity for many algorithms involving nearest elements.</p>
+                    
+                    <div class="code-block">
+<pre><code class="language-cpp">
+// Next greater element
+vector<int> nextGreaterElement(vector<int>& nums) {
+    vector<int> result(nums.size(), -1);
+    stack<int> st; // Store indices
+    
+    for (int i = 0; i < nums.size(); i++) {
+        while (!st.empty() && nums[st.top()] < nums[i]) {
+            result[st.top()] = nums[i];
+            st.pop();
+        }
+        st.push(i);
+    }
+    
+    return result;
+}
+
+// Previous smaller element
+vector<int> previousSmallerElement(vector<int>& nums) {
+    vector<int> result(nums.size(), -1);
+    stack<int> st;
+    
+    for (int i = 0; i < nums.size(); i++) {
+        while (!st.empty() && nums[st.top()] >= nums[i]) {
+            st.pop();
+        }
+        
+        if (!st.empty()) {
+            result[i] = nums[st.top()];
+        }
+        
+        st.push(i);
+    }
+    
+    return result;
+}
+
+// Largest rectangle in histogram
+int largestRectangleArea(vector<int>& heights) {
+    stack<int> st;
+    int maxArea = 0;
+    
+    for (int i = 0; i < heights.size(); i++) {
+        while (!st.empty() && heights[st.top()] > heights[i]) {
+            int h = heights[st.top()];
+            st.pop();
+            int w = st.empty() ? i : i - st.top() - 1;
+            maxArea = max(maxArea, h * w);
+        }
+        st.push(i);
+    }
+    
+    while (!st.empty()) {
+        int h = heights[st.top()];
+        st.pop();
+        int w = st.empty() ? heights.size() : heights.size() - st.top() - 1;
+        maxArea = max(maxArea, h * w);
+    }
+    
+    return maxArea;
+}
+</code></pre>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h4>Amortized Analysis:</h4>
+                        <p>Each element is pushed and popped at most once, giving O(n) total time complexity.</p>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Dynamic Array Analysis</h3>
+                    <p>Dynamic arrays achieve amortized O(1) insertion by doubling capacity when needed.</p>
+                    
+                    <div class="code-block">
+<pre><code class="language-cpp">
+template<typename T>
+class DynamicArray {
+private:
+    T* arr;
+    int capacity;
+    int size;
+    
+    void resize() {
+        int newCapacity = capacity * 2;
+        T* newArr = new T[newCapacity];
+        
+        for (int i = 0; i < size; i++) {
+            newArr[i] = arr[i];
+        }
+        
+        delete[] arr;
+        arr = newArr;
+        capacity = newCapacity;
+    }
+    
+public:
+    DynamicArray() : capacity(1), size(0) {
+        arr = new T[capacity];
+    }
+    
+    void push_back(const T& element) {
+        if (size == capacity) {
+            resize(); // O(n) operation
+        }
+        arr[size++] = element; // O(1) operation
+    }
+    
+    T& operator[](int index) {
+        return arr[index];
+    }
+    
+    int getSize() const { return size; }
+    
+    ~DynamicArray() {
+        delete[] arr;
+    }
+};
+
+// Amortized analysis:
+// - Most insertions: O(1)
+// - Occasional resize: O(n)
+// - Total for n insertions: O(n)
+// - Amortized per insertion: O(1)
+</code></pre>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Union-Find with Path Compression</h3>
+                    <p>Union-Find with path compression and union by rank achieves nearly constant amortized time.</p>
+                    
+                    <div class="code-block">
+<pre><code class="language-cpp">
+class UnionFind {
+private:
+    vector<int> parent, rank;
+    int components;
+    
+public:
+    UnionFind(int n) : parent(n), rank(n, 0), components(n) {
+        iota(parent.begin(), parent.end(), 0);
+    }
+    
+    int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]); // Path compression
+        }
+        return parent[x];
+    }
+    
+    bool unite(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+        
+        if (rootX == rootY) return false;
+        
+        // Union by rank
+        if (rank[rootX] < rank[rootY]) {
+            parent[rootX] = rootY;
+        } else if (rank[rootX] > rank[rootY]) {
+            parent[rootY] = rootX;
+        } else {
+            parent[rootY] = rootX;
+            rank[rootX]++;
+        }
+        
+        components--;
+        return true;
+    }
+    
+    bool connected(int x, int y) {
+        return find(x) == find(y);
+    }
+    
+    int getComponents() const {
+        return components;
+    }
+};
+
+// Time complexity: O(α(n)) amortized per operation
+// where α is the inverse Ackermann function (practically constant)
+</code></pre>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Analysis Techniques</h3>
+                    
+                    <div class="info-box">
+                        <h4>Three Main Methods:</h4>
                         <ul>
-                            <li>Two pointer technique</li>
-                            <li>Sliding window method</li>
-                            <li>Finding nearest smaller/larger elements</li>
-                            <li>Subarray problems</li>
-                            <li>Stack-based amortized algorithms</li>
-                            <li>Dynamic array analysis</li>
-                            <li>Union-Find amortized complexity</li>
+                            <li><strong>Aggregate Analysis:</strong> Total cost of n operations ÷ n</li>
+                            <li><strong>Accounting Method:</strong> Assign credits to operations</li>
+                            <li><strong>Potential Method:</strong> Use potential function to smooth costs</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="code-block">
+<pre><code class="language-cpp">
+// Example: Potential method for dynamic array
+// Potential function: Φ(D) = 2 * size - capacity
+// 
+// Before resize: Φ = 2n - n = n
+// After resize: Φ = 2n - 2n = 0
+// 
+// Amortized cost = Actual cost + ΔΦ
+//                = n + (0 - n) = 0 (for resize)
+//                = 1 + 1 = 2 (for normal insert)
+</code></pre>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <h4>⚠️ Common Pitfalls</h4>
+                        <ul>
+                            <li>Confusing worst-case with amortized complexity</li>
+                            <li>Not considering all operations in the sequence</li>
+                            <li>Incorrect potential function choice</li>
+                            <li>Forgetting to account for space complexity</li>
                         </ul>
                     </div>
                 </div>

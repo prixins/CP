@@ -34,14 +34,325 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on map structures will cover:</p>
+                    <h3>What are Maps?</h3>
+                    <p>A map is a data structure that stores key-value pairs. Each key is unique and maps to exactly one value. Maps are essential for:</p>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Common Map Use Cases:</h4>
                         <ul>
-                            <li>STL map and multimap</li>
-                            <li>Unordered map for hash-based lookups</li>
+                            <li>Counting frequency of elements</li>
+                            <li>Creating lookup tables and dictionaries</li>
+                            <li>Caching computed results</li>
+                            <li>Implementing graphs with adjacency lists</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>STL map</h3>
+                    <p>The STL map stores key-value pairs sorted by key using a balanced binary search tree:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;map&gt;
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+int main() {
+    map&lt;string, int&gt; ages;
+    
+    // Insert key-value pairs
+    ages["Alice"] = 25;
+    ages["Bob"] = 30;
+    ages["Carol"] = 22;
+    ages.insert({"David", 28});
+    
+    // Access values
+    cout &lt;&lt; "Alice's age: " &lt;&lt; ages["Alice"] &lt;&lt; endl;
+    
+    // Check if key exists
+    if (ages.find("Bob") != ages.end()) {
+        cout &lt;&lt; "Bob found with age: " &lt;&lt; ages["Bob"] &lt;&lt; endl;
+    }
+    
+    // Alternative existence check
+    if (ages.count("Eve") == 0) {
+        cout &lt;&lt; "Eve not found" &lt;&lt; endl;
+    }
+    
+    // Iterate (keys are in sorted order)
+    for (const auto&amp; pair : ages) {
+        cout &lt;&lt; pair.first &lt;&lt; ": " &lt;&lt; pair.second &lt;&lt; endl;
+    }
+    // Output: Alice: 25, Bob: 30, Carol: 22, David: 28
+    
+    // Remove element
+    ages.erase("Alice");
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Frequency Counting</h3>
+                    <p>One of the most common uses of maps is counting element frequencies:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;map&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+
+// Count character frequencies in a string
+map&lt;char, int&gt; countChars(const string&amp; text) {
+    map&lt;char, int&gt; frequency;
+    
+    for (char c : text) {
+        frequency[c]++; // Automatically creates entry if not exists
+    }
+    
+    return frequency;
+}
+
+// Count word frequencies
+map&lt;string, int&gt; countWords(const vector&lt;string&gt;&amp; words) {
+    map&lt;string, int&gt; frequency;
+    
+    for (const string&amp; word : words) {
+        frequency[word]++;
+    }
+    
+    return frequency;
+}
+
+int main() {
+    string text = "hello world";
+    auto charCount = countChars(text);
+    
+    for (const auto&amp; pair : charCount) {
+        cout &lt;&lt; "'" &lt;&lt; pair.first &lt;&lt; "': " &lt;&lt; pair.second &lt;&lt; endl;
+    }
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>STL multimap</h3>
+                    <p>Multimap allows multiple values for the same key:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;map&gt;
+
+int main() {
+    multimap&lt;string, int&gt; scores;
+    
+    // Multiple values for same key
+    scores.insert({"Alice", 85});
+    scores.insert({"Alice", 92});
+    scores.insert({"Alice", 78});
+    scores.insert({"Bob", 88});
+    scores.insert({"Bob", 95});
+    
+    cout &lt;&lt; "Alice has " &lt;&lt; scores.count("Alice") &lt;&lt; " scores" &lt;&lt; endl;
+    
+    // Find all values for a key
+    auto range = scores.equal_range("Alice");
+    cout &lt;&lt; "Alice's scores: ";
+    for (auto it = range.first; it != range.second; ++it) {
+        cout &lt;&lt; it-&gt;second &lt;&lt; " ";
+    }
+    cout &lt;&lt; endl;
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Unordered Map</h3>
+                    <p>For faster average operations, use unordered_map (hash table based):</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;unordered_map&gt;
+#include &lt;string&gt;
+
+int main() {
+    unordered_map&lt;string, int&gt; phoneBook;
+    
+    // Insert elements (O(1) average)
+    phoneBook["John"] = 123456789;
+    phoneBook["Jane"] = 987654321;
+    phoneBook["Alice"] = 555123456;
+    
+    // Fast lookup (O(1) average)
+    if (phoneBook.find("John") != phoneBook.end()) {
+        cout &lt;&lt; "John's number: " &lt;&lt; phoneBook["John"] &lt;&lt; endl;
+    }
+    
+    // Keys are not sorted (hash table order)
+    for (const auto&amp; pair : phoneBook) {
+        cout &lt;&lt; pair.first &lt;&lt; ": " &lt;&lt; pair.second &lt;&lt; endl;
+    }
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Custom Key Types</h3>
+                    <p>You can use custom types as keys with appropriate comparison or hash functions:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;map&gt;
+#include &lt;unordered_map&gt;
+
+struct Point {
+    int x, y;
+    
+    // For map (requires comparison)
+    bool operator&lt;(const Point&amp; other) const {
+        if (x != other.x) return x &lt; other.x;
+        return y &lt; other.y;
+    }
+    
+    bool operator==(const Point&amp; other) const {
+        return x == other.x &amp;&amp; y == other.y;
+    }
+};
+
+// Hash function for unordered_map
+struct PointHash {
+    size_t operator()(const Point&amp; p) const {
+        return hash&lt;int&gt;()(p.x) ^ (hash&lt;int&gt;()(p.y) &lt;&lt; 1);
+    }
+};
+
+int main() {
+    // Using custom type with map
+    map&lt;Point, string&gt; locations;
+    locations[{0, 0}] = "Origin";
+    locations[{1, 1}] = "Point A";
+    
+    // Using custom type with unordered_map
+    unordered_map&lt;Point, string, PointHash&gt; fastLocations;
+    fastLocations[{0, 0}] = "Origin";
+    fastLocations[{2, 3}] = "Point B";
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Advanced Map Operations</h3>
+                    <p>Some useful techniques for working with maps:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;map&gt;
+#include &lt;algorithm&gt;
+
+int main() {
+    map&lt;string, int&gt; inventory = {
+        {"apples", 50},
+        {"bananas", 30},
+        {"oranges", 25},
+        {"grapes", 40}
+    };
+    
+    // Find item with minimum value
+    auto minItem = min_element(inventory.begin(), inventory.end(),
+        [](const auto&amp; a, const auto&amp; b) {
+            return a.second &lt; b.second;
+        });
+    cout &lt;&lt; "Least stock: " &lt;&lt; minItem-&gt;first &lt;&lt; " (" 
+         &lt;&lt; minItem-&gt;second &lt;&lt; ")" &lt;&lt; endl;
+    
+    // Update all values
+    for (auto&amp; pair : inventory) {
+        pair.second += 10; // Restock everything by 10
+    }
+    
+    // Conditional update
+    for (auto&amp; [item, quantity] : inventory) { // C++17 structured binding
+        if (quantity &lt; 35) {
+            quantity = 50; // Restock low items
+        }
+    }
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Performance Comparison</h3>
+                    <div class="info-box">
+                        <h4>Time Complexities:</h4>
+                        <ul>
+                            <li><strong>map/multimap:</strong> O(log n) for insert, find, erase</li>
+                            <li><strong>unordered_map:</strong> O(1) average, O(n) worst case</li>
+                            <li><strong>When to use map:</strong> Need sorted keys, stable performance</li>
+                            <li><strong>When to use unordered_map:</strong> Don't need order, want faster operations</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Practical Examples</h3>
+                    <h4>Two Sum Problem</h4>
+                    <pre><code class="language-cpp">
+vector&lt;int&gt; twoSum(vector&lt;int&gt;&amp; nums, int target) {
+    unordered_map&lt;int, int&gt; seen;
+    
+    for (int i = 0; i &lt; nums.size(); i++) {
+        int complement = target - nums[i];
+        
+        if (seen.find(complement) != seen.end()) {
+            return {seen[complement], i};
+        }
+        
+        seen[nums[i]] = i;
+    }
+    
+    return {}; // No solution found
+}
+                    </code></pre>
+                    
+                    <h4>Group Anagrams</h4>
+                    <pre><code class="language-cpp">
+vector&lt;vector&lt;string&gt;&gt; groupAnagrams(vector&lt;string&gt;&amp; strs) {
+    unordered_map&lt;string, vector&lt;string&gt;&gt; groups;
+    
+    for (string&amp; s : strs) {
+        string key = s;
+        sort(key.begin(), key.end());
+        groups[key].push_back(s);
+    }
+    
+    vector&lt;vector&lt;string&gt;&gt; result;
+    for (auto&amp; [key, group] : groups) {
+        result.push_back(group);
+    }
+    
+    return result;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Common Pitfalls</h3>
+                    <div class="warning-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Watch Out For</h4>
+                        <ul>
+                            <li><strong>Default initialization:</strong> map[key] creates entry with default value if key doesn't exist</li>
+                            <li><strong>Use find() vs []:</strong> find() doesn't create entries, [] does</li>
+                            <li><strong>Iterator invalidation:</strong> Modifying map while iterating can be dangerous</li>
+                            <li><strong>Hash collisions:</strong> unordered_map can degrade to O(n) performance</li>
+                        </ul>
+                    </div>
+                </div>
                             <li>Frequency counting and character mapping</li>
                             <li>Custom key types and comparators</li>
                             <li>Map iterators and traversal</li>

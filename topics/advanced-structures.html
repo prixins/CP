@@ -51,21 +51,310 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on advanced data structures will cover:</p>
+                    <h3>STL Iterators</h3>
+                    <p>Iterators are objects that point to elements in containers and provide a way to traverse them:</p>
                     
-                    <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                    <pre><code class="language-cpp">
+#include &lt;vector&gt;
+#include &lt;list&gt;
+#include &lt;iterator&gt;
+
+int main() {
+    vector&lt;int&gt; vec = {1, 2, 3, 4, 5};
+    
+    // Different iterator types
+    vector&lt;int&gt;::iterator it = vec.begin();
+    vector&lt;int&gt;::const_iterator cit = vec.cbegin();
+    vector&lt;int&gt;::reverse_iterator rit = vec.rbegin();
+    
+    // Using auto (C++11+)
+    auto it2 = vec.begin();
+    
+    // Iterator operations
+    cout &lt;&lt; *it &lt;&lt; endl;        // Dereference
+    ++it;                      // Move to next
+    it += 2;                   // Advance by 2 (random access)
+    
+    // Iterator categories
+    // 1. Input Iterator - read once, forward only
+    // 2. Output Iterator - write once, forward only  
+    // 3. Forward Iterator - read/write, forward only
+    // 4. Bidirectional Iterator - read/write, forward and backward
+    // 5. Random Access Iterator - all operations, jump to any position
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Priority Queues and Heaps</h3>
+                    <p>Priority queues maintain elements in order of priority, with the highest priority element at the top:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;queue&gt;
+#include &lt;vector&gt;
+#include &lt;functional&gt;
+
+int main() {
+                    
+    // Max heap (default)
+    priority_queue&lt;int&gt; maxHeap;
+    maxHeap.push(10);
+    maxHeap.push(30);
+    maxHeap.push(20);
+    
+    cout &lt;&lt; "Max element: " &lt;&lt; maxHeap.top() &lt;&lt; endl; // 30
+    maxHeap.pop(); // Remove max element
+    
+    // Min heap
+    priority_queue&lt;int, vector&lt;int&gt;, greater&lt;int&gt;&gt; minHeap;
+    minHeap.push(10);
+    minHeap.push(30);
+    minHeap.push(20);
+    
+    cout &lt;&lt; "Min element: " &lt;&lt; minHeap.top() &lt;&lt; endl; // 10
+    
+    // Custom comparator for pairs
+    auto cmp = [](const pair&lt;int, int&gt;&amp; a, const pair&lt;int, int&gt;&amp; b) {
+        return a.first &gt; b.first; // Min heap by first element
+    };
+    
+    priority_queue&lt;pair&lt;int, int&gt;, vector&lt;pair&lt;int, int&gt;&gt;, decltype(cmp)&gt; pq(cmp);
+    pq.push({5, 100});
+    pq.push({1, 200});
+    pq.push({3, 150});
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Deque (Double-Ended Queue)</h3>
+                    <p>Deque allows efficient insertion and deletion at both ends:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;deque&gt;
+
+int main() {
+    deque&lt;int&gt; dq;
+    
+    // Add elements at both ends
+    dq.push_back(10);    // Add to rear
+    dq.push_front(5);    // Add to front
+    dq.push_back(15);
+    dq.push_front(1);
+    
+    // Current deque: [1, 5, 10, 15]
+    
+    // Access elements
+    cout &lt;&lt; "Front: " &lt;&lt; dq.front() &lt;&lt; endl; // 1
+    cout &lt;&lt; "Back: " &lt;&lt; dq.back() &lt;&lt; endl;   // 15
+    cout &lt;&lt; "At index 2: " &lt;&lt; dq[2] &lt;&lt; endl; // 10
+    
+    // Remove from both ends
+    dq.pop_front();  // Remove front
+    dq.pop_back();   // Remove back
+    
+    // Iterate
+    for (int x : dq) {
+        cout &lt;&lt; x &lt;&lt; " "; // Output: 5 10
+    }
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Stack and Queue</h3>
+                    <p>Basic LIFO and FIFO data structures:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+
+int main() {
+    // Stack (LIFO - Last In, First Out)
+    stack&lt;int&gt; st;
+    st.push(10);
+    st.push(20);
+    st.push(30);
+    
+    cout &lt;&lt; "Stack top: " &lt;&lt; st.top() &lt;&lt; endl; // 30
+    st.pop();
+    cout &lt;&lt; "After pop: " &lt;&lt; st.top() &lt;&lt; endl; // 20
+    cout &lt;&lt; "Stack size: " &lt;&lt; st.size() &lt;&lt; endl; // 2
+    
+    // Queue (FIFO - First In, First Out)
+    queue&lt;int&gt; q;
+    q.push(10);
+    q.push(20);
+    q.push(30);
+    
+    cout &lt;&lt; "Queue front: " &lt;&lt; q.front() &lt;&lt; endl; // 10
+    cout &lt;&lt; "Queue back: " &lt;&lt; q.back() &lt;&lt; endl;   // 30
+    q.pop();
+    cout &lt;&lt; "After pop: " &lt;&lt; q.front() &lt;&lt; endl;  // 20
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>STL Algorithms</h3>
+                    <p>Powerful algorithms that work with iterators:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;algorithm&gt;
+#include &lt;numeric&gt;
+#include &lt;vector&gt;
+
+int main() {
+    vector&lt;int&gt; nums = {5, 2, 8, 1, 9, 3, 7};
+    
+    // Sorting and searching
+    sort(nums.begin(), nums.end());
+    bool found = binary_search(nums.begin(), nums.end(), 5);
+    
+    // Find operations
+    auto it = find(nums.begin(), nums.end(), 8);
+    auto it2 = find_if(nums.begin(), nums.end(), 
+                       [](int x) { return x &gt; 5; });
+    
+    // Counting
+    int count = count_if(nums.begin(), nums.end(), 
+                        [](int x) { return x % 2 == 0; });
+    
+    // Transformations
+    vector&lt;int&gt; squares(nums.size());
+    transform(nums.begin(), nums.end(), squares.begin(),
+              [](int x) { return x * x; });
+    
+    // Accumulate and reduce
+    int sum = accumulate(nums.begin(), nums.end(), 0);
+    int product = accumulate(nums.begin(), nums.end(), 1, multiplies&lt;int&gt;());
+    
+    // Min/Max operations
+    auto minIt = min_element(nums.begin(), nums.end());
+    auto maxIt = max_element(nums.begin(), nums.end());
+    auto [minIt2, maxIt2] = minmax_element(nums.begin(), nums.end());
+    
+    // Partition operations
+    auto pivot = partition(nums.begin(), nums.end(), 
+                          [](int x) { return x % 2 == 0; });
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Custom Data Structure: Trie</h3>
+                    <p>Example of implementing a custom data structure:</p>
+                    
+                    <pre><code class="language-cpp">
+class TrieNode {
+public:
+    TrieNode* children[26];
+    bool isEndOfWord;
+    
+    TrieNode() {
+        for (int i = 0; i &lt; 26; i++) {
+            children[i] = nullptr;
+        }
+        isEndOfWord = false;
+    }
+};
+
+class Trie {
+private:
+    TrieNode* root;
+    
+public:
+    Trie() {
+        root = new TrieNode();
+    }
+    
+    void insert(const string&amp; word) {
+        TrieNode* node = root;
+        for (char c : word) {
+            int index = c - 'a';
+            if (node-&gt;children[index] == nullptr) {
+                node-&gt;children[index] = new TrieNode();
+            }
+            node = node-&gt;children[index];
+        }
+        node-&gt;isEndOfWord = true;
+    }
+    
+    bool search(const string&amp; word) {
+        TrieNode* node = root;
+        for (char c : word) {
+            int index = c - 'a';
+            if (node-&gt;children[index] == nullptr) {
+                return false;
+            }
+            node = node-&gt;children[index];
+        }
+        return node-&gt;isEndOfWord;
+    }
+    
+    bool startsWith(const string&amp; prefix) {
+        TrieNode* node = root;
+        for (char c : prefix) {
+            int index = c - 'a';
+            if (node-&gt;children[index] == nullptr) {
+                return false;
+            }
+            node = node-&gt;children[index];
+        }
+        return true;
+    }
+};
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Memory-Efficient Techniques</h3>
+                    <div class="tip-box">
+                        <h4><i class="fas fa-memory"></i> Memory Optimization</h4>
                         <ul>
-                            <li>STL iterators and their types</li>
-                            <li>Range-based operations and algorithms</li>
-                            <li>Priority queues and heaps</li>
-                            <li>Deques and specialized containers</li>
-                            <li>Custom data structures design</li>
-                            <li>Memory-efficient data structures</li>
-                            <li>Thread-safe data structures</li>
+                            <li><strong>Object pooling:</strong> Reuse objects instead of creating new ones</li>
+                            <li><strong>Bit manipulation:</strong> Use bits to store boolean flags</li>
+                            <li><strong>Structure packing:</strong> Arrange struct members by size</li>
+                            <li><strong>Smart pointers:</strong> Use unique_ptr, shared_ptr for automatic memory management</li>
                         </ul>
                     </div>
+                    
+                    <pre><code class="language-cpp">
+// Bit manipulation for flags
+class Flags {
+    unsigned int flags;
+public:
+    void setFlag(int bit) { flags |= (1 &lt;&lt; bit); }
+    void clearFlag(int bit) { flags &amp;= ~(1 &lt;&lt; bit); }
+    bool isSet(int bit) { return flags &amp; (1 &lt;&lt; bit); }
+};
+
+// Smart pointer usage
+#include &lt;memory&gt;
+
+class Resource {
+public:
+    Resource() { cout &lt;&lt; "Resource created" &lt;&lt; endl; }
+    ~Resource() { cout &lt;&lt; "Resource destroyed" &lt;&lt; endl; }
+};
+
+int main() {
+    auto ptr = make_unique&lt;Resource&gt;(); // Automatic cleanup
+    shared_ptr&lt;Resource&gt; shared = make_shared&lt;Resource&gt;();
+    
+    return 0; // Automatic destruction
+}
+                    </code></pre>
                 </div>
             </article>
             

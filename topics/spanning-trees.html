@@ -51,19 +51,380 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on spanning trees will cover:</p>
+                    <h3>Spanning Tree Fundamentals</h3>
+                    <p>A spanning tree of a connected graph is a subgraph that connects all vertices with exactly n-1 edges, forming a tree. The Minimum Spanning Tree (MST) is the spanning tree with minimum total edge weight.</p>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Key Properties:</h4>
                         <ul>
-                            <li>Minimum Spanning Tree (MST) concepts</li>
-                            <li>Kruskal's algorithm implementation</li>
-                            <li>Union-Find (Disjoint Set) data structure</li>
-                            <li>Prim's algorithm and comparison</li>
-                            <li>MST applications and variants</li>
-                            <li>Maximum spanning trees</li>
-                            <li>Cycle property and cut property</li>
+                            <li>A connected graph with n vertices has n-1 edges in its spanning tree</li>
+                            <li>MST may not be unique, but the minimum total weight is unique</li>
+                            <li>Removing any edge from MST disconnects the graph</li>
+                            <li>Adding any non-MST edge creates exactly one cycle</li>
+                        </ul>
+                    </div>
+                    
+                    <h4>Edge Structure</h4>
+                    <pre><code class="language-cpp">
+struct Edge {
+    int u, v, weight;
+    
+    Edge(int u, int v, int weight) : u(u), v(v), weight(weight) {}
+    
+    bool operator<(const Edge&amp; other) const {
+        return weight < other.weight;
+    }
+};
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Union-Find Data Structure</h3>
+                    <p>Union-Find (Disjoint Set Union) is crucial for Kruskal's algorithm to efficiently detect cycles:</p>
+                    
+                    <pre><code class="language-cpp">
+class UnionFind {
+private:
+    vector&lt;int&gt; parent, rank;
+    int components;
+    
+public:
+    UnionFind(int n) : parent(n), rank(n, 0), components(n) {
+        iota(parent.begin(), parent.end(), 0); // parent[i] = i
+    }
+    
+    int find(int x) {
+        if(parent[x] != x) {
+            parent[x] = find(parent[x]); // Path compression
+        }
+        return parent[x];
+    }
+    
+    bool unite(int x, int y) {
+        int px = find(x), py = find(y);
+        if(px == py) return false; // Already in same component
+        
+        // Union by rank
+        if(rank[px] < rank[py]) {
+            parent[px] = py;
+        } else if(rank[px] > rank[py]) {
+            parent[py] = px;
+        } else {
+            parent[py] = px;
+            rank[px]++;
+        }
+        
+        components--;
+        return true;
+    }
+    
+    bool connected(int x, int y) {
+        return find(x) == find(y);
+    }
+    
+    int getComponents() {
+        return components;
+    }
+    
+    vector&lt;vector&lt;int&gt;&gt; getComponentGroups() {
+        map&lt;int, vector&lt;int&gt;&gt; groups;
+        for(int i = 0; i < parent.size(); i++) {
+            groups[find(i)].push_back(i);
+        }
+        
+        vector&lt;vector&lt;int&gt;&gt; result;
+        for(auto&amp; [root, group] : groups) {
+            result.push_back(group);
+        }
+        return result;
+    }
+};
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Kruskal's Algorithm</h3>
+                    <p>Kruskal's algorithm builds MST by adding edges in order of increasing weight, skipping edges that would create cycles:</p>
+                    
+                    <pre><code class="language-cpp">
+// Kruskal's algorithm for MST
+pair&lt;long long, vector&lt;Edge&gt;&gt; kruskalMST(int n, vector&lt;Edge&gt;&amp; edges) {
+    sort(edges.begin(), edges.end()); // Sort by weight
+    
+    UnionFind uf(n);
+    vector&lt;Edge&gt; mstEdges;
+    long long totalWeight = 0;
+    
+    for(Edge&amp; edge : edges) {
+        if(uf.unite(edge.u, edge.v)) {
+            mstEdges.push_back(edge);
+            totalWeight += edge.weight;
+            
+            // MST complete when we have n-1 edges
+            if(mstEdges.size() == n - 1) break;
+        }
+    }
+    
+    // Check if MST exists (graph is connected)
+    if(mstEdges.size() != n - 1) {
+        return {-1, {}}; // Graph is not connected
+    }
+    
+    return {totalWeight, mstEdges};
+}
+
+// Kruskal with custom comparator
+struct EdgeComparator {
+    bool operator()(const Edge&amp; a, const Edge&amp; b) const {
+        if(a.weight != b.weight) return a.weight < b.weight;
+        if(a.u != b.u) return a.u < b.u;
+        return a.v < b.v;
+    }
+};
+
+long long kruskalCustom(int n, vector&lt;Edge&gt;&amp; edges) {
+    sort(edges.begin(), edges.end(), EdgeComparator());
+    
+    UnionFind uf(n);
+    long long totalWeight = 0;
+    int edgesUsed = 0;
+    
+    for(Edge&amp; edge : edges) {
+        if(!uf.connected(edge.u, edge.v)) {
+            uf.unite(edge.u, edge.v);
+            totalWeight += edge.weight;
+            edgesUsed++;
+            
+            if(edgesUsed == n - 1) break;
+        }
+    }
+    
+    return (edgesUsed == n - 1) ? totalWeight : -1;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Prim's Algorithm</h3>
+                    <p>Prim's algorithm grows the MST by always adding the minimum weight edge connecting the current tree to a new vertex:</p>
+                    
+                    <pre><code class="language-cpp">
+// Prim's algorithm using priority queue
+long long primMST(int n, vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt;&amp; adj) {
+    vector&lt;bool&gt; inMST(n, false);
+    vector&lt;int&gt; minEdge(n, INT_MAX);
+    priority_queue&lt;pair&lt;int, int&gt;, vector&lt;pair&lt;int, int&gt;&gt;, greater&gt; pq;
+    
+    minEdge[0] = 0;
+    pq.push({0, 0}); // {weight, vertex}
+    
+    long long totalWeight = 0;
+    
+    while(!pq.empty()) {
+        int weight = pq.top().first;
+        int u = pq.top().second;
+        pq.pop();
+        
+        if(inMST[u]) continue;
+        
+        inMST[u] = true;
+        totalWeight += weight;
+        
+        // Update adjacent vertices
+        for(auto&amp; edge : adj[u]) {
+            int v = edge.first;
+            int edgeWeight = edge.second;
+            
+            if(!inMST[v] && edgeWeight < minEdge[v]) {
+                minEdge[v] = edgeWeight;
+                pq.push({edgeWeight, v});
+            }
+        }
+    }
+    
+    // Check if all vertices are included
+    for(int i = 0; i < n; i++) {
+        if(!inMST[i]) return -1; // Graph not connected
+    }
+    
+    return totalWeight;
+}
+
+// Prim's with edge tracking
+pair&lt;long long, vector&lt;pair&lt;int, int&gt;&gt;&gt; primMSTWithEdges(int n, vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt;&amp; adj) {
+    vector&lt;bool&gt; inMST(n, false);
+    vector&lt;int&gt; minEdge(n, INT_MAX);
+    vector&lt;int&gt; parent(n, -1);
+    
+    minEdge[0] = 0;
+    long long totalWeight = 0;
+    vector&lt;pair&lt;int, int&gt;&gt; mstEdges;
+    
+    for(int i = 0; i < n; i++) {
+        int u = -1;
+        
+        // Find minimum edge to add to MST
+        for(int v = 0; v < n; v++) {
+            if(!inMST[v] && (u == -1 || minEdge[v] < minEdge[u])) {
+                u = v;
+            }
+        }
+        
+        if(minEdge[u] == INT_MAX) {
+            return {-1, {}}; // Graph not connected
+        }
+        
+        inMST[u] = true;
+        totalWeight += minEdge[u];
+        
+        if(parent[u] != -1) {
+            mstEdges.push_back({parent[u], u});
+        }
+        
+        // Update adjacent vertices
+        for(auto&amp; edge : adj[u]) {
+            int v = edge.first;
+            int weight = edge.second;
+            
+            if(!inMST[v] && weight < minEdge[v]) {
+                minEdge[v] = weight;
+                parent[v] = u;
+            }
+        }
+    }
+    
+    return {totalWeight, mstEdges};
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Advanced MST Algorithms</h3>
+                    
+                    <h4>Maximum Spanning Tree</h4>
+                    <p>Find spanning tree with maximum total weight:</p>
+                    
+                    <pre><code class="language-cpp">
+// Maximum spanning tree (reverse edge weights)
+long long maximumSpanningTree(int n, vector&lt;Edge&gt;&amp; edges) {
+    // Negate weights for maximum spanning tree
+    for(Edge&amp; edge : edges) {
+        edge.weight = -edge.weight;
+    }
+    
+    long long maxWeight = kruskalMST(n, edges).first;
+    
+    // Restore original weights
+    for(Edge&amp; edge : edges) {
+        edge.weight = -edge.weight;
+    }
+    
+    return (maxWeight == -1) ? -1 : -maxWeight;
+}
+                    </code></pre>
+                    
+                    <h4>MST with Fixed Edges</h4>
+                    <pre><code class="language-cpp">
+// MST including certain required edges
+long long mstWithRequiredEdges(int n, vector&lt;Edge&gt;&amp; allEdges, vector&lt;Edge&gt;&amp; requiredEdges) {
+    UnionFind uf(n);
+    long long totalWeight = 0;
+    int edgesUsed = 0;
+    
+    // First, add all required edges
+    for(Edge&amp; edge : requiredEdges) {
+        if(!uf.connected(edge.u, edge.v)) {
+            uf.unite(edge.u, edge.v);
+            totalWeight += edge.weight;
+            edgesUsed++;
+        } else {
+            // Required edge creates cycle - impossible
+            return -1;
+        }
+    }
+    
+    // Sort remaining edges
+    vector&lt;Edge&gt; remainingEdges;
+    for(Edge&amp; edge : allEdges) {
+        bool isRequired = false;
+        for(Edge&amp; req : requiredEdges) {
+            if((edge.u == req.u && edge.v == req.v) || 
+               (edge.u == req.v && edge.v == req.u)) {
+                isRequired = true;
+                break;
+            }
+        }
+        if(!isRequired) {
+            remainingEdges.push_back(edge);
+        }
+    }
+    
+    sort(remainingEdges.begin(), remainingEdges.end());
+    
+    // Add remaining edges using Kruskal's
+    for(Edge&amp; edge : remainingEdges) {
+        if(uf.unite(edge.u, edge.v)) {
+            totalWeight += edge.weight;
+            edgesUsed++;
+            
+            if(edgesUsed == n - 1) break;
+        }
+    }
+    
+    return (edgesUsed == n - 1) ? totalWeight : -1;
+}
+                    </code></pre>
+                    
+                    <h4>Second Minimum Spanning Tree</h4>
+                    <pre><code class="language-cpp">
+// Find second minimum spanning tree
+long long secondMST(int n, vector&lt;Edge&gt;&amp; edges) {
+    auto [mstWeight, mstEdges] = kruskalMST(n, edges);
+    if(mstWeight == -1) return -1;
+    
+    long long secondMstWeight = LLONG_MAX;
+    
+    // Try removing each MST edge and replacing with next best
+    for(int skipIdx = 0; skipIdx < mstEdges.size(); skipIdx++) {
+        vector&lt;Edge&gt; modifiedEdges;
+        
+        // Add all edges except the skipped MST edge
+        for(int i = 0; i < edges.size(); i++) {
+            bool skip = false;
+            for(int j = 0; j < mstEdges.size(); j++) {
+                if(j == skipIdx) continue;
+                
+                if((edges[i].u == mstEdges[j].u && edges[i].v == mstEdges[j].v) ||
+                   (edges[i].u == mstEdges[j].v && edges[i].v == mstEdges[j].u)) {
+                    skip = true;
+                    break;
+                }
+            }
+            
+            if(!skip && 
+               !((edges[i].u == mstEdges[skipIdx].u && edges[i].v == mstEdges[skipIdx].v) ||
+                 (edges[i].u == mstEdges[skipIdx].v && edges[i].v == mstEdges[skipIdx].u))) {
+                modifiedEdges.push_back(edges[i]);
+            }
+        }
+        
+        auto [weight, _] = kruskalMST(n, modifiedEdges);
+        if(weight != -1 && weight > mstWeight) {
+            secondMstWeight = min(secondMstWeight, weight);
+        }
+    }
+    
+    return (secondMstWeight == LLONG_MAX) ? -1 : secondMstWeight;
+}
+                    </code></pre>
+                    
+                    <div class="warning-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Algorithm Comparison</h4>
+                        <ul>
+                            <li><strong>Kruskal's:</strong> Better for sparse graphs, O(E log E)</li>
+                            <li><strong>Prim's:</strong> Better for dense graphs, O(V²) or O(E log V) with heap</li>
+                            <li>Use Union-Find for cycle detection in Kruskal's</li>
+                            <li>Both produce the same MST weight (though edges may differ)</li>
                         </ul>
                     </div>
                 </div>

@@ -34,19 +34,351 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on sweep line algorithms will cover:</p>
+                    <h3>Sweep Line Concept</h3>
+                    <p>A sweep line algorithm processes geometric objects by conceptually moving a line (usually vertical) across the plane from left to right, maintaining active objects and processing events as they occur.</p>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Key Components:</h4>
                         <ul>
-                            <li>Line segment intersection detection</li>
-                            <li>Closest pair of points algorithm</li>
-                            <li>Convex hull construction (Graham scan)</li>
-                            <li>Rectangle union area calculation</li>
-                            <li>Event-driven simulation techniques</li>
-                            <li>Bentley-Ottmann algorithm</li>
-                            <li>Applications in computational geometry</li>
+                            <li><strong>Event Points:</strong> Critical positions where sweep line stops</li>
+                            <li><strong>Event Queue:</strong> Ordered list of events to process</li>
+                            <li><strong>Active Structure:</strong> Objects currently intersecting sweep line</li>
+                            <li><strong>Sweep Invariant:</strong> Properties maintained during sweep</li>
+                        </ul>
+                    </div>
+                    
+                    <h4>Basic Sweep Line Template</h4>
+                    <pre><code class="language-cpp">
+struct Event {
+    double x; // X-coordinate of event
+    int type; // Type of event (start, end, intersection, etc.)
+    int id;   // Associated object ID
+    
+    bool operator<(const Event&amp; other) const {
+        if(abs(x - other.x) > EPS) return x < other.x;
+        return type < other.type; // Process by type if same x
+    }
+};
+
+void sweepLine(vector&lt;Event&gt;&amp; events) {
+    sort(events.begin(), events.end());
+    
+    set&lt;ActiveObject&gt; activeSet; // Maintain active objects
+    
+    for(Event&amp; event : events) {
+        // Process event based on type
+        if(event.type == START) {
+            activeSet.insert(getObject(event.id));
+        } else if(event.type == END) {
+            activeSet.erase(getObject(event.id));
+        }
+        
+        // Check for interactions between active objects
+        processActiveObjects(activeSet, event.x);
+    }
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Line Segment Intersection</h3>
+                    <p>Find all intersections among n line segments using sweep line:</p>
+                    
+                    <pre><code class="language-cpp">
+struct Segment {
+    Point start, end;
+    int id;
+    
+    // Get y-coordinate at given x
+    double getY(double x) const {
+        if(abs(start.x - end.x) < EPS) return start.y; // Vertical line
+        double t = (x - start.x) / (end.x - start.x);
+        return start.y + t * (end.y - start.y);
+    }
+    
+    bool operator<(const Segment&amp; other) const {
+        // For sweep line ordering at current x
+        return getY(currentX) < other.getY(currentX);
+    }
+};
+
+vector&lt;Point&gt; findIntersections(vector&lt;Segment&gt;&amp; segments) {
+    vector&lt;Event&gt; events;
+    vector&lt;Point&gt; intersections;
+    
+    // Create start and end events for each segment
+    for(int i = 0; i < segments.size(); i++) {
+        Segment&amp; seg = segments[i];
+        if(seg.start.x > seg.end.x) swap(seg.start, seg.end);
+        
+        events.push_back({seg.start.x, START, i});
+        events.push_back({seg.end.x, END, i});
+    }
+    
+    sort(events.begin(), events.end());
+    set&lt;Segment&gt; activeSegments;
+    
+    for(Event&amp; event : events) {
+        currentX = event.x; // Global variable for ordering
+        
+        if(event.type == START) {
+            Segment&amp; seg = segments[event.id];
+            auto it = activeSegments.insert(seg).first;
+            
+            // Check intersections with neighbors
+            if(it != activeSegments.begin()) {
+                auto prev = prev(it);
+                Point inter;
+                if(segmentIntersection(*prev, *it, inter)) {
+                    intersections.push_back(inter);
+                }
+            }
+            
+            auto next = next(it);
+            if(next != activeSegments.end()) {
+                Point inter;
+                if(segmentIntersection(*it, *next, inter)) {
+                    intersections.push_back(inter);
+                }
+            }
+            
+        } else if(event.type == END) {
+            Segment&amp; seg = segments[event.id];
+            auto it = activeSegments.find(seg);
+            
+            // Check if neighbors now intersect
+            if(it != activeSegments.begin() && next(it) != activeSegments.end()) {
+                auto prev_it = prev(it);
+                auto next_it = next(it);
+                Point inter;
+                if(segmentIntersection(*prev_it, *next_it, inter)) {
+                    intersections.push_back(inter);
+                }
+            }
+            
+            activeSegments.erase(it);
+        }
+    }
+    
+    return intersections;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Convex Hull (Graham Scan)</h3>
+                    <p>Construct convex hull using polar angle sweep:</p>
+                    
+                    <pre><code class="language-cpp">
+// Cross product for orientation test
+double cross(Point O, Point A, Point B) {
+    return (A.x - O.x) * (B.y - O.y) - (A.y - O.y) * (B.x - O.x);
+}
+
+// Distance squared between two points
+double distSq(Point A, Point B) {
+    return (A.x - B.x) * (A.x - B.x) + (A.y - B.y) * (A.y - B.y);
+}
+
+vector&lt;Point&gt; convexHull(vector&lt;Point&gt; points) {
+    int n = points.size();
+    if(n < 3) return points;
+    
+    // Find bottom-most point (and leftmost if tie)
+    int minIdx = 0;
+    for(int i = 1; i < n; i++) {
+        if(points[i].y < points[minIdx].y || 
+           (points[i].y == points[minIdx].y && points[i].x < points[minIdx].x)) {
+            minIdx = i;
+        }
+    }
+    swap(points[0], points[minIdx]);
+    Point pivot = points[0];
+    
+    // Sort by polar angle with respect to pivot
+    sort(points.begin() + 1, points.end(), [&](Point A, Point B) {
+        double crossProd = cross(pivot, A, B);
+        if(abs(crossProd) < EPS) {
+            // Collinear points - sort by distance
+            return distSq(pivot, A) < distSq(pivot, B);
+        }
+        return crossProd > 0; // Counter-clockwise order
+    });
+    
+    // Remove collinear points at the end (keep only farthest)
+    int m = 1;
+    for(int i = 1; i < n; i++) {
+        while(i < n - 1 && abs(cross(pivot, points[i], points[i + 1])) < EPS) {
+            i++;
+        }
+        points[m++] = points[i];
+    }
+    
+    if(m < 3) return points; // Not enough points for hull
+    
+    // Build convex hull
+    vector&lt;Point&gt; hull;
+    hull.push_back(points[0]);
+    hull.push_back(points[1]);
+    hull.push_back(points[2]);
+    
+    for(int i = 3; i < m; i++) {
+        // Remove points that create clockwise turn
+        while(hull.size() > 1 && 
+              cross(hull[hull.size()-2], hull[hull.size()-1], points[i]) <= 0) {
+            hull.pop_back();
+        }
+        hull.push_back(points[i]);
+    }
+    
+    return hull;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Rectangle Union Area</h3>
+                    <p>Calculate the area covered by union of rectangles:</p>
+                    
+                    <pre><code class="language-cpp">
+struct Rectangle {
+    double x1, y1, x2, y2;
+    Rectangle(double x1, double y1, double x2, double y2) 
+        : x1(x1), y1(y1), x2(x2), y2(y2) {}
+};
+
+double rectangleUnionArea(vector&lt;Rectangle&gt;&amp; rects) {
+    vector&lt;Event&gt; events;
+    
+    // Create events for rectangle starts and ends
+    for(int i = 0; i < rects.size(); i++) {
+        events.push_back({rects[i].x1, START, i});
+        events.push_back({rects[i].x2, END, i});
+    }
+    
+    sort(events.begin(), events.end());
+    
+    double totalArea = 0;
+    vector&lt;pair&lt;double, double&gt;&gt; activeIntervals;
+    double lastX = 0;
+    
+    for(int i = 0; i < events.size(); i++) {
+        double currentX = events[i].x;
+        
+        // Calculate contribution of current active intervals
+        if(i > 0) {
+            double width = currentX - lastX;
+            double height = getUnionHeight(activeIntervals);
+            totalArea += width * height;
+        }
+        
+        // Process all events at current x-coordinate
+        while(i < events.size() && abs(events[i].x - currentX) < EPS) {
+            if(events[i].type == START) {
+                Rectangle&amp; rect = rects[events[i].id];
+                activeIntervals.push_back({rect.y1, rect.y2});
+            } else {
+                Rectangle&amp; rect = rects[events[i].id];
+                activeIntervals.erase(
+                    find(activeIntervals.begin(), activeIntervals.end(), 
+                         make_pair(rect.y1, rect.y2))
+                );
+            }
+            i++;
+        }
+        i--; // Adjust for outer loop increment
+        
+        lastX = currentX;
+    }
+    
+    return totalArea;
+}
+
+// Helper function to calculate union of 1D intervals
+double getUnionHeight(vector&lt;pair&lt;double, double&gt;&gt;&amp; intervals) {
+    if(intervals.empty()) return 0;
+    
+    vector&lt;pair&lt;double, double&gt;&gt; sorted = intervals;
+    sort(sorted.begin(), sorted.end());
+    
+    double totalHeight = 0;
+    double currentStart = sorted[0].first;
+    double currentEnd = sorted[0].second;
+    
+    for(int i = 1; i < sorted.size(); i++) {
+        if(sorted[i].first <= currentEnd) {
+            // Overlapping intervals
+            currentEnd = max(currentEnd, sorted[i].second);
+        } else {
+            // Non-overlapping interval
+            totalHeight += currentEnd - currentStart;
+            currentStart = sorted[i].first;
+            currentEnd = sorted[i].second;
+        }
+    }
+    
+    totalHeight += currentEnd - currentStart;
+    return totalHeight;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Closest Pair of Points</h3>
+                    <p>Find the closest pair among n points efficiently:</p>
+                    
+                    <pre><code class="language-cpp">
+double closestPairSweep(vector&lt;Point&gt;&amp; points) {
+    vector&lt;pair&lt;Point, int&gt;&gt; events; // Point and original index
+    
+    for(int i = 0; i < points.size(); i++) {
+        events.push_back({points[i], i});
+    }
+    
+    // Sort by x-coordinate
+    sort(events.begin(), events.end(), [](const auto&amp; a, const auto&amp; b) {
+        return a.first.x < b.first.x;
+    });
+    
+    double minDist = 1e18;
+    set&lt;pair&lt;double, int&gt;&gt; activePoints; // y-coordinate, index
+    int left = 0;
+    
+    for(int right = 0; right < events.size(); right++) {
+        Point currentPoint = events[right].first;
+        
+        // Remove points that are too far in x-direction
+        while(left < right && 
+              currentPoint.x - events[left].first.x >= minDist) {
+            activePoints.erase({events[left].first.y, events[left].second});
+            left++;
+        }
+        
+        // Check distances to nearby points in y-direction
+        auto lower = activePoints.lower_bound({currentPoint.y - minDist, -1});
+        auto upper = activePoints.upper_bound({currentPoint.y + minDist, INT_MAX});
+        
+        for(auto it = lower; it != upper; ++it) {
+            Point otherPoint = points[it->second];
+            double dist = sqrt(pow(currentPoint.x - otherPoint.x, 2) + 
+                              pow(currentPoint.y - otherPoint.y, 2));
+            minDist = min(minDist, dist);
+        }
+        
+        activePoints.insert({currentPoint.y, events[right].second});
+    }
+    
+    return minDist;
+}
+                    </code></pre>
+                    
+                    <div class="warning-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Sweep Line Tips</h4>
+                        <ul>
+                            <li>Always handle degenerate cases (vertical lines, overlapping points)</li>
+                            <li>Use appropriate data structures for the active set (usually balanced BST)</li>
+                            <li>Be careful with floating-point precision in geometric computations</li>
+                            <li>Sort events properly - consider event type when x-coordinates are equal</li>
                         </ul>
                     </div>
                 </div>

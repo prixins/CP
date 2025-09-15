@@ -34,19 +34,275 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on game theory will cover:</p>
+                    <h3>Basic Game Theory Concepts</h3>
+                    <p>Game theory studies mathematical models of strategic interaction between rational decision-makers. In competitive programming, we focus on two-player, zero-sum, perfect information games.</p>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Key Concepts:</h4>
                         <ul>
-                            <li>Game states and transitions</li>
-                            <li>Winning and losing positions</li>
-                            <li>Nim game and variations</li>
-                            <li>Sprague-Grundy theorem</li>
-                            <li>Minimax algorithm basics</li>
-                            <li>Alpha-beta pruning</li>
-                            <li>Two-player zero-sum games</li>
+                            <li><strong>Game State:</strong> Current configuration of the game</li>
+                            <li><strong>Winning Position:</strong> Player to move can force a win</li>
+                            <li><strong>Losing Position:</strong> Player to move will lose with optimal play</li>
+                            <li><strong>Terminal State:</strong> Game has ended</li>
+                        </ul>
+                    </div>
+                    
+                    <h4>Determining Winning/Losing Positions</h4>
+                    <pre><code class="language-cpp">
+// Basic game state analysis
+bool isWinning(int state, vector&lt;int&gt;&amp; memo) {
+    if(memo[state] != -1) return memo[state];
+    
+    // Check if this is a terminal (losing) state
+    if(isTerminal(state)) {
+        return memo[state] = false;
+    }
+    
+    // Try all possible moves
+    vector&lt;int&gt; nextStates = getNextStates(state);
+    
+    for(int nextState : nextStates) {
+        // If any move leads to a losing position for opponent, this is winning
+        if(!isWinning(nextState, memo)) {
+            return memo[state] = true;
+        }
+    }
+    
+    // All moves lead to winning positions for opponent, so this is losing
+    return memo[state] = false;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>The Nim Game</h3>
+                    <p>Nim is a fundamental game where players take turns removing objects from piles. The player who takes the last object wins.</p>
+                    
+                    <h4>Basic Nim Strategy</h4>
+                    <p>The key insight: A position is losing if and only if the XOR (nim-sum) of all pile sizes is 0.</p>
+                    
+                    <pre><code class="language-cpp">
+// Determine if current Nim position is winning
+bool isNimWinning(vector&lt;int&gt;&amp; piles) {
+    int nimSum = 0;
+    for(int pile : piles) {
+        nimSum ^= pile;
+    }
+    return nimSum != 0; // Non-zero nim-sum means winning position
+}
+
+// Find optimal move in Nim
+pair&lt;int, int&gt; findNimMove(vector&lt;int&gt;&amp; piles) {
+    int nimSum = 0;
+    for(int pile : piles) {
+        nimSum ^= pile;
+    }
+    
+    if(nimSum == 0) return {-1, -1}; // Already losing position
+    
+    // Find a pile where pile XOR nimSum < pile
+    for(int i = 0; i < piles.size(); i++) {
+        int newSize = piles[i] ^ nimSum;
+        if(newSize < piles[i]) {
+            return {i, piles[i] - newSize}; // Pile index, amount to remove
+        }
+    }
+    
+    return {-1, -1}; // Should not reach here
+}
+                    </code></pre>
+                    
+                    <div class="tip-box">
+                        <h4><i class="fas fa-lightbulb"></i> Nim Strategy</h4>
+                        <p>In Nim, always try to make the nim-sum (XOR of all piles) equal to 0. If it's already 0, you're in a losing position with perfect play.</p>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Sprague-Grundy Theorem</h3>
+                    <p>The Sprague-Grundy theorem allows us to analyze complex games by computing the Grundy number (nimber) of each position.</p>
+                    
+                    <h4>Computing Grundy Numbers</h4>
+                    <pre><code class="language-cpp">
+// Calculate Grundy number for a game state
+int grundyNumber(int state, vector&lt;int&gt;&amp; memo) {
+    if(memo[state] != -1) return memo[state];
+    
+    // Terminal states have Grundy number 0
+    if(isTerminal(state)) {
+        return memo[state] = 0;
+    }
+    
+    // Get all possible next states
+    vector&lt;int&gt; nextStates = getNextStates(state);
+    set&lt;int&gt; reachableGrundy;
+    
+    // Collect Grundy numbers of all reachable states
+    for(int nextState : nextStates) {
+        reachableGrundy.insert(grundyNumber(nextState, memo));
+    }
+    
+    // Grundy number is the minimum excludant (mex)
+    int mex = 0;
+    while(reachableGrundy.count(mex)) {
+        mex++;
+    }
+    
+    return memo[state] = mex;
+}
+
+// For combined games, XOR the Grundy numbers
+int combinedGrundy(vector&lt;int&gt;&amp; gameStates, vector&lt;vector&lt;int&gt;&gt;&amp; memos) {
+    int result = 0;
+    for(int i = 0; i < gameStates.size(); i++) {
+        result ^= grundyNumber(gameStates[i], memos[i]);
+    }
+    return result;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Minimax Algorithm</h3>
+                    <p>Minimax is used to find the optimal move in two-player games by assuming both players play optimally.</p>
+                    
+                    <pre><code class="language-cpp">
+// Minimax algorithm for two-player games
+int minimax(GameState state, int depth, bool isMaximizing) {
+    // Terminal state or depth limit reached
+    if(isTerminal(state) || depth == 0) {
+        return evaluate(state); // Return game evaluation
+    }
+    
+    vector&lt;GameState&gt; nextStates = getNextStates(state);
+    
+    if(isMaximizing) {
+        int maxEval = INT_MIN;
+        for(GameState nextState : nextStates) {
+            int eval = minimax(nextState, depth - 1, false);
+            maxEval = max(maxEval, eval);
+        }
+        return maxEval;
+    } else {
+        int minEval = INT_MAX;
+        for(GameState nextState : nextStates) {
+            int eval = minimax(nextState, depth - 1, true);
+            minEval = min(minEval, eval);
+        }
+        return minEval;
+    }
+}
+
+// Alpha-beta pruning optimization
+int alphaBeta(GameState state, int depth, int alpha, int beta, bool isMaximizing) {
+    if(isTerminal(state) || depth == 0) {
+        return evaluate(state);
+    }
+    
+    vector&lt;GameState&gt; nextStates = getNextStates(state);
+    
+    if(isMaximizing) {
+        int maxEval = INT_MIN;
+        for(GameState nextState : nextStates) {
+            int eval = alphaBeta(nextState, depth - 1, alpha, beta, false);
+            maxEval = max(maxEval, eval);
+            alpha = max(alpha, eval);
+            if(beta <= alpha) break; // Beta cutoff
+        }
+        return maxEval;
+    } else {
+        int minEval = INT_MAX;
+        for(GameState nextState : nextStates) {
+            int eval = alphaBeta(nextState, depth - 1, alpha, beta, true);
+            minEval = min(minEval, eval);
+            beta = min(beta, eval);
+            if(beta <= alpha) break; // Alpha cutoff
+        }
+        return minEval;
+    }
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Common Game Types</h3>
+                    
+                    <h4>Subtraction Games</h4>
+                    <p>Players can remove 1, 2, or 3 objects from a pile:</p>
+                    
+                    <pre><code class="language-cpp">
+// Subtraction game with allowed moves {1, 2, 3}
+bool isSubtractionWinning(int n, vector&lt;int&gt;&amp; memo) {
+    if(memo[n] != -1) return memo[n];
+    
+    if(n == 0) return memo[n] = false; // Terminal losing state
+    
+    vector&lt;int&gt; moves = {1, 2, 3};
+    for(int move : moves) {
+        if(n >= move && !isSubtractionWinning(n - move, memo)) {
+            return memo[n] = true; // Found winning move
+        }
+    }
+    
+    return memo[n] = false; // All moves lead to winning positions
+}
+                    </code></pre>
+                    
+                    <h4>Green Hackenbush</h4>
+                    <p>A game played on trees where players remove edges:</p>
+                    
+                    <pre><code class="language-cpp">
+// Calculate Grundy number for Green Hackenbush on trees
+int hackenbushGrundy(int node, vector&lt;vector&lt;int&gt;&gt;&amp; adj, vector&lt;int&gt;&amp; memo, int parent = -1) {
+    if(memo[node] != -1) return memo[node];
+    
+    int result = 0;
+    
+    // XOR Grundy numbers of all subtrees
+    for(int child : adj[node]) {
+        if(child != parent) {
+            result ^= (hackenbushGrundy(child, adj, memo, node) + 1);
+        }
+    }
+    
+    return memo[node] = result;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Advanced Game Theory</h3>
+                    
+                    <h4>Partizan Games</h4>
+                    <p>Games where the set of available moves depends on which player is moving:</p>
+                    
+                    <pre><code class="language-cpp">
+// Example: Domineering (players place dominoes differently)
+struct GameValue {
+    int left, right; // Values for left and right players
+    
+    bool isWinningForLeft() {
+        return left >= 0;
+    }
+    
+    bool isWinningForRight() {
+        return right <= 0;
+    }
+};
+
+// Combine partizan game values
+GameValue combinePartizan(GameValue a, GameValue b) {
+    return {a.left + b.left, a.right + b.right};
+}
+                    </code></pre>
+                    
+                    <div class="warning-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Game Theory Tips</h4>
+                        <ul>
+                            <li>Always assume both players play optimally</li>
+                            <li>Memoize game states to avoid recomputation</li>
+                            <li>For Nim-like games, think about XOR operations</li>
+                            <li>Use Sprague-Grundy theorem for complex combined games</li>
                         </ul>
                     </div>
                 </div>

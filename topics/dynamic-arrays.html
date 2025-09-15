@@ -34,19 +34,295 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on dynamic arrays will cover:</p>
+                    <h3>What are Dynamic Arrays?</h3>
+                    <p>Dynamic arrays automatically manage memory and can resize themselves as needed. In C++, the primary dynamic array is the vector:</p>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Advantages of Dynamic Arrays:</h4>
                         <ul>
-                            <li>Vector operations and methods</li>
-                            <li>2D vectors and matrices</li>
-                            <li>Vector iterators</li>
-                            <li>Memory management and capacity</li>
-                            <li>Common patterns and algorithms</li>
-                            <li>Performance considerations</li>
-                            <li>STL algorithms with vectors</li>
+                            <li>Automatic memory management</li>
+                            <li>Can grow and shrink as needed</li>
+                            <li>Random access to elements (O(1))</li>
+                            <li>Rich set of operations and algorithms</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Basic Vector Operations</h3>
+                    <p>Here are the fundamental operations you'll use with vectors:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;vector&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    // Declaration and initialization
+    vector&lt;int&gt; v;                    // Empty vector
+    vector&lt;int&gt; v2(5);               // 5 elements, all 0
+    vector&lt;int&gt; v3(5, 10);           // 5 elements, all 10
+    vector&lt;int&gt; v4 = {1, 2, 3, 4, 5}; // Initialize with values
+    
+    // Adding elements
+    v.push_back(10);  // Add to end
+    v.push_back(20);
+    v.push_back(30);
+    
+    // Accessing elements
+    cout &lt;&lt; "First element: " &lt;&lt; v[0] &lt;&lt; endl;        // Direct access
+    cout &lt;&lt; "First element: " &lt;&lt; v.front() &lt;&lt; endl;   // First element
+    cout &lt;&lt; "Last element: " &lt;&lt; v.back() &lt;&lt; endl;     // Last element
+    cout &lt;&lt; "Safe access: " &lt;&lt; v.at(1) &lt;&lt; endl;       // Bounds checking
+    
+    // Size and capacity
+    cout &lt;&lt; "Size: " &lt;&lt; v.size() &lt;&lt; endl;
+    cout &lt;&lt; "Capacity: " &lt;&lt; v.capacity() &lt;&lt; endl;
+    cout &lt;&lt; "Empty? " &lt;&lt; v.empty() &lt;&lt; endl;
+    
+    // Removing elements
+    v.pop_back();     // Remove last element
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Iterating Through Vectors</h3>
+                    <p>There are several ways to iterate through vector elements:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;vector&gt;
+
+int main() {
+    vector&lt;int&gt; numbers = {10, 20, 30, 40, 50};
+    
+    // Method 1: Range-based for loop (C++11+)
+    cout &lt;&lt; "Range-based loop: ";
+    for (int num : numbers) {
+        cout &lt;&lt; num &lt;&lt; " ";
+    }
+    cout &lt;&lt; endl;
+    
+    // Method 2: Traditional for loop with index
+    cout &lt;&lt; "Index-based loop: ";
+    for (size_t i = 0; i &lt; numbers.size(); i++) {
+        cout &lt;&lt; numbers[i] &lt;&lt; " ";
+    }
+    cout &lt;&lt; endl;
+    
+    // Method 3: Iterator-based loop
+    cout &lt;&lt; "Iterator-based loop: ";
+    for (auto it = numbers.begin(); it != numbers.end(); ++it) {
+        cout &lt;&lt; *it &lt;&lt; " ";
+    }
+    cout &lt;&lt; endl;
+    
+    // Method 4: Reverse iteration
+    cout &lt;&lt; "Reverse loop: ";
+    for (auto it = numbers.rbegin(); it != numbers.rend(); ++it) {
+        cout &lt;&lt; *it &lt;&lt; " ";
+    }
+    cout &lt;&lt; endl;
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>2D Vectors (Matrices)</h3>
+                    <p>Vectors can be nested to create 2D arrays or matrices:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;vector&gt;
+
+int main() {
+    // Create a 3x4 matrix
+    int rows = 3, cols = 4;
+    vector&lt;vector&lt;int&gt;&gt; matrix(rows, vector&lt;int&gt;(cols));
+    
+    // Initialize with values
+    vector&lt;vector&lt;int&gt;&gt; matrix2 = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    };
+    
+    // Fill with values
+    for (int i = 0; i &lt; rows; i++) {
+        for (int j = 0; j &lt; cols; j++) {
+            matrix[i][j] = i * cols + j + 1;
+        }
+    }
+    
+    // Print matrix
+    for (const auto&amp; row : matrix) {
+        for (int val : row) {
+            cout &lt;&lt; val &lt;&lt; " ";
+        }
+        cout &lt;&lt; endl;
+    }
+    
+    // Jagged arrays (different row sizes)
+    vector&lt;vector&lt;int&gt;&gt; jagged = {
+        {1, 2},
+        {3, 4, 5, 6},
+        {7}
+    };
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Advanced Vector Operations</h3>
+                    <p>Vectors support many advanced operations for manipulation:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+int main() {
+    vector&lt;int&gt; v = {5, 2, 8, 1, 9, 3};
+    
+    // Insert elements
+    v.insert(v.begin() + 2, 100);      // Insert 100 at position 2
+    v.insert(v.end(), {6, 7});         // Insert multiple at end
+    
+    // Erase elements
+    v.erase(v.begin() + 1);            // Erase element at position 1
+    v.erase(v.begin() + 2, v.begin() + 4); // Erase range
+    
+    // Resize operations
+    v.resize(10);          // Resize to 10 elements (fills with 0)
+    v.resize(5);           // Shrink to 5 elements
+    v.reserve(20);         // Reserve capacity for 20 elements
+    
+    // Clear and swap
+    vector&lt;int&gt; v2 = {10, 20, 30};
+    v.swap(v2);            // Swap contents of v and v2
+    v.clear();             // Remove all elements
+    
+    // Using algorithms
+    vector&lt;int&gt; nums = {5, 2, 8, 1, 9, 3};
+    
+    sort(nums.begin(), nums.end());                    // Sort ascending
+    reverse(nums.begin(), nums.end());                 // Reverse order
+    
+    auto it = find(nums.begin(), nums.end(), 8);       // Find element
+    if (it != nums.end()) {
+        cout &lt;&lt; "Found 8 at position: " &lt;&lt; it - nums.begin() &lt;&lt; endl;
+    }
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Memory Management</h3>
+                    <p>Understanding how vectors manage memory helps with performance:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;vector&gt;
+
+int main() {
+    vector&lt;int&gt; v;
+    
+    cout &lt;&lt; "Initial - Size: " &lt;&lt; v.size() 
+         &lt;&lt; ", Capacity: " &lt;&lt; v.capacity() &lt;&lt; endl;
+    
+    // Adding elements shows capacity growth
+    for (int i = 1; i &lt;= 10; i++) {
+        v.push_back(i);
+        cout &lt;&lt; "After adding " &lt;&lt; i 
+             &lt;&lt; " - Size: " &lt;&lt; v.size() 
+             &lt;&lt; ", Capacity: " &lt;&lt; v.capacity() &lt;&lt; endl;
+    }
+    
+    // Reserve space to avoid reallocations
+    vector&lt;int&gt; v2;
+    v2.reserve(1000);  // Reserve space for 1000 elements
+    
+    // Shrink to fit - reduce capacity to size
+    v.shrink_to_fit();
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Common Patterns</h3>
+                    <p>Some frequently used patterns in competitive programming:</p>
+                    
+                    <h4>Reading Input into Vector</h4>
+                    <pre><code class="language-cpp">
+// Read n integers into vector
+int n;
+cin &gt;&gt; n;
+vector&lt;int&gt; arr(n);
+for (int i = 0; i &lt; n; i++) {
+    cin &gt;&gt; arr[i];
+}
+
+// Alternative: using istream_iterator
+vector&lt;int&gt; arr2(istream_iterator&lt;int&gt;(cin), 
+                 istream_iterator&lt;int&gt;());
+                    </code></pre>
+                    
+                    <h4>Prefix Sums</h4>
+                    <pre><code class="language-cpp">
+vector&lt;int&gt; computePrefixSums(const vector&lt;int&gt;&amp; arr) {
+    vector&lt;int&gt; prefix(arr.size() + 1, 0);
+    for (int i = 0; i &lt; arr.size(); i++) {
+        prefix[i + 1] = prefix[i] + arr[i];
+    }
+    return prefix;
+}
+                    </code></pre>
+                    
+                    <h4>Sliding Window Maximum</h4>
+                    <pre><code class="language-cpp">
+vector&lt;int&gt; slidingWindowMax(vector&lt;int&gt;&amp; nums, int k) {
+    vector&lt;int&gt; result;
+    deque&lt;int&gt; dq; // Store indices
+    
+    for (int i = 0; i &lt; nums.size(); i++) {
+        // Remove elements outside window
+        while (!dq.empty() &amp;&amp; dq.front() &lt;= i - k) {
+            dq.pop_front();
+        }
+        
+        // Maintain decreasing order
+        while (!dq.empty() &amp;&amp; nums[dq.back()] &lt;= nums[i]) {
+            dq.pop_back();
+        }
+        
+        dq.push_back(i);
+        
+        if (i &gt;= k - 1) {
+            result.push_back(nums[dq.front()]);
+        }
+    }
+    
+    return result;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Performance Tips</h3>
+                    <div class="tip-box">
+                        <h4><i class="fas fa-rocket"></i> Optimization Tips</h4>
+                        <ul>
+                            <li><strong>Reserve space:</strong> Use reserve() when you know the size</li>
+                            <li><strong>Use emplace_back:</strong> More efficient than push_back for complex objects</li>
+                            <li><strong>Pass by reference:</strong> Avoid copying large vectors</li>
+                            <li><strong>Use [] for known bounds:</strong> Faster than at() but no bounds checking</li>
+                            <li><strong>Prefer range-based loops:</strong> Cleaner and often faster</li>
                         </ul>
                     </div>
                 </div>

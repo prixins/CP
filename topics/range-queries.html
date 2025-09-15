@@ -34,19 +34,327 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on range queries will cover:</p>
+                    <h3>Prefix Sums</h3>
+                    <p>The simplest technique for range sum queries in static arrays:</p>
                     
+                    <pre><code class="language-cpp">
+#include &lt;vector&gt;
+
+class PrefixSum {
+private:
+    vector&lt;long long&gt; prefix;
+    
+public:
+    PrefixSum(const vector&lt;int&gt;&amp; arr) {
+        int n = arr.size();
+        prefix.resize(n + 1, 0);
+        
+        // Build prefix sum array
+        for (int i = 0; i &lt; n; i++) {
+            prefix[i + 1] = prefix[i] + arr[i];
+        }
+    }
+    
+    // Query sum from index l to r (inclusive)
+    long long rangeSum(int l, int r) {
+        return prefix[r + 1] - prefix[l];
+    }
+};
+
+int main() {
+    vector&lt;int&gt; arr = {2, 4, 3, 1, 6, 9, 7};
+    PrefixSum ps(arr);
+    
+    // Query examples
+    cout &lt;&lt; "Sum [1,3]: " &lt;&lt; ps.rangeSum(1, 3) &lt;&lt; endl; // 4+3+1 = 8
+    cout &lt;&lt; "Sum [2,5]: " &lt;&lt; ps.rangeSum(2, 5) &lt;&lt; endl; // 3+1+6+9 = 19
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>2D Prefix Sums</h3>
+                    <p>Extend prefix sums to handle 2D range queries:</p>
+                    
+                    <pre><code class="language-cpp">
+class PrefixSum2D {
+private:
+    vector&lt;vector&lt;long long&gt;&gt; prefix;
+    
+public:
+    PrefixSum2D(const vector&lt;vector&lt;int&gt;&gt;&amp; matrix) {
+        int rows = matrix.size();
+        int cols = matrix[0].size();
+        prefix.resize(rows + 1, vector&lt;long long&gt;(cols + 1, 0));
+        
+        // Build 2D prefix sum
+        for (int i = 1; i &lt;= rows; i++) {
+            for (int j = 1; j &lt;= cols; j++) {
+                prefix[i][j] = matrix[i-1][j-1] 
+                             + prefix[i-1][j] 
+                             + prefix[i][j-1] 
+                             - prefix[i-1][j-1];
+            }
+        }
+    }
+    
+    // Query sum of rectangle from (r1,c1) to (r2,c2)
+    long long rangeSum(int r1, int c1, int r2, int c2) {
+        return prefix[r2+1][c2+1] 
+             - prefix[r1][c2+1] 
+             - prefix[r2+1][c1] 
+             + prefix[r1][c1];
+    }
+};
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Binary Indexed Tree (Fenwick Tree)</h3>
+                    <p>Efficient data structure for range sum queries with updates:</p>
+                    
+                    <pre><code class="language-cpp">
+class BinaryIndexedTree {
+private:
+    vector&lt;long long&gt; tree;
+    int n;
+    
+public:
+    BinaryIndexedTree(int size) : n(size) {
+        tree.resize(n + 1, 0);
+    }
+    
+    BinaryIndexedTree(const vector&lt;int&gt;&amp; arr) : n(arr.size()) {
+        tree.resize(n + 1, 0);
+        for (int i = 0; i &lt; n; i++) {
+            update(i, arr[i]);
+        }
+    }
+    
+    // Add val to index i
+    void update(int i, int val) {
+        for (++i; i &lt;= n; i += i &amp; -i) {
+            tree[i] += val;
+        }
+    }
+    
+    // Get prefix sum up to index i
+    long long query(int i) {
+        long long sum = 0;
+        for (++i; i &gt; 0; i -= i &amp; -i) {
+            sum += tree[i];
+        }
+        return sum;
+    }
+    
+    // Get range sum from l to r
+    long long rangeQuery(int l, int r) {
+        return query(r) - (l &gt; 0 ? query(l - 1) : 0);
+    }
+};
+
+int main() {
+    vector&lt;int&gt; arr = {2, 4, 3, 1, 6, 9, 7};
+    BinaryIndexedTree bit(arr);
+    
+    cout &lt;&lt; "Sum [1,3]: " &lt;&lt; bit.rangeQuery(1, 3) &lt;&lt; endl; // 8
+    
+    bit.update(2, 5); // Add 5 to index 2
+    cout &lt;&lt; "Sum [1,3] after update: " &lt;&lt; bit.rangeQuery(1, 3) &lt;&lt; endl; // 13
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Segment Tree</h3>
+                    <p>Versatile data structure for various range queries:</p>
+                    
+                    <pre><code class="language-cpp">
+class SegmentTree {
+private:
+    vector&lt;long long&gt; tree;
+    vector&lt;int&gt; arr;
+    int n;
+    
+    void build(int node, int start, int end) {
+        if (start == end) {
+            tree[node] = arr[start];
+        } else {
+            int mid = (start + end) / 2;
+            build(2 * node, start, mid);
+            build(2 * node + 1, mid + 1, end);
+            tree[node] = tree[2 * node] + tree[2 * node + 1];
+        }
+    }
+    
+    void updateHelper(int node, int start, int end, int idx, int val) {
+        if (start == end) {
+            arr[idx] = val;
+            tree[node] = val;
+        } else {
+            int mid = (start + end) / 2;
+            if (idx &lt;= mid) {
+                updateHelper(2 * node, start, mid, idx, val);
+            } else {
+                updateHelper(2 * node + 1, mid + 1, end, idx, val);
+            }
+            tree[node] = tree[2 * node] + tree[2 * node + 1];
+        }
+    }
+    
+    long long queryHelper(int node, int start, int end, int l, int r) {
+        if (r &lt; start || end &lt; l) {
+            return 0; // Outside range
+        }
+        if (l &lt;= start &amp;&amp; end &lt;= r) {
+            return tree[node]; // Completely inside range
+        }
+        
+        int mid = (start + end) / 2;
+        long long p1 = queryHelper(2 * node, start, mid, l, r);
+        long long p2 = queryHelper(2 * node + 1, mid + 1, end, l, r);
+        return p1 + p2;
+    }
+    
+public:
+    SegmentTree(const vector&lt;int&gt;&amp; inputArr) {
+        arr = inputArr;
+        n = arr.size();
+        tree.resize(4 * n);
+        build(1, 0, n - 1);
+    }
+    
+    void update(int idx, int val) {
+        updateHelper(1, 0, n - 1, idx, val);
+    }
+    
+    long long query(int l, int r) {
+        return queryHelper(1, 0, n - 1, l, r);
+    }
+};
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Range Minimum Query (RMQ)</h3>
+                    <p>Find the minimum element in any range efficiently:</p>
+                    
+                    <pre><code class="language-cpp">
+class RMQSegmentTree {
+private:
+    vector&lt;int&gt; tree;
+    vector&lt;int&gt; arr;
+    int n;
+    
+    void build(int node, int start, int end) {
+        if (start == end) {
+            tree[node] = arr[start];
+        } else {
+            int mid = (start + end) / 2;
+            build(2 * node, start, mid);
+            build(2 * node + 1, mid + 1, end);
+            tree[node] = min(tree[2 * node], tree[2 * node + 1]);
+        }
+    }
+    
+    int queryHelper(int node, int start, int end, int l, int r) {
+        if (r &lt; start || end &lt; l) {
+            return INT_MAX; // Outside range
+        }
+        if (l &lt;= start &amp;&amp; end &lt;= r) {
+            return tree[node]; // Completely inside range
+        }
+        
+        int mid = (start + end) / 2;
+        int p1 = queryHelper(2 * node, start, mid, l, r);
+        int p2 = queryHelper(2 * node + 1, mid + 1, end, l, r);
+        return min(p1, p2);
+    }
+    
+public:
+    RMQSegmentTree(const vector&lt;int&gt;&amp; inputArr) {
+        arr = inputArr;
+        n = arr.size();
+        tree.resize(4 * n);
+        build(1, 0, n - 1);
+    }
+    
+    int query(int l, int r) {
+        return queryHelper(1, 0, n - 1, l, r);
+    }
+};
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Sparse Table (Static RMQ)</h3>
+                    <p>O(1) query time for static range minimum queries:</p>
+                    
+                    <pre><code class="language-cpp">
+class SparseTable {
+private:
+    vector&lt;vector&lt;int&gt;&gt; st;
+    vector&lt;int&gt; logs;
+    
+public:
+    SparseTable(const vector&lt;int&gt;&amp; arr) {
+        int n = arr.size();
+        int maxLog = 0;
+        while ((1 &lt;&lt; maxLog) &lt;= n) maxLog++;
+        
+        st.resize(maxLog, vector&lt;int&gt;(n));
+        logs.resize(n + 1);
+        
+        // Precompute logs
+        logs[1] = 0;
+        for (int i = 2; i &lt;= n; i++) {
+            logs[i] = logs[i / 2] + 1;
+        }
+        
+        // Initialize for length 1
+        for (int i = 0; i &lt; n; i++) {
+            st[0][i] = arr[i];
+        }
+        
+        // Fill sparse table
+        for (int j = 1; j &lt; maxLog; j++) {
+            for (int i = 0; i + (1 &lt;&lt; j) &lt;= n; i++) {
+                st[j][i] = min(st[j-1][i], st[j-1][i + (1 &lt;&lt; (j-1))]);
+            }
+        }
+    }
+    
+    int query(int l, int r) {
+        int j = logs[r - l + 1];
+        return min(st[j][l], st[j][r - (1 &lt;&lt; j) + 1]);
+    }
+};
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Performance Comparison</h3>
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Time Complexities:</h4>
                         <ul>
-                            <li>Static array queries and prefix sums</li>
-                            <li>Binary Indexed Trees (Fenwick Tree)</li>
-                            <li>Segment Trees</li>
-                            <li>Range minimum/maximum queries</li>
-                            <li>Lazy propagation</li>
-                            <li>Square root decomposition</li>
-                            <li>Sparse tables</li>
+                            <li><strong>Prefix Sum:</strong> O(1) query, O(n) preprocessing, no updates</li>
+                            <li><strong>Binary Indexed Tree:</strong> O(log n) query/update, O(n log n) build</li>
+                            <li><strong>Segment Tree:</strong> O(log n) query/update, O(n) build</li>
+                            <li><strong>Sparse Table:</strong> O(1) query, O(n log n) build, no updates</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <h4><i class="fas fa-lightbulb"></i> When to Use Which</h4>
+                        <ul>
+                            <li><strong>Static range sums:</strong> Prefix sums</li>
+                            <li><strong>Range sums with updates:</strong> Binary Indexed Tree</li>
+                            <li><strong>General range queries with updates:</strong> Segment Tree</li>
+                            <li><strong>Static range min/max:</strong> Sparse Table</li>
                         </ul>
                     </div>
                 </div>

@@ -51,19 +51,272 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on set structures will cover:</p>
+                    <h3>What are Sets?</h3>
+                    <p>A set is a collection of unique elements. In programming, sets are useful when you need to:</p>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Common Set Use Cases:</h4>
                         <ul>
-                            <li>STL set and multiset</li>
-                            <li>Unordered set for hash-based operations</li>
-                            <li>Set operations (union, intersection, difference)</li>
-                            <li>Custom comparators</li>
-                            <li>Set iterators and traversal</li>
-                            <li>Performance analysis</li>
-                            <li>Practical applications in competitive programming</li>
+                            <li>Remove duplicates from data</li>
+                            <li>Check if an element exists quickly</li>
+                            <li>Maintain sorted unique elements</li>
+                            <li>Perform mathematical set operations</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>STL set</h3>
+                    <p>The STL set stores unique elements in sorted order using a balanced binary search tree:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;set&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    set&lt;int&gt; s;
+    
+    // Insert elements
+    s.insert(5);
+    s.insert(2);
+    s.insert(8);
+    s.insert(2); // Duplicate - won't be added
+    
+    // Size and check
+    cout &lt;&lt; "Size: " &lt;&lt; s.size() &lt;&lt; endl; // Output: 3
+    
+    // Check if element exists
+    if (s.find(5) != s.end()) {
+        cout &lt;&lt; "5 found in set" &lt;&lt; endl;
+    }
+    
+    // Alternative existence check
+    if (s.count(8) &gt; 0) {
+        cout &lt;&lt; "8 exists in set" &lt;&lt; endl;
+    }
+    
+    // Iterate (elements are in sorted order)
+    for (int x : s) {
+        cout &lt;&lt; x &lt;&lt; " "; // Output: 2 5 8
+    }
+    
+    // Remove element
+    s.erase(5);
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>STL multiset</h3>
+                    <p>Multiset allows duplicate elements while maintaining sorted order:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;set&gt;
+
+int main() {
+    multiset&lt;int&gt; ms;
+    
+    // Insert duplicates
+    ms.insert(3);
+    ms.insert(1);
+    ms.insert(3);
+    ms.insert(2);
+    ms.insert(3);
+    
+    cout &lt;&lt; "Size: " &lt;&lt; ms.size() &lt;&lt; endl; // Output: 5
+    cout &lt;&lt; "Count of 3: " &lt;&lt; ms.count(3) &lt;&lt; endl; // Output: 3
+    
+    // Iterate
+    for (int x : ms) {
+        cout &lt;&lt; x &lt;&lt; " "; // Output: 1 2 3 3 3
+    }
+    
+    // Remove one occurrence
+    ms.erase(ms.find(3)); // Removes only one 3
+    cout &lt;&lt; "After erasing one 3: " &lt;&lt; ms.count(3) &lt;&lt; endl; // Output: 2
+    
+    // Remove all occurrences
+    ms.erase(3); // Removes all remaining 3s
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Unordered Set</h3>
+                    <p>For faster average operations, use unordered_set (hash table based):</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;unordered_set&gt;
+
+int main() {
+    unordered_set&lt;int&gt; us;
+    
+    // Insert elements (O(1) average)
+    us.insert(10);
+    us.insert(20);
+    us.insert(15);
+    
+    // Fast lookup (O(1) average)
+    if (us.find(15) != us.end()) {
+        cout &lt;&lt; "15 found!" &lt;&lt; endl;
+    }
+    
+    // Elements are not sorted
+    for (int x : us) {
+        cout &lt;&lt; x &lt;&lt; " "; // Order is not guaranteed
+    }
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Set Operations</h3>
+                    <p>STL provides algorithms for mathematical set operations:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;set&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+
+int main() {
+    set&lt;int&gt; set1 = {1, 2, 3, 4, 5};
+    set&lt;int&gt; set2 = {3, 4, 5, 6, 7};
+    vector&lt;int&gt; result;
+    
+    // Union (all elements from both sets)
+    set_union(set1.begin(), set1.end(),
+              set2.begin(), set2.end(),
+              back_inserter(result));
+    // result: {1, 2, 3, 4, 5, 6, 7}
+    
+    result.clear();
+    
+    // Intersection (common elements)
+    set_intersection(set1.begin(), set1.end(),
+                     set2.begin(), set2.end(),
+                     back_inserter(result));
+    // result: {3, 4, 5}
+    
+    result.clear();
+    
+    // Difference (elements in set1 but not in set2)
+    set_difference(set1.begin(), set1.end(),
+                   set2.begin(), set2.end(),
+                   back_inserter(result));
+    // result: {1, 2}
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Custom Comparators</h3>
+                    <p>You can define custom sorting criteria for sets:</p>
+                    
+                    <pre><code class="language-cpp">
+#include &lt;set&gt;
+#include &lt;string&gt;
+
+// Custom comparator for descending order
+struct GreaterInt {
+    bool operator()(int a, int b) const {
+        return a &gt; b;
+    }
+};
+
+// Custom comparator for strings by length
+struct CompareByLength {
+    bool operator()(const string&amp; a, const string&amp; b) const {
+        if (a.length() != b.length()) {
+            return a.length() &lt; b.length();
+        }
+        return a &lt; b; // If same length, lexicographic order
+    }
+};
+
+int main() {
+    // Set with custom comparator
+    set&lt;int, GreaterInt&gt; descendingSet;
+    descendingSet.insert(3);
+    descendingSet.insert(1);
+    descendingSet.insert(4);
+    
+    for (int x : descendingSet) {
+        cout &lt;&lt; x &lt;&lt; " "; // Output: 4 3 1
+    }
+    
+    // Set of strings sorted by length
+    set&lt;string, CompareByLength&gt; lengthSet;
+    lengthSet.insert("cat");
+    lengthSet.insert("elephant");
+    lengthSet.insert("a");
+    lengthSet.insert("dog");
+    
+    for (const string&amp; s : lengthSet) {
+        cout &lt;&lt; s &lt;&lt; " "; // Output: a cat dog elephant
+    }
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Performance Comparison</h3>
+                    <div class="info-box">
+                        <h4>Time Complexities:</h4>
+                        <ul>
+                            <li><strong>set/multiset:</strong> O(log n) for insert, find, erase</li>
+                            <li><strong>unordered_set:</strong> O(1) average, O(n) worst case</li>
+                            <li><strong>When to use set:</strong> Need sorted order, stable performance</li>
+                            <li><strong>When to use unordered_set:</strong> Don't need order, want faster operations</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Practical Examples</h3>
+                    <h4>Remove Duplicates from Array</h4>
+                    <pre><code class="language-cpp">
+vector&lt;int&gt; removeDuplicates(vector&lt;int&gt;&amp; nums) {
+    set&lt;int&gt; uniqueSet(nums.begin(), nums.end());
+    return vector&lt;int&gt;(uniqueSet.begin(), uniqueSet.end());
+}
+                    </code></pre>
+                    
+                    <h4>Find Missing Numbers</h4>
+                    <pre><code class="language-cpp">
+vector&lt;int&gt; findMissing(const vector&lt;int&gt;&amp; nums, int maxVal) {
+    set&lt;int&gt; present(nums.begin(), nums.end());
+    vector&lt;int&gt; missing;
+    
+    for (int i = 1; i &lt;= maxVal; i++) {
+        if (present.find(i) == present.end()) {
+            missing.push_back(i);
+        }
+    }
+    
+    return missing;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Common Pitfalls</h3>
+                    <div class="warning-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Watch Out For</h4>
+                        <ul>
+                            <li><strong>Iterator invalidation:</strong> Modifying set while iterating can be dangerous</li>
+                            <li><strong>Custom comparator consistency:</strong> Must define strict weak ordering</li>
+                            <li><strong>Hash collisions:</strong> unordered_set can degrade to O(n) in worst case</li>
+                            <li><strong>Memory overhead:</strong> Sets have more overhead than simple arrays</li>
                         </ul>
                     </div>
                 </div>

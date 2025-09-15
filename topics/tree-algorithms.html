@@ -51,19 +51,431 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on tree algorithms will cover:</p>
+                    <h3>Tree Fundamentals</h3>
+                    <p>Trees are connected acyclic graphs that form the backbone of many algorithmic problems. Understanding tree properties and traversal methods is essential for solving complex tree-based challenges.</p>
                     
                     <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                        <h4>Key Tree Properties:</h4>
                         <ul>
-                            <li>Tree traversal techniques (preorder, inorder, postorder)</li>
-                            <li>Tree diameter and radius calculations</li>
-                            <li>Lowest Common Ancestor (LCA) algorithms</li>
-                            <li>Tree path queries and operations</li>
-                            <li>Binary tree operations and properties</li>
-                            <li>Tree dynamic programming</li>
-                            <li>Heavy-light decomposition basics</li>
+                            <li>A tree with n vertices has exactly n-1 edges</li>
+                            <li>There's exactly one path between any two vertices</li>
+                            <li>Removing any edge disconnects the tree</li>
+                            <li>Adding any edge creates exactly one cycle</li>
+                        </ul>
+                    </div>
+                    
+                    <h4>Tree Representation</h4>
+                    <pre><code class="language-cpp">
+// Adjacency list representation
+vector&lt;vector&lt;int&gt;&gt; adj;
+vector&lt;int&gt; parent;
+vector&lt;int&gt; depth;
+
+// Build tree from edges
+void buildTree(int n, vector&lt;pair&lt;int, int&gt;&gt;&amp; edges) {
+    adj.assign(n, vector&lt;int&gt;());
+    parent.assign(n, -1);
+    depth.assign(n, 0);
+    
+    for(auto&amp; edge : edges) {
+        int u = edge.first, v = edge.second;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+}
+
+// Root the tree and compute parent/depth
+void rootTree(int root, int par = -1, int d = 0) {
+    parent[root] = par;
+    depth[root] = d;
+    
+    for(int child : adj[root]) {
+        if(child != par) {
+            rootTree(child, root, d + 1);
+        }
+    }
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Tree Traversal Algorithms</h3>
+                    <p>Different traversal methods serve different purposes in tree algorithms:</p>
+                    
+                    <h4>DFS Traversal Orders</h4>
+                    <pre><code class="language-cpp">
+vector&lt;int&gt; preorder, inorder, postorder;
+
+void dfsTraversal(int node, int parent = -1) {
+    // Preorder: visit node before children
+    preorder.push_back(node);
+    
+    for(int child : adj[node]) {
+        if(child != parent) {
+            dfsTraversal(child, node);
+        }
+    }
+    
+    // Postorder: visit node after children
+    postorder.push_back(node);
+}
+
+// For binary trees with explicit left/right children
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+};
+
+void inorderTraversal(TreeNode* root, vector&lt;int&gt;&amp; result) {
+    if(!root) return;
+    
+    inorderTraversal(root->left, result);
+    result.push_back(root->val);  // Inorder: left, root, right
+    inorderTraversal(root->right, result);
+}
+
+// Iterative DFS using stack
+vector&lt;int&gt; iterativeDFS(int root) {
+    vector&lt;int&gt; result;
+    stack&lt;int&gt; st;
+    vector&lt;bool&gt; visited(adj.size(), false);
+    
+    st.push(root);
+    
+    while(!st.empty()) {
+        int node = st.top();
+        st.pop();
+        
+        if(!visited[node]) {
+            visited[node] = true;
+            result.push_back(node);
+            
+            // Add children in reverse order for correct traversal
+            for(int i = adj[node].size() - 1; i >= 0; i--) {
+                int child = adj[node][i];
+                if(!visited[child]) {
+                    st.push(child);
+                }
+            }
+        }
+    }
+    
+    return result;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Tree Diameter</h3>
+                    <p>The diameter is the longest path between any two nodes in the tree. We can find it using two DFS calls:</p>
+                    
+                    <pre><code class="language-cpp">
+pair&lt;int, int&gt; bfsFarthest(int start) {
+    queue&lt;int&gt; q;
+    vector&lt;int&gt; dist(adj.size(), -1);
+    
+    q.push(start);
+    dist[start] = 0;
+    
+    int farthest = start, maxDist = 0;
+    
+    while(!q.empty()) {
+        int node = q.front();
+        q.pop();
+        
+        for(int neighbor : adj[node]) {
+            if(dist[neighbor] == -1) {
+                dist[neighbor] = dist[node] + 1;
+                q.push(neighbor);
+                
+                if(dist[neighbor] > maxDist) {
+                    maxDist = dist[neighbor];
+                    farthest = neighbor;
+                }
+            }
+        }
+    }
+    
+    return {farthest, maxDist};
+}
+
+// Find tree diameter
+pair&lt;int, vector&lt;int&gt;&gt; findDiameter() {
+    // First BFS to find one end of diameter
+    auto [end1, _] = bfsFarthest(0);
+    
+    // Second BFS to find actual diameter
+    auto [end2, diameter] = bfsFarthest(end1);
+    
+    // Reconstruct diameter path
+    vector&lt;int&gt; diameterPath;
+    // ... path reconstruction logic
+    
+    return {diameter, diameterPath};
+}
+
+// Alternative: Tree DP approach for diameter
+vector&lt;int&gt; maxDepth1, maxDepth2; // Two largest depths from each node
+int treeDiameter = 0;
+
+void treeDiameterDP(int node, int parent = -1) {
+    maxDepth1[node] = maxDepth2[node] = 0;
+    
+    for(int child : adj[node]) {
+        if(child != parent) {
+            treeDiameterDP(child, node);
+            
+            int childDepth = maxDepth1[child] + 1;
+            
+            if(childDepth > maxDepth1[node]) {
+                maxDepth2[node] = maxDepth1[node];
+                maxDepth1[node] = childDepth;
+            } else if(childDepth > maxDepth2[node]) {
+                maxDepth2[node] = childDepth;
+            }
+        }
+    }
+    
+    // Update global diameter
+    treeDiameter = max(treeDiameter, maxDepth1[node] + maxDepth2[node]);
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Lowest Common Ancestor (LCA)</h3>
+                    <p>LCA algorithms help find the lowest common ancestor of two nodes efficiently:</p>
+                    
+                    <h4>Binary Lifting LCA</h4>
+                    <pre><code class="language-cpp">
+class LCA {
+private:
+    int n, LOG;
+    vector&lt;vector&lt;int&gt;&gt; up;
+    vector&lt;int&gt; depth;
+    vector&lt;vector&lt;int&gt;&gt;&amp; adj;
+    
+public:
+    LCA(vector&lt;vector&lt;int&gt;&gt;&amp; _adj, int root = 0) : adj(_adj) {
+        n = adj.size();
+        LOG = ceil(log2(n)) + 1;
+        up.assign(n, vector&lt;int&gt;(LOG, -1));
+        depth.assign(n, 0);
+        
+        dfs(root, -1);
+        preprocess();
+    }
+    
+    void dfs(int node, int parent) {
+        up[node][0] = parent;
+        for(int child : adj[node]) {
+            if(child != parent) {
+                depth[child] = depth[node] + 1;
+                dfs(child, node);
+            }
+        }
+    }
+    
+    void preprocess() {
+        for(int j = 1; j < LOG; j++) {
+            for(int i = 0; i < n; i++) {
+                if(up[i][j-1] != -1) {
+                    up[i][j] = up[up[i][j-1]][j-1];
+                }
+            }
+        }
+    }
+    
+    int lca(int a, int b) {
+        if(depth[a] < depth[b]) swap(a, b);
+        
+        // Bring a to same level as b
+        int diff = depth[a] - depth[b];
+        for(int i = 0; i < LOG; i++) {
+            if(diff & (1 << i)) {
+                a = up[a][i];
+            }
+        }
+        
+        if(a == b) return a;
+        
+        // Binary search for LCA
+        for(int i = LOG - 1; i >= 0; i--) {
+            if(up[a][i] != up[b][i]) {
+                a = up[a][i];
+                b = up[b][i];
+            }
+        }
+        
+        return up[a][0];
+    }
+    
+    int distance(int a, int b) {
+        return depth[a] + depth[b] - 2 * depth[lca(a, b)];
+    }
+    
+    bool isAncestor(int ancestor, int node) {
+        return lca(ancestor, node) == ancestor;
+    }
+};
+                    </code></pre>
+                    
+                    <h4>Euler Tour LCA</h4>
+                    <pre><code class="language-cpp">
+class EulerTourLCA {
+private:
+    vector&lt;int&gt; euler, depth, first;
+    vector&lt;vector&lt;int&gt;&gt; st; // Sparse table for RMQ
+    
+public:
+    EulerTourLCA(vector&lt;vector&lt;int&gt;&gt;&amp; adj, int root = 0) {
+        int n = adj.size();
+        first.assign(n, -1);
+        
+        // Build Euler tour
+        eulerTour(root, -1, 0, adj);
+        
+        // Build sparse table for RMQ
+        buildSparseTable();
+    }
+    
+    void eulerTour(int node, int parent, int d, vector&lt;vector&lt;int&gt;&gt;&amp; adj) {
+        if(first[node] == -1) first[node] = euler.size();
+        
+        euler.push_back(node);
+        depth.push_back(d);
+        
+        for(int child : adj[node]) {
+            if(child != parent) {
+                eulerTour(child, node, d + 1, adj);
+                euler.push_back(node);
+                depth.push_back(d);
+            }
+        }
+    }
+    
+    void buildSparseTable() {
+        int m = euler.size();
+        int k = floor(log2(m)) + 1;
+        st.assign(k, vector&lt;int&gt;(m));
+        
+        for(int i = 0; i < m; i++) {
+            st[0][i] = i;
+        }
+        
+        for(int j = 1; j < k; j++) {
+            for(int i = 0; i + (1 << j) <= m; i++) {
+                int left = st[j-1][i];
+                int right = st[j-1][i + (1 << (j-1))];
+                st[j][i] = (depth[left] < depth[right]) ? left : right;
+            }
+        }
+    }
+    
+    int lca(int a, int b) {
+        int left = first[a], right = first[b];
+        if(left > right) swap(left, right);
+        
+        int len = right - left + 1;
+        int k = floor(log2(len));
+        
+        int idx1 = st[k][left];
+        int idx2 = st[k][right - (1 << k) + 1];
+        
+        return (depth[idx1] < depth[idx2]) ? euler[idx1] : euler[idx2];
+    }
+};
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Tree Dynamic Programming</h3>
+                    <p>Many tree problems can be solved efficiently using dynamic programming on trees:</p>
+                    
+                    <h4>Tree DP Template</h4>
+                    <pre><code class="language-cpp">
+// Tree DP for maximum independent set
+vector&lt;int&gt; dpInclude, dpExclude; // Include/exclude current node
+
+void treeDPMaxIndependentSet(int node, int parent = -1) {
+    dpInclude[node] = 1; // Include current node
+    dpExclude[node] = 0; // Exclude current node
+    
+    for(int child : adj[node]) {
+        if(child != parent) {
+            treeDPMaxIndependentSet(child, node);
+            
+            // If we include current node, we cannot include children
+            dpInclude[node] += dpExclude[child];
+            
+            // If we exclude current node, we can choose optimally for children
+            dpExclude[node] += max(dpInclude[child], dpExclude[child]);
+        }
+    }
+}
+
+// Tree DP for subtree sizes
+vector&lt;int&gt; subtreeSize;
+
+void calculateSubtreeSizes(int node, int parent = -1) {
+    subtreeSize[node] = 1;
+    
+    for(int child : adj[node]) {
+        if(child != parent) {
+            calculateSubtreeSizes(child, node);
+            subtreeSize[node] += subtreeSize[child];
+        }
+    }
+}
+
+// Tree DP for distance sums
+vector&lt;long long&gt; distSum; // Sum of distances from each node to all others
+vector&lt;int&gt; subtreeSize;
+
+void calculateDistSums(int node, int parent = -1) {
+    subtreeSize[node] = 1;
+    distSum[node] = 0;
+    
+    for(int child : adj[node]) {
+        if(child != parent) {
+            calculateDistSums(child, node);
+            subtreeSize[node] += subtreeSize[child];
+            distSum[node] += distSum[child] + subtreeSize[child];
+        }
+    }
+}
+
+// Re-root the tree to calculate answer for all nodes
+void reroot(int node, int parent = -1, int n = 0) {
+    for(int child : adj[node]) {
+        if(child != parent) {
+            // Move root from node to child
+            long long oldDistSum = distSum[child];
+            int oldSubtreeSize = subtreeSize[child];
+            
+            // Update child as new root
+            distSum[child] = distSum[node] - subtreeSize[child] + (n - subtreeSize[child]);
+            subtreeSize[child] = n;
+            
+            reroot(child, node, n);
+            
+            // Restore values
+            distSum[child] = oldDistSum;
+            subtreeSize[child] = oldSubtreeSize;
+        }
+    }
+}
+                    </code></pre>
+                    
+                    <div class="tip-box">
+                        <h4><i class="fas fa-lightbulb"></i> Tree Algorithm Tips</h4>
+                        <ul>
+                            <li>Always consider rooting the tree at an appropriate node</li>
+                            <li>Use DFS for tree traversal and DP problems</li>
+                            <li>Binary lifting is efficient for LCA queries: O(log n) per query</li>
+                            <li>Re-rooting technique helps solve problems for all possible roots</li>
                         </ul>
                     </div>
                 </div>

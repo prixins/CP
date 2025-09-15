@@ -51,19 +51,405 @@
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Content Coming Soon</h3>
-                    <p>This comprehensive guide on bit manipulation will cover:</p>
+                    <h3>Bitwise Operators</h3>
+                    <p>Understanding the fundamental bitwise operations:</p>
                     
-                    <div class="info-box">
-                        <h4>Topics to be covered:</h4>
+                    <pre><code class="language-cpp">
+#include &lt;iostream&gt;
+#include &lt;bitset&gt;
+
+int main() {
+    int a = 12;  // Binary: 1100
+    int b = 10;  // Binary: 1010
+    
+    // AND (&amp;): 1 only if both bits are 1
+    cout &lt;&lt; "a &amp; b = " &lt;&lt; (a &amp; b) &lt;&lt; endl; // 8 (1000)
+    
+    // OR (|): 1 if at least one bit is 1
+    cout &lt;&lt; "a | b = " &lt;&lt; (a | b) &lt;&lt; endl; // 14 (1110)
+    
+    // XOR (^): 1 if bits are different
+    cout &lt;&lt; "a ^ b = " &lt;&lt; (a ^ b) &lt;&lt; endl; // 6 (0110)
+    
+    // NOT (~): Flip all bits
+    cout &lt;&lt; "~a = " &lt;&lt; (~a) &lt;&lt; endl; // -13 (two's complement)
+    
+    // Left shift (&lt;&lt;): Multiply by 2^n
+    cout &lt;&lt; "a &lt;&lt; 2 = " &lt;&lt; (a &lt;&lt; 2) &lt;&lt; endl; // 48 (multiply by 4)
+    
+    // Right shift (&gt;&gt;): Divide by 2^n
+    cout &lt;&lt; "a &gt;&gt; 2 = " &lt;&lt; (a &gt;&gt; 2) &lt;&lt; endl; // 3 (divide by 4)
+    
+    // Visualize with bitset
+    cout &lt;&lt; "a in binary: " &lt;&lt; bitset&lt;8&gt;(a) &lt;&lt; endl;
+    cout &lt;&lt; "b in binary: " &lt;&lt; bitset&lt;8&gt;(b) &lt;&lt; endl;
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Basic Bit Operations</h3>
+                    <p>Essential bit manipulation techniques:</p>
+                    
+                    <pre><code class="language-cpp">
+// Check if i-th bit is set
+bool isBitSet(int num, int i) {
+    return (num &amp; (1 &lt;&lt; i)) != 0;
+}
+
+// Set i-th bit
+int setBit(int num, int i) {
+    return num | (1 &lt;&lt; i);
+}
+
+// Clear i-th bit
+int clearBit(int num, int i) {
+    return num &amp; ~(1 &lt;&lt; i);
+}
+
+// Toggle i-th bit
+int toggleBit(int num, int i) {
+    return num ^ (1 &lt;&lt; i);
+}
+
+// Clear all bits from i-th bit to 0
+int clearBitsFromIto0(int num, int i) {
+    return num &amp; (~((1 &lt;&lt; (i + 1)) - 1));
+}
+
+// Clear all bits from MSB to i-th bit
+int clearBitsFromMSBtoI(int num, int i) {
+    return num &amp; ((1 &lt;&lt; i) - 1);
+}
+
+// Update i-th bit to value
+int updateBit(int num, int i, int value) {
+    return (num &amp; ~(1 &lt;&lt; i)) | (value &lt;&lt; i);
+}
+
+int main() {
+    int num = 12; // Binary: 1100
+    
+    cout &lt;&lt; "Original: " &lt;&lt; bitset&lt;8&gt;(num) &lt;&lt; " (" &lt;&lt; num &lt;&lt; ")" &lt;&lt; endl;
+    cout &lt;&lt; "Bit 1 set? " &lt;&lt; isBitSet(num, 1) &lt;&lt; endl;
+    cout &lt;&lt; "Set bit 1: " &lt;&lt; bitset&lt;8&gt;(setBit(num, 1)) &lt;&lt; endl;
+    cout &lt;&lt; "Clear bit 2: " &lt;&lt; bitset&lt;8&gt;(clearBit(num, 2)) &lt;&lt; endl;
+    cout &lt;&lt; "Toggle bit 0: " &lt;&lt; bitset&lt;8&gt;(toggleBit(num, 0)) &lt;&lt; endl;
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Counting Set Bits</h3>
+                    <p>Different methods to count the number of 1s in binary representation:</p>
+                    
+                    <pre><code class="language-cpp">
+// Method 1: Brian Kernighan's algorithm
+int countSetBits1(int n) {
+    int count = 0;
+    while (n) {
+        n &amp;= (n - 1); // Remove rightmost set bit
+        count++;
+    }
+    return count;
+}
+
+// Method 2: Simple bit checking
+int countSetBits2(int n) {
+    int count = 0;
+    while (n) {
+        count += n &amp; 1;
+        n &gt;&gt;= 1;
+    }
+    return count;
+}
+
+// Method 3: Built-in function (GCC)
+int countSetBits3(int n) {
+    return __builtin_popcount(n);
+}
+
+// Method 4: Lookup table (for optimization)
+int popcount_table[256];
+
+void precompute_popcount() {
+    for (int i = 0; i &lt; 256; i++) {
+        popcount_table[i] = (i &amp; 1) + popcount_table[i / 2];
+    }
+}
+
+int countSetBits4(int n) {
+    return popcount_table[n &amp; 0xff] +
+           popcount_table[(n &gt;&gt; 8) &amp; 0xff] +
+           popcount_table[(n &gt;&gt; 16) &amp; 0xff] +
+           popcount_table[(n &gt;&gt; 24) &amp; 0xff];
+}
+
+int main() {
+    int num = 45; // Binary: 101101
+    
+    cout &lt;&lt; "Number: " &lt;&lt; bitset&lt;8&gt;(num) &lt;&lt; " (" &lt;&lt; num &lt;&lt; ")" &lt;&lt; endl;
+    cout &lt;&lt; "Set bits: " &lt;&lt; countSetBits1(num) &lt;&lt; endl; // 4
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>XOR Properties and Applications</h3>
+                    <p>XOR has unique properties that make it very useful:</p>
+                    
+                    <pre><code class="language-cpp">
+// XOR Properties:
+// 1. a ^ a = 0
+// 2. a ^ 0 = a  
+// 3. XOR is commutative and associative
+// 4. a ^ b ^ a = b
+
+// Find the unique number (all others appear twice)
+int findUnique(vector&lt;int&gt;&amp; nums) {
+    int result = 0;
+    for (int num : nums) {
+        result ^= num;
+    }
+    return result; // All duplicates cancel out
+}
+
+// Find two unique numbers (all others appear twice)
+vector&lt;int&gt; findTwoUnique(vector&lt;int&gt;&amp; nums) {
+    int xor_all = 0;
+    for (int num : nums) {
+        xor_all ^= num;
+    }
+    
+    // Find rightmost set bit
+    int rightmost_bit = xor_all &amp; (-xor_all);
+    
+    int num1 = 0, num2 = 0;
+    for (int num : nums) {
+        if (num &amp; rightmost_bit) {
+            num1 ^= num;
+        } else {
+            num2 ^= num;
+        }
+    }
+    
+    return {num1, num2};
+}
+
+// Swap two numbers without temporary variable
+void swapWithoutTemp(int&amp; a, int&amp; b) {
+    if (a != b) { // Avoid issues when a and b are same
+        a ^= b;
+        b ^= a;
+        a ^= b;
+    }
+}
+
+// Check if number is power of 2
+bool isPowerOfTwo(int n) {
+    return n &gt; 0 &amp;&amp; (n &amp; (n - 1)) == 0;
+}
+
+int main() {
+    vector&lt;int&gt; nums = {1, 2, 3, 2, 1};
+    cout &lt;&lt; "Unique number: " &lt;&lt; findUnique(nums) &lt;&lt; endl; // 3
+    
+    int a = 5, b = 7;
+    cout &lt;&lt; "Before swap: a=" &lt;&lt; a &lt;&lt; ", b=" &lt;&lt; b &lt;&lt; endl;
+    swapWithoutTemp(a, b);
+    cout &lt;&lt; "After swap: a=" &lt;&lt; a &lt;&lt; ", b=" &lt;&lt; b &lt;&lt; endl;
+    
+    cout &lt;&lt; "8 is power of 2? " &lt;&lt; isPowerOfTwo(8) &lt;&lt; endl; // true
+    cout &lt;&lt; "6 is power of 2? " &lt;&lt; isPowerOfTwo(6) &lt;&lt; endl; // false
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Bit Masking and Subset Generation</h3>
+                    <p>Use bit masks to represent and manipulate subsets:</p>
+                    
+                    <pre><code class="language-cpp">
+// Generate all subsets using bit masking
+void generateSubsets(vector&lt;int&gt;&amp; arr) {
+    int n = arr.size();
+    
+    // 2^n possible subsets
+    for (int mask = 0; mask &lt; (1 &lt;&lt; n); mask++) {
+        cout &lt;&lt; "Subset: { ";
+        for (int i = 0; i &lt; n; i++) {
+            if (mask &amp; (1 &lt;&lt; i)) {
+                cout &lt;&lt; arr[i] &lt;&lt; " ";
+            }
+        }
+        cout &lt;&lt; "}" &lt;&lt; endl;
+    }
+}
+
+// Check if subset with given sum exists
+bool hasSubsetSum(vector&lt;int&gt;&amp; arr, int target) {
+    int n = arr.size();
+    
+    for (int mask = 0; mask &lt; (1 &lt;&lt; n); mask++) {
+        int sum = 0;
+        for (int i = 0; i &lt; n; i++) {
+            if (mask &amp; (1 &lt;&lt; i)) {
+                sum += arr[i];
+            }
+        }
+        if (sum == target) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// DP with bitmask - Traveling Salesman Problem
+int tsp(vector&lt;vector&lt;int&gt;&gt;&amp; dist) {
+    int n = dist.size();
+    vector&lt;vector&lt;int&gt;&gt; dp(1 &lt;&lt; n, vector&lt;int&gt;(n, INT_MAX));
+    
+    dp[1][0] = 0; // Start from city 0
+    
+    for (int mask = 0; mask &lt; (1 &lt;&lt; n); mask++) {
+        for (int u = 0; u &lt; n; u++) {
+            if (!(mask &amp; (1 &lt;&lt; u)) || dp[mask][u] == INT_MAX) continue;
+            
+            for (int v = 0; v &lt; n; v++) {
+                if (mask &amp; (1 &lt;&lt; v)) continue; // Already visited
+                
+                int new_mask = mask | (1 &lt;&lt; v);
+                dp[new_mask][v] = min(dp[new_mask][v], 
+                                     dp[mask][u] + dist[u][v]);
+            }
+        }
+    }
+    
+    int result = INT_MAX;
+    for (int i = 1; i &lt; n; i++) {
+        result = min(result, dp[(1 &lt;&lt; n) - 1][i] + dist[i][0]);
+    }
+    
+    return result;
+}
+
+int main() {
+    vector&lt;int&gt; arr = {1, 2, 3};
+    cout &lt;&lt; "All subsets:" &lt;&lt; endl;
+    generateSubsets(arr);
+    
+    cout &lt;&lt; "Has subset with sum 4? " &lt;&lt; hasSubsetSum(arr, 4) &lt;&lt; endl; // true (1+3)
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Advanced Bit Tricks</h3>
+                    <p>Useful bit manipulation tricks for optimization:</p>
+                    
+                    <pre><code class="language-cpp">
+// Get rightmost set bit
+int getRightmostSetBit(int n) {
+    return n &amp; (-n);
+}
+
+// Turn off rightmost set bit
+int turnOffRightmostSetBit(int n) {
+    return n &amp; (n - 1);
+}
+
+// Check if only one bit is set
+bool isOnlyOneBitSet(int n) {
+    return n &gt; 0 &amp;&amp; (n &amp; (n - 1)) == 0;
+}
+
+// Position of rightmost set bit (1-indexed)
+int positionOfRightmostSetBit(int n) {
+    return __builtin_ctz(n) + 1; // Count trailing zeros + 1
+}
+
+// Reverse bits
+unsigned int reverseBits(unsigned int n) {
+    unsigned int result = 0;
+    for (int i = 0; i &lt; 32; i++) {
+        result &lt;&lt;= 1;
+        result |= (n &amp; 1);
+        n &gt;&gt;= 1;
+    }
+    return result;
+}
+
+// Fast multiplication/division by powers of 2
+int multiplyBy8(int n) {
+    return n &lt;&lt; 3;  // Left shift by 3
+}
+
+int divideBy4(int n) {
+    return n &gt;&gt; 2;  // Right shift by 2
+}
+
+// Check if number is odd/even
+bool isOdd(int n) {
+    return n &amp; 1;
+}
+
+// Absolute value without branching
+int absoluteValue(int n) {
+    int mask = n &gt;&gt; 31; // Sign bit
+    return (n ^ mask) - mask;
+}
+
+// Min/Max without branching
+int minWithoutBranch(int a, int b) {
+    return b ^ ((a ^ b) &amp; -(a &lt; b));
+}
+
+int maxWithoutBranch(int a, int b) {
+    return a ^ ((a ^ b) &amp; -(a &lt; b));
+}
+
+int main() {
+    int n = 12; // Binary: 1100
+    
+    cout &lt;&lt; "Number: " &lt;&lt; bitset&lt;8&gt;(n) &lt;&lt; " (" &lt;&lt; n &lt;&lt; ")" &lt;&lt; endl;
+    cout &lt;&lt; "Rightmost set bit: " &lt;&lt; getRightmostSetBit(n) &lt;&lt; endl; // 4
+    cout &lt;&lt; "Position of rightmost set bit: " &lt;&lt; positionOfRightmostSetBit(n) &lt;&lt; endl; // 3
+    cout &lt;&lt; "Turn off rightmost set bit: " &lt;&lt; bitset&lt;8&gt;(turnOffRightmostSetBit(n)) &lt;&lt; endl;
+    
+    return 0;
+}
+                    </code></pre>
+                </div>
+                
+                <div class="topic-section">
+                    <h3>Performance Benefits</h3>
+                    <div class="tip-box">
+                        <h4><i class="fas fa-rocket"></i> Why Use Bit Manipulation?</h4>
                         <ul>
-                            <li>Binary representation and bitwise operators</li>
-                            <li>Bit manipulation tricks and techniques</li>
-                            <li>Setting, clearing, and toggling bits</li>
-                            <li>Counting set bits and finding positions</li>
-                            <li>XOR properties and applications</li>
-                            <li>Bit masking and subset generation</li>
-                            <li>Performance optimization using bit operations</li>
+                            <li><strong>Speed:</strong> Bitwise operations are extremely fast</li>
+                            <li><strong>Memory:</strong> Can pack boolean flags efficiently</li>
+                            <li><strong>Elegance:</strong> Some problems have beautiful bit-based solutions</li>
+                            <li><strong>Mathematics:</strong> Many number theory problems use bit properties</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Common Pitfalls</h4>
+                        <ul>
+                            <li><strong>Sign extension:</strong> Be careful with negative numbers</li>
+                            <li><strong>Overflow:</strong> Left shifts can cause overflow</li>
+                            <li><strong>Operator precedence:</strong> Use parentheses with bit operators</li>
+                            <li><strong>Portability:</strong> Some tricks depend on architecture</li>
                         </ul>
                     </div>
                 </div>
