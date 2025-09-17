@@ -55,7 +55,7 @@
                         <i class="fab fa-discord fa-3x"></i>
                         <h4>Discord Server</h4>
                         <p>Join real-time discussions, get help with coding problems, and connect with other learners</p>
-                        <a href="#" class="btn btn-secondary">Join Discord</a>
+                        <a href="https://discord.gg/mCc3w3YmUg" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">Join Discord</a>
                     </div>
                     
                     <!-- <div class="community-card">
@@ -69,7 +69,43 @@
                         <i class="fas fa-users fa-3x"></i>
                         <h4>Study Groups</h4>
                         <p>Join virtual study groups focused on different programming topics and technologies</p>
-                        <a href="#" class="btn btn-secondary">Browse Groups</a>
+                        <a href="#" class="btn btn-secondary" onclick="showComingSoon(); return false;">Browse Groups</a>
+                        <script>
+                        function showComingSoon() {
+                            const modal = document.createElement('div');
+                            modal.style.position = 'fixed';
+                            modal.style.top = 0;
+                            modal.style.left = 0;
+                            modal.style.width = '100vw';
+                            modal.style.height = '100vh';
+                            modal.style.background = 'rgba(0,0,0,0.5)';
+                            modal.style.display = 'flex';
+                            modal.style.alignItems = 'center';
+                            modal.style.justifyContent = 'center';
+                            modal.style.zIndex = 9999;
+
+                            const box = document.createElement('div');
+                            box.style.background = '#fff';
+                            box.style.padding = '2rem 2.5rem';
+                            box.style.borderRadius = '10px';
+                            box.style.boxShadow = '0 2px 16px rgba(0,0,0,0.2)';
+                            box.style.textAlign = 'center';
+                            box.innerHTML = `
+                                <h3 style="margin-bottom: 1rem;">Coming Soon!</h3>
+                                <p>Study Groups will be available soon. Stay tuned!</p>
+                                <button style="margin-top:1.5rem;padding:0.5rem 1.5rem;border:none;background:#4f46e5;color:#fff;border-radius:5px;cursor:pointer;" onclick="document.body.removeChild(this.closest('div[style*=&quot;position: fixed&quot;]'));">Close</button>
+                            `;
+                            box.className = 'custom-modal';
+
+                            modal.appendChild(box);
+                            document.body.appendChild(modal);
+
+                            // Remove modal when clicking outside the box
+                            modal.addEventListener('click', function(e) {
+                                if (e.target === modal) modal.remove();
+                            });
+                        }
+                        </script>
                     </div>
                 </div>
             </div>
@@ -98,7 +134,7 @@
                     </div>
                 </div>
                 
-                <a href="#" class="btn btn-primary">Apply to Contribute</a>
+                <a href="mailto:owling.code@gmail.com" class="btn btn-primary">Apply to Contribute</a>
             </div>
         </section>
     </main>
