@@ -1,0 +1,14 @@
+# robots.txt for owlingcode.com
+
+User-agent: *
+Allow: /
+
+# Disallow authentication pages
+Disallow: /login.html
+Disallow: /dashboard.html
+
+# Sitemap location
+Sitemap: https://owlingcode.com/sitemap.xml
+
+# Crawl-delay (optional, for politeness)
+Crawl-delay: 1
