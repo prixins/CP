@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Programming Topics - owlingcode</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+Pro:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
 </head>
 <body>
@@ -12,10 +15,15 @@
         <div class="container">
             <div class="logo">
                 <h1>owlingcode</h1>
-            </div>            <nav>
-                <ul>
+            </div>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
+            <nav>
+                <ul id="nav-menu">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="topics.html" class="active">Topics</a></li>
+                    <li><a href="practice.html">Practice</a></li>
                     <li><a href="dashboard.html">Dashboard</a></li>
                     <li><a href="contact.html">Contact</a></li>
                     <li class="search-container">
@@ -24,7 +32,8 @@
                             <i class="fas fa-search search-icon"></i>
                             <div id="search-results" class="search-results"></div>
                         </div>
-                    </li>                    <li>
+                    </li>
+                    <li>
                         <button class="theme-toggle" onclick="toggleTheme()">
                             <i class="fas fa-moon" id="theme-icon"></i>
                             <span id="theme-text">Dark</span>
@@ -32,13 +41,15 @@
                     </li>
                     <li>
                         <a href="login.html" class="btn btn-login" id="login-btn">
-                            <i class="fas fa-sign-in-alt"></i> Login
+                            <i class="fas fa-sign-in-alt"></i> Sign In
                         </a>
                     </li>
                 </ul>
             </nav>
         </div>
-    </header>    <main class="container">
+    </header>
+    
+    <main class="container">
         <section id="topics-content">
             <h2>Programming Topics</h2>
             <p>Browse our comprehensive collection of programming topics. Each guide includes detailed explanations, examples, and practice questions.</p>
@@ -52,7 +63,7 @@
                 <button class="filter-btn" data-filter="advanced">Advanced</button>
             </div>
 
-            <!-- Popular Topics Section -->
+            <!-- Featured Topics Section -->
             <div class="popular-topics">
                 <h3>Popular Topics</h3>
                 <div class="mini-card-grid">

@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>owlingcode - Learn Programming</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+Pro:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
 </head>
 <body>
@@ -12,13 +15,15 @@
         <div class="container">
             <div class="logo">
                 <h1>owlingcode</h1>
-            </div>            <nav>
-                <ul>
+            </div>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
+            <nav>
+                <ul id="nav-menu">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="topics.html">Topics</a></li>
-     
-     
-     
+                    <li><a href="practice.html">Practice</a></li>
                     <li><a href="dashboard.html">Dashboard</a></li>
                     <li><a href="contact.html">Contact</a></li>
                     <li class="search-container">
@@ -29,14 +34,14 @@
                         </div>
                     </li>
                     <li>
-                    <button class="theme-toggle" onclick="toggleTheme()">
-                        <i class="fas fa-moon" id="theme-icon"></i>
-                        <span id="theme-text">Dark</span>
-                    </button>
+                        <button class="theme-toggle" onclick="toggleTheme()">
+                            <i class="fas fa-moon" id="theme-icon"></i>
+                            <span id="theme-text">Dark</span>
+                        </button>
                     </li>
                     <li>
                         <a href="login.html" class="btn btn-login" id="login-btn">
-                            <i class="fas fa-sign-in-alt"></i> Login
+                            <i class="fas fa-sign-in-alt"></i> Sign In
                         </a>
                     </li>
                 </ul>
@@ -45,7 +50,6 @@
     </header>
 
     <main class="container">
-        <!-- Home page content -->
         <section id="home-content">
             <h2>Welcome to OWLING CODE</h2>
             <p>Your journey to becoming a skilled programmer starts here. Our comprehensive guides cover everything from basic concepts to advanced topics.</p>
@@ -55,19 +59,19 @@
 
             <div class="features">
                 <div class="feature">
-                    <i class="fas fa-book"></i>
-                    <h3>Comprehensive Guides</h3>
-                    <p>On various programming topics</p>
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Structured Curriculum</h3>
+                    <p>Topics are organized in a logical progression, from basic programming constructs to advanced algorithmic techniques.</p>
                 </div>
                 <div class="feature">
-                    <i class="fas fa-code"></i>
-                    <h3>Practice Questions</h3>
-                    <p>Reinforce your learning with hands-on exercises</p>
+                    <i class="fas fa-laptop-code"></i>
+                    <h3>Practical Exercises</h3>
+                    <p>Each topic includes curated practice problems to reinforce understanding and develop problem-solving skills.</p>
                 </div>
                 <div class="feature">
-                    <i class="fas fa-users"></i>
-                    <h3>Community</h3>
-                    <p>Join other learners and collaborate</p>
+                    <i class="fas fa-book-open"></i>
+                    <h3>Reference Material</h3>
+                    <p>Detailed explanations with code examples serve as both learning material and ongoing reference documentation.</p>
                 </div>
             </div>
             
@@ -85,7 +89,8 @@
                     <h3>Quick Links</h3>
                     <ul>
                         <li><a href="index.html">Home</a></li>
-                        <li><a href="about.html">About</a></li>
+                        <li><a href="topics.html">Topics</a></li>
+                        <li><a href="practice.html">Practice</a></li>
                         <li><a href="contact.html">Contact</a></li>
                     </ul>
                 </div>

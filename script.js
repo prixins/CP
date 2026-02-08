@@ -11,6 +11,38 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+        const navMenu = document.getElementById('nav-menu');
+        const menuToggle = document.querySelector('.mobile-menu-toggle');
+        
+        if (navMenu && navMenu.classList.contains('active')) {
+            if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                navMenu.classList.remove('active');
+                const menuIcon = document.getElementById('menu-icon');
+                if (menuIcon) {
+                    menuIcon.classList.remove('fa-times');
+                    menuIcon.classList.add('fa-bars');
+                }
+            }
+        }
+    });
+    
+    // Close mobile menu when window is resized to desktop
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            const navMenu = document.getElementById('nav-menu');
+            if (navMenu) {
+                navMenu.classList.remove('active');
+                const menuIcon = document.getElementById('menu-icon');
+                if (menuIcon) {
+                    menuIcon.classList.remove('fa-times');
+                    menuIcon.classList.add('fa-bars');
+                }
+            }
+        }
+    });
+    
     // Topic filters with category hiding
     const filterButtons = document.querySelectorAll('.filter-btn');
     const topicCards = document.querySelectorAll('.topic-card');
@@ -540,6 +572,27 @@ function displaySearchResults(results, query) {
 function highlightMatch(text, query) {
     const regex = new RegExp(`(${query})`, 'gi');
     return text.replace(regex, '<mark style="background-color: var(--primary-color); color: white; padding: 0 2px;">$1</mark>');
+}
+
+// Mobile Menu Toggle
+function toggleMobileMenu() {
+    const navMenu = document.getElementById('nav-menu');
+    const menuIcon = document.getElementById('menu-icon');
+    
+    if (navMenu) {
+        navMenu.classList.toggle('active');
+        
+        // Toggle icon between hamburger and close
+        if (menuIcon) {
+            if (navMenu.classList.contains('active')) {
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-times');
+            } else {
+                menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
+            }
+        }
+    }
 }
 
 // Global keyboard shortcut for search

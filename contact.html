@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - owlingcode</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+Pro:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
 </head>
 <body>
@@ -12,10 +15,15 @@
         <div class="container">
             <div class="logo">
                 <h1>owlingcode</h1>
-            </div>            <nav>
-                <ul>
+            </div>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
+            <nav>
+                <ul id="nav-menu">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="topics.html">Topics</a></li>
+                    <li><a href="practice.html">Practice</a></li>
                     <li><a href="dashboard.html">Dashboard</a></li>
                     <li><a href="contact.html" class="active">Contact</a></li>
                     <li class="search-container">
@@ -26,14 +34,14 @@
                         </div>
                     </li>
                     <li>
-                    <button class="theme-toggle" onclick="toggleTheme()">
-                        <i class="fas fa-moon" id="theme-icon"></i>
-                        <span id="theme-text">Dark</span>
-                    </button>
+                        <button class="theme-toggle" onclick="toggleTheme()">
+                            <i class="fas fa-moon" id="theme-icon"></i>
+                            <span id="theme-text">Dark</span>
+                        </button>
                     </li>
                     <li>
                         <a href="login.html" class="btn btn-login" id="login-btn">
-                            <i class="fas fa-sign-in-alt"></i> Login
+                            <i class="fas fa-sign-in-alt"></i> Sign In
                         </a>
                     </li>
                 </ul>
@@ -52,7 +60,7 @@
                 
                 <div class="community-options">
                     <div class="community-card">
-                        <i class="fab fa-discord fa-3x"></i>
+                        <i class="fab fa-discord fa-2x"></i>
                         <h4>Discord Server</h4>
                         <p>Join real-time discussions, get help with coding problems, and connect with other learners</p>
                         <a href="https://discord.gg/SxXVGnNZ3b" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">Join Discord</a>
@@ -66,7 +74,7 @@
                     </div> -->
                     
                     <div class="community-card">
-                        <i class="fas fa-users fa-3x"></i>
+                        <i class="fas fa-users fa-2x"></i>
                         <h4>Study Groups</h4>
                         <p>Join virtual study groups focused on different programming topics and technologies</p>
                         <a href="#" class="btn btn-secondary" onclick="showComingSoon(); return false;">Browse Groups</a>
@@ -116,25 +124,25 @@
                 
                 <div class="contributor-options">
                     <div class="contributor-card">
-                        <i class="fas fa-pen-fancy fa-2x"></i>
-                        <h4>Content Writer</h4>
-                        <p>Write tutorials, guides, and articles on programming topics</p>
+                        <i class="fas fa-pen fa-2x"></i>
+                        <h4>Content Development</h4>
+                        <p>Write explanations, create examples, or develop practice problems for the curriculum.</p>
+                    </div>
+                    
+                    <div class="contributor-card">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                        <h4>Technical Review</h4>
+                        <p>Review content for accuracy, clarity, and adherence to best practices.</p>
                     </div>
                     
                     <div class="contributor-card">
                         <i class="fas fa-code fa-2x"></i>
-                        <h4>Code Reviewer</h4>
-                        <p>Review code examples and practice problems for accuracy and best practices</p>
-                    </div>
-                    
-                    <div class="contributor-card">
-                        <i class="fas fa-laptop-code fa-2x"></i>
-                        <h4>Platform Developer</h4>
-                        <p>Contribute to the development and improvement of our learning platform</p>
+                        <h4>Platform Development</h4>
+                        <p>Contribute to the technical infrastructure and features of the learning platform.</p>
                     </div>
                 </div>
                 
-                <a href="mailto:owling.code@gmail.com" class="btn btn-primary">Apply to Contribute</a>
+                <p style="margin-top: 1.5rem;">For contribution inquiries, contact: <a href="mailto:owling.code@gmail.com">owling.code@gmail.com</a></p>
             </div>
         </section>
     </main>
@@ -147,7 +155,7 @@
                     <p>Learn programming the right way</p>
                 </div>
                 <div class="footer-section">
-                    <h3>Quick Links</h3>
+                    <h3>Navigation</h3>
                     <ul>
                         <li><a href="index.html">Home</a></li>
                         <li><a href="topics.html">Topics</a></li>
@@ -167,5 +175,26 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+    function showComingSoon() {
+        const modal = document.createElement('div');
+        modal.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;';
+        
+        const box = document.createElement('div');
+        box.style.cssText = 'background:var(--card-bg);padding:2rem;border-radius:4px;box-shadow:0 4px 20px rgba(0,0,0,0.15);text-align:center;max-width:400px;';
+        box.innerHTML = `
+            <h3 style="margin-bottom:1rem;color:var(--text-primary);">Coming Soon</h3>
+            <p style="color:var(--text-secondary);margin-bottom:1.5rem;">Study groups will be available in a future update.</p>
+            <button style="padding:0.5rem 1.5rem;border:none;background:var(--primary-color);color:#fff;border-radius:4px;cursor:pointer;font-weight:500;" onclick="this.closest('div[style*=position]').remove()">Close</button>
+        `;
+        
+        modal.appendChild(box);
+        document.body.appendChild(modal);
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) modal.remove();
+        });
+    }
+    </script>
 </body>
+</html>
 </html>

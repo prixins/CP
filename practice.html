@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice - owlingcode</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+Pro:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>owlingcode</h1>
+            </div>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
+            <nav>
+                <ul id="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="topics.html">Topics</a></li>
+                    <li><a href="practice.html" class="active">Practice</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li class="search-container">
+                        <div class="search-box">
+                            <input type="text" id="global-search" placeholder="Search topics..." autocomplete="off">
+                            <i class="fas fa-search search-icon"></i>
+                            <div id="search-results" class="search-results"></div>
+                        </div>
+                    </li>
+                    <li>
+                        <button class="theme-toggle" onclick="toggleTheme()">
+                            <i class="fas fa-moon" id="theme-icon"></i>
+                            <span id="theme-text">Dark</span>
+                        </button>
+                    </li>
+                    <li>
+                        <a href="login.html" class="btn btn-login" id="login-btn">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="practice-content">
+            <h2>Practice & Problem Solving</h2>
+            <p>Master competitive programming through coding challenges and develop algorithmic thinking with logic puzzles.</p>
+
+            <!-- Section Tabs -->
+            <div class="section-tabs">
+                <button class="section-tab active" data-tab="coding">
+                    <i class="fas fa-code"></i>
+                    <span>Coding Problems</span>
+                </button>
+                <button class="section-tab" data-tab="logic">
+                    <i class="fas fa-brain"></i>
+                    <span>Logic & Reasoning</span>
+                </button>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- CODING PROBLEMS SECTION -->
+            <!-- ============================================== -->
+            <div class="tab-content active" id="coding-tab">
+                <div class="section-header">
+                    <h3><i class="fas fa-laptop-code"></i> Coding Problems</h3>
+                    <p>Practice with curated problems from Codeforces, organized by difficulty. Build your skills from beginner to advanced.</p>
+                </div>
+
+                <div class="practice-tips">
+                    <h4><i class="fas fa-lightbulb"></i> Coding Tips</h4>
+                    <ul>
+                        <li>Start with problems at your current skill level, then gradually increase difficulty</li>
+                        <li>Try to solve each problem on your own before looking at hints or solutions</li>
+                        <li>After solving, analyze the time and space complexity of your solution</li>
+                        <li>Revisit problems you couldn't solve after learning new concepts</li>
+                    </ul>
+                </div>
+
+                <div class="topic-filters">
+                    <button class="filter-btn active" data-filter="all">All Levels</button>
+                    <button class="filter-btn" data-filter="beginner">Beginner</button>
+                    <button class="filter-btn" data-filter="easy">Easy</button>
+                    <button class="filter-btn" data-filter="medium">Medium</button>
+                    <button class="filter-btn" data-filter="hard">Hard</button>
+                </div>
+
+                <!-- Beginner Problems -->
+                <div class="practice-section" id="beginner-section">
+                    <h3><i class="fas fa-seedling"></i> Beginner Problems</h3>
+                    <p>Perfect for those just starting their competitive programming journey.</p>
+                    
+                    <div class="codeforces-problems">
+                        <div class="problem-card" data-difficulty="beginner">
+                            <div class="problem-card-header">
+                                <h4>Watermelon</h4>
+                                <span class="difficulty beginner"><i class="fas fa-circle"></i> Beginner</span>
+                            </div>
+                            <div class="problem-card-body">
+                                <p>Determine if a watermelon can be divided into two even parts.</p>
+                                <div class="tags">
+                                    <span class="tag">Math</span>
+                                    <span class="tag">Brute Force</span>
+                                </div>
+                                <div class="problem-stats">
+                                    <span class="problem-stat"><i class="fas fa-signal"></i> 800</span>
+                                    <span class="problem-stat"><i class="fas fa-users"></i> 500k+ solved</span>
+                                </div>
+                                <a href="https://codeforces.com/problemset/problem/4/A" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-code"></i> Solve Problem
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="problem-card" data-difficulty="beginner">
+                            <div class="problem-card-header">
+                                <h4>Way Too Long Words</h4>
+                                <span class="difficulty beginner"><i class="fas fa-circle"></i> Beginner</span>
+                            </div>
+                            <div class="problem-card-body">
+                                <p>Abbreviate words that are too long according to specific rules.</p>
+                                <div class="tags">
+                                    <span class="tag">Strings</span>
+                                    <span class="tag">Implementation</span>
+                                </div>
+                                <div class="problem-stats">
+                                    <span class="problem-stat"><i class="fas fa-signal"></i> 800</span>
+                                    <span class="problem-stat"><i class="fas fa-users"></i> 400k+ solved</span>
+                                </div>
+                                <a href="https://codeforces.com/problemset/problem/71/A" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-code"></i> Solve Problem
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="problem-card" data-difficulty="beginner">
+                            <div class="problem-card-header">
+                                <h4>Team</h4>
+                                <span class="difficulty beginner"><i class="fas fa-circle"></i> Beginner</span>
+                            </div>
+                            <div class="problem-card-body">
+                                <p>Count problems that can be solved by a team of three friends.</p>
+                                <div class="tags">
+                                    <span class="tag">Brute Force</span>
+                                    <span class="tag">Greedy</span>
+                                </div>
+                                <div class="problem-stats">
+                                    <span class="problem-stat"><i class="fas fa-signal"></i> 800</span>
+                                    <span class="problem-stat"><i class="fas fa-users"></i> 350k+ solved</span>
+                                </div>
+                                <a href="https://codeforces.com/problemset/problem/231/A" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-code"></i> Solve Problem
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="problem-card" data-difficulty="beginner">
+                            <div class="problem-card-header">
+                                <h4>Next Round</h4>
+                                <span class="difficulty beginner"><i class="fas fa-circle"></i> Beginner</span>
+                            </div>
+                            <div class="problem-card-body">
+                                <p>Determine how many participants advance to the next round.</p>
+                                <div class="tags">
+                                    <span class="tag">Implementation</span>
+                                </div>
+                                <div class="problem-stats">
+                                    <span class="problem-stat"><i class="fas fa-signal"></i> 800</span>
+                                    <span class="problem-stat"><i class="fas fa-users"></i> 300k+ solved</span>
+                                </div>
+                                <a href="https://codeforces.com/problemset/problem/158/A" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-code"></i> Solve Problem
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Easy Problems -->
+                <div class="practice-section" id="easy-section">
+                    <h3><i class="fas fa-leaf"></i> Easy Problems</h3>
+                    <p>Build confidence with basic algorithmic thinking.</p>
+                    
+                    <div class="codeforces-problems">
+                        <div class="problem-card" data-difficulty="easy">
+                            <div class="problem-card-header">
+                                <h4>Nearly Lucky Number</h4>
+                                <span class="difficulty easy"><i class="fas fa-circle"></i> Easy</span>
+                            </div>
+                            <div class="problem-card-body">
+                                <p>Check if the count of lucky digits is itself a lucky number.</p>
+                                <div class="tags">
+                                    <span class="tag">Implementation</span>
+                                    <span class="tag">Strings</span>
+                                </div>
+                                <div class="problem-stats">
+                                    <span class="problem-stat"><i class="fas fa-signal"></i> 800</span>
+                                    <span class="problem-stat"><i class="fas fa-users"></i> 200k+ solved</span>
+                                </div>
+                                <a href="https://codeforces.com/problemset/problem/110/A" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-code"></i> Solve Problem
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="problem-card" data-difficulty="easy">
+                            <div class="problem-card-header">
+                                <h4>Petya and Strings</h4>
+                                <span class="difficulty easy"><i class="fas fa-circle"></i> Easy</span>
+                            </div>
+                            <div class="problem-card-body">
+                                <p>Compare two strings lexicographically, ignoring case.</p>
+                                <div class="tags">
+                                    <span class="tag">Strings</span>
+                                    <span class="tag">Implementation</span>
+                                </div>
+                                <div class="problem-stats">
+                                    <span class="problem-stat"><i class="fas fa-signal"></i> 800</span>
+                                    <span class="problem-stat"><i class="fas fa-users"></i> 280k+ solved</span>
+                                </div>
+                                <a href="https://codeforces.com/problemset/problem/112/A" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-code"></i> Solve Problem
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="problem-card" data-difficulty="easy">
+                            <div class="problem-card-header">
+                                <h4>Bear and Big Brother</h4>
+                                <span class="difficulty easy"><i class="fas fa-circle"></i> Easy</span>
+                            </div>
+                            <div class="problem-card-body">
+                                <p>Calculate when Limak's weight will exceed Chantel's weight.</p>
+                                <div class="tags">
+                                    <span class="tag">Math</span>
+                                    <span class="tag">Implementation</span>
+                                </div>
+                                <div class="problem-stats">
+                                    <span class="problem-stat"><i class="fas fa-signal"></i> 800</span>
+                                    <span class="problem-stat"><i class="fas fa-users"></i> 170k+ solved</span>
+                                </div>
+                                <a href="https://codeforces.com/problemset/problem/791/A" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-code"></i> Solve Problem
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="problem-card" data-difficulty="easy">
+                            <div class="problem-card-header">
+                                <h4>Elephant</h4>
+                                <span class="difficulty easy"><i class="fas fa-circle"></i> Easy</span>
+                            </div>
+                            <div class="problem-card-body">
+                                <p>Find minimum steps for an elephant to reach position X.</p>
+                                <div class="tags">
+                                    <span class="tag">Math</span>
+                                    <span class="tag">Greedy</span>
+                                </div>
+                                <div class="problem-stats">
+                                    <span class="problem-stat"><i class="fas fa-signal"></i> 800</span>
+                                    <span class="problem-stat"><i class="fas fa-users"></i> 160k+ solved</span>
+                                </div>
+                                <a href="https://codeforces.com/problemset/problem/617/A" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-code"></i> Solve Problem
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medium Problems -->
+                <div class="practice-section" id="medium-section">
+                    <h3><i class="fas fa-tree"></i> Medium Problems</h3>
+                    <p>Challenge yourself with sorting, searching, and simulation problems.</p>
+                    
+                    <div class="codeforces-problems">
+                        <div class="problem-card" data-difficulty="medium">
+                            <div class="problem-card-header">
+                                <h4>Twins</h4>
+                                <span class="difficulty medium"><i class="fas fa-circle"></i> Medium</span>
+                            </div>
+                            <div class="problem-card-body">
+                                <p>Find minimum coins needed to have strictly more than your twin.</p>
+                                <div class="tags">
+                                    <span class="tag">Greedy</span>
+                                    <span class="tag">Sorting</span>
+                                </div>
+                                <div class="problem-stats">
+                                    <span class="problem-stat"><i class="fas fa-signal"></i> 900</span>
+                                    <span class="problem-stat"><i class="fas fa-users"></i> 120k+ solved</span>
+                                </div>
+                                <a href="https://codeforces.com/problemset/problem/160/A" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-code"></i> Solve Problem
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="problem-card" data-difficulty="medium">
+                            <div class="problem-card-header">
+                                <h4>Queue at the School</h4>
+                                <span class="difficulty medium"><i class="fas fa-circle"></i> Medium</span>
+                            </div>
+                            <div class="problem-card-body">
+                                <p>Simulate a queue of boys and girls swapping positions.</p>
+                                <div class="tags">
+                                    <span class="tag">Implementation</span>
+                                    <span class="tag">Simulation</span>
+                                </div>
+                                <div class="problem-stats">
+                                    <span class="problem-stat"><i class="fas fa-signal"></i> 1000</span>
+                                    <span class="problem-stat"><i class="fas fa-users"></i> 100k+ solved</span>
+                                </div>
+                                <a href="https://codeforces.com/problemset/problem/266/B" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-code"></i> Solve Problem
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="problem-card" data-difficulty="medium">
+                            <div class="problem-card-header">
+                                <h4>Two-gram</h4>
+                                <span class="difficulty medium"><i class="fas fa-circle"></i> Medium</span>
+                            </div>
+                            <div class="problem-card-body">
+                                <p>Find the most frequent two-character substring.</p>
+                                <div class="tags">
+                                    <span class="tag">Strings</span>
+                                    <span class="tag">Implementation</span>
+                                </div>
+                                <div class="problem-stats">
+                                    <span class="problem-stat"><i class="fas fa-signal"></i> 900</span>
+                                    <span class="problem-stat"><i class="fas fa-users"></i> 90k+ solved</span>
+                                </div>
+                                <a href="https://codeforces.com/problemset/problem/977/B" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-code"></i> Solve Problem
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="problem-card" data-difficulty="medium">
+                            <div class="problem-card-header">
+                                <h4>Gravity Flip</h4>
+                                <span class="difficulty medium"><i class="fas fa-circle"></i> Medium</span>
+                            </div>
+                            <div class="problem-card-body">
+                                <p>Simulate boxes falling in a container after gravity flips.</p>
+                                <div class="tags">
+                                    <span class="tag">Sorting</span>
+                                    <span class="tag">Greedy</span>
+                                </div>
+                                <div class="problem-stats">
+                                    <span class="problem-stat"><i class="fas fa-signal"></i> 900</span>
+                                    <span class="problem-stat"><i class="fas fa-users"></i> 85k+ solved</span>
+                                </div>
+                                <a href="https://codeforces.com/problemset/problem/405/A" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-code"></i> Solve Problem
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hard Problems -->
+                <div class="practice-section" id="hard-section">
+                    <h3><i class="fas fa-mountain"></i> Hard Problems</h3>
+                    <p>Advanced algorithms, graphs, and dynamic programming.</p>
+                    
+                    <div class="codeforces-problems">
+                        <div class="problem-card" data-difficulty="hard">
+                            <div class="problem-card-header">
+                                <h4>Longest Regular Bracket Sequence</h4>
+                                <span class="difficulty hard"><i class="fas fa-circle"></i> Hard</span>
+                            </div>
+                            <div class="problem-card-body">
+                                <p>Find the longest valid parentheses substring and count occurrences.</p>
+                                <div class="tags">
+                                    <span class="tag">Stack</span>
+                                    <span class="tag">DP</span>
+                                    <span class="tag">Strings</span>
+                                </div>
+                                <div class="problem-stats">
+                                    <span class="problem-stat"><i class="fas fa-signal"></i> 1900</span>
+                                    <span class="problem-stat"><i class="fas fa-users"></i> 25k+ solved</span>
+                                </div>
+                                <a href="https://codeforces.com/problemset/problem/5/C" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-code"></i> Solve Problem
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="problem-card" data-difficulty="hard">
+                            <div class="problem-card-header">
+                                <h4>Two Buttons</h4>
+                                <span class="difficulty hard"><i class="fas fa-circle"></i> Hard</span>
+                            </div>
+                            <div class="problem-card-body">
+                                <p>Find minimum button presses to transform one number to another.</p>
+                                <div class="tags">
+                                    <span class="tag">BFS</span>
+                                    <span class="tag">Greedy</span>
+                                    <span class="tag">Math</span>
+                                </div>
+                                <div class="problem-stats">
+                                    <span class="problem-stat"><i class="fas fa-signal"></i> 1400</span>
+                                    <span class="problem-stat"><i class="fas fa-users"></i> 45k+ solved</span>
+                                </div>
+                                <a href="https://codeforces.com/problemset/problem/520/B" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-code"></i> Solve Problem
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="problem-card" data-difficulty="hard">
+                            <div class="problem-card-header">
+                                <h4>Mike and Shortcuts</h4>
+                                <span class="difficulty hard"><i class="fas fa-circle"></i> Hard</span>
+                            </div>
+                            <div class="problem-card-body">
+                                <p>Find shortest paths using BFS with special edges.</p>
+                                <div class="tags">
+                                    <span class="tag">Graphs</span>
+                                    <span class="tag">BFS</span>
+                                </div>
+                                <div class="problem-stats">
+                                    <span class="problem-stat"><i class="fas fa-signal"></i> 1600</span>
+                                    <span class="problem-stat"><i class="fas fa-users"></i> 18k+ solved</span>
+                                </div>
+                                <a href="https://codeforces.com/problemset/problem/689/B" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-code"></i> Solve Problem
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="problem-card" data-difficulty="hard">
+                            <div class="problem-card-header">
+                                <h4>Powerful Array</h4>
+                                <span class="difficulty hard"><i class="fas fa-circle"></i> Hard</span>
+                            </div>
+                            <div class="problem-card-body">
+                                <p>Answer range queries using Mo's algorithm efficiently.</p>
+                                <div class="tags">
+                                    <span class="tag">Mo's Algorithm</span>
+                                    <span class="tag">Data Structures</span>
+                                </div>
+                                <div class="problem-stats">
+                                    <span class="problem-stat"><i class="fas fa-signal"></i> 2200</span>
+                                    <span class="problem-stat"><i class="fas fa-users"></i> 5k+ solved</span>
+                                </div>
+                                <a href="https://codeforces.com/problemset/problem/86/D" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-code"></i> Solve Problem
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- External Resources -->
+                <div class="practice-section">
+                    <h3><i class="fas fa-globe"></i> More Practice Resources</h3>
+                    <p>Explore these platforms for additional problems.</p>
+                    
+                    <div class="practice-cards">
+                        <div class="practice-card">
+                            <i class="fas fa-code" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                            <h4>Codeforces</h4>
+                            <p>Popular competitive programming platform with regular contests.</p>
+                            <a href="https://codeforces.com/problemset" target="_blank" class="btn btn-primary">
+                                <i class="fas fa-external-link-alt"></i> Visit
+                            </a>
+                        </div>
+
+                        <div class="practice-card">
+                            <i class="fas fa-laptop-code" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                            <h4>AtCoder</h4>
+                            <p>High-quality problems and beginner-friendly contests.</p>
+                            <a href="https://atcoder.jp/" target="_blank" class="btn btn-primary">
+                                <i class="fas fa-external-link-alt"></i> Visit
+                            </a>
+                        </div>
+
+                        <div class="practice-card">
+                            <i class="fas fa-rocket" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                            <h4>CSES Problem Set</h4>
+                            <p>Curated collection for systematic practice.</p>
+                            <a href="https://cses.fi/problemset/" target="_blank" class="btn btn-primary">
+                                <i class="fas fa-external-link-alt"></i> Visit
+                            </a>
+                        </div>
+
+                        <div class="practice-card">
+                            <i class="fas fa-terminal" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                            <h4>LeetCode</h4>
+                            <p>Great for interview preparation.</p>
+                            <a href="https://leetcode.com/" target="_blank" class="btn btn-primary">
+                                <i class="fas fa-external-link-alt"></i> Visit
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- LOGIC & REASONING SECTION -->
+            <!-- ============================================== -->
+            <div class="tab-content" id="logic-tab">
+                <div class="section-header">
+                    <h3><i class="fas fa-brain"></i> Logic & Reasoning</h3>
+                    <p>Develop algorithmic thinking through puzzles. No coding required — focus on problem-solving strategies.</p>
+                </div>
+
+                <!-- Problem Solving Framework -->
+                <div class="thinking-framework">
+                    <h4><i class="fas fa-compass"></i> Problem Solving Framework</h4>
+                    <div class="framework-steps">
+                        <div class="framework-step">
+                            <div class="step-number">1</div>
+                            <h5>Understand</h5>
+                            <p>Identify inputs, outputs, constraints</p>
+                        </div>
+                        <div class="framework-step">
+                            <div class="step-number">2</div>
+                            <h5>Plan</h5>
+                            <p>Break into smaller parts</p>
+                        </div>
+                        <div class="framework-step">
+                            <div class="step-number">3</div>
+                            <h5>Explore</h5>
+                            <p>Try examples, find patterns</p>
+                        </div>
+                        <div class="framework-step">
+                            <div class="step-number">4</div>
+                            <h5>Solve</h5>
+                            <p>Design step-by-step approach</p>
+                        </div>
+                        <div class="framework-step">
+                            <div class="step-number">5</div>
+                            <h5>Reflect</h5>
+                            <p>Optimize and learn</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Classic Logic Puzzles -->
+                <div class="category-section">
+                    <h3><i class="fas fa-puzzle-piece"></i> Classic Logic Puzzles</h3>
+                    <p>Foundational puzzles that teach core problem-solving patterns.</p>
+
+                    <div class="puzzle-card">
+                        <div class="puzzle-header">
+                            <h4><i class="fas fa-balance-scale"></i> The Weighing Problem</h4>
+                            <span class="puzzle-category">Binary Search</span>
+                        </div>
+                        <div class="puzzle-body">
+                            <div class="puzzle-problem">
+                                <h5><i class="fas fa-question-circle"></i> Problem</h5>
+                                <p>You have 8 identical-looking balls. One ball is slightly heavier than the others. Using a balance scale, what is the <strong>minimum number of weighings</strong> needed to guarantee finding the heavy ball?</p>
+                            </div>
+                            
+                            <button class="hint-toggle" onclick="toggleHint(this)">
+                                <i class="fas fa-lightbulb"></i> Show Hint
+                            </button>
+                            <div class="hint-content">
+                                <p>Think about dividing balls into groups. Each weighing gives three outcomes: left heavier, right heavier, or balanced.</p>
+                            </div>
+
+                            <button class="solution-toggle" onclick="toggleSolution(this)">
+                                <i class="fas fa-check-circle"></i> Show Solution
+                            </button>
+                            <div class="solution-content">
+                                <h5><i class="fas fa-lightbulb"></i> Answer: 2 weighings</h5>
+                                <p><strong>Approach: Divide and Conquer (Ternary Search)</strong></p>
+                                <ol>
+                                    <li><strong>Divide into 3 groups:</strong> A(3), B(3), C(2)</li>
+                                    <li><strong>Weighing 1:</strong> Compare A vs B → identifies which group has heavy ball</li>
+                                    <li><strong>Weighing 2:</strong> Compare 2 balls from that group → finds the heavy one</li>
+                                </ol>
+                                <p><strong>Key Insight:</strong> With n weighings, you can distinguish 3ⁿ cases. 3² = 9 ≥ 8 balls.</p>
+                            </div>
+
+                            <div class="puzzle-tags">
+                                <span class="puzzle-tag">Divide & Conquer</span>
+                                <span class="puzzle-tag">Optimization</span>
+                                <span class="puzzle-tag">Information Theory</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="puzzle-card">
+                        <div class="puzzle-header">
+                            <h4><i class="fas fa-water"></i> Water Jug Problem</h4>
+                            <span class="puzzle-category">State Space Search</span>
+                        </div>
+                        <div class="puzzle-body">
+                            <div class="puzzle-problem">
+                                <h5><i class="fas fa-question-circle"></i> Problem</h5>
+                                <p>You have a <strong>5-liter jug</strong> and a <strong>3-liter jug</strong> with no measuring marks. How do you measure exactly <strong>4 liters</strong> of water?</p>
+                            </div>
+                            
+                            <button class="hint-toggle" onclick="toggleHint(this)">
+                                <i class="fas fa-lightbulb"></i> Show Hint
+                            </button>
+                            <div class="hint-content">
+                                <p>Think of each state as (water in 5L, water in 3L). What operations can you perform?</p>
+                            </div>
+
+                            <button class="solution-toggle" onclick="toggleSolution(this)">
+                                <i class="fas fa-check-circle"></i> Show Solution
+                            </button>
+                            <div class="solution-content">
+                                <h5><i class="fas fa-lightbulb"></i> Solution Steps</h5>
+                                <div class="algorithm-visual">
+                                    <div class="step">(0, 0) Start: both empty</div>
+                                    <div class="step">(5, 0) Fill 5L jug</div>
+                                    <div class="step">(2, 3) Pour into 3L jug</div>
+                                    <div class="step">(2, 0) Empty 3L jug</div>
+                                    <div class="step">(0, 2) Pour 5L into 3L</div>
+                                    <div class="step">(5, 2) Fill 5L jug</div>
+                                    <div class="step">(4, 3) Pour into 3L until full ✓</div>
+                                </div>
+                                <p><strong>Key Insight:</strong> This is a graph problem! BFS finds the shortest path.</p>
+                            </div>
+
+                            <div class="puzzle-tags">
+                                <span class="puzzle-tag">BFS</span>
+                                <span class="puzzle-tag">State Space</span>
+                                <span class="puzzle-tag">Graph Traversal</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="puzzle-card">
+                        <div class="puzzle-header">
+                            <h4><i class="fas fa-door-open"></i> Monty Hall Problem</h4>
+                            <span class="puzzle-category">Probability</span>
+                        </div>
+                        <div class="puzzle-body">
+                            <div class="puzzle-problem">
+                                <h5><i class="fas fa-question-circle"></i> Problem</h5>
+                                <p>3 doors: one has a car, two have goats. You pick a door. The host opens another door showing a goat. Should you <strong>switch</strong> or <strong>stay</strong>?</p>
+                            </div>
+                            
+                            <button class="hint-toggle" onclick="toggleHint(this)">
+                                <i class="fas fa-lightbulb"></i> Show Hint
+                            </button>
+                            <div class="hint-content">
+                                <p>What's the probability the car was behind your first choice? What about the other doors combined?</p>
+                            </div>
+
+                            <button class="solution-toggle" onclick="toggleSolution(this)">
+                                <i class="fas fa-check-circle"></i> Show Solution
+                            </button>
+                            <div class="solution-content">
+                                <h5><i class="fas fa-lightbulb"></i> Always Switch! (2/3 win rate)</h5>
+                                <p><strong>Case Analysis:</strong></p>
+                                <ul>
+                                    <li>Pick car (1/3) → Switch loses</li>
+                                    <li>Pick goat A (1/3) → Switch wins</li>
+                                    <li>Pick goat B (1/3) → Switch wins</li>
+                                </ul>
+                                <p><strong>Key Insight:</strong> Your initial choice had 1/3 probability. The remaining 2/3 concentrates on the other unopened door.</p>
+                            </div>
+
+                            <div class="puzzle-tags">
+                                <span class="puzzle-tag">Probability</span>
+                                <span class="puzzle-tag">Conditional Logic</span>
+                                <span class="puzzle-tag">Enumeration</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Algorithmic Thinking -->
+                <div class="category-section">
+                    <h3><i class="fas fa-project-diagram"></i> Algorithmic Thinking</h3>
+                    <p>Problems about efficiency, optimization, and algorithm design.</p>
+
+                    <div class="puzzle-card">
+                        <div class="puzzle-header">
+                            <h4><i class="fas fa-stairs"></i> The Staircase Problem</h4>
+                            <span class="puzzle-category">Dynamic Programming</span>
+                        </div>
+                        <div class="puzzle-body">
+                            <div class="puzzle-problem">
+                                <h5><i class="fas fa-question-circle"></i> Problem</h5>
+                                <p>You can climb stairs by taking <strong>1 or 2 steps</strong> at a time. How many different ways can you climb <strong>n</strong> steps?</p>
+                            </div>
+                            
+                            <button class="hint-toggle" onclick="toggleHint(this)">
+                                <i class="fas fa-lightbulb"></i> Show Hint
+                            </button>
+                            <div class="hint-content">
+                                <p>To reach step n, you must have come from n-1 or n-2. How do these relate?</p>
+                            </div>
+
+                            <button class="solution-toggle" onclick="toggleSolution(this)">
+                                <i class="fas fa-check-circle"></i> Show Solution
+                            </button>
+                            <div class="solution-content">
+                                <h5><i class="fas fa-lightbulb"></i> Answer: Fibonacci Sequence!</h5>
+                                <div class="algorithm-visual">
+                                    <div class="step">f(1) = 1, f(2) = 2</div>
+                                    <div class="step">f(n) = f(n-1) + f(n-2)</div>
+                                    <div class="step">f(3) = 3, f(4) = 5, f(5) = 8...</div>
+                                </div>
+                                <p><strong>Key Insight:</strong> This is dynamic programming — combining solutions to subproblems.</p>
+                            </div>
+
+                            <div class="puzzle-tags">
+                                <span class="puzzle-tag">Dynamic Programming</span>
+                                <span class="puzzle-tag">Recurrence</span>
+                                <span class="puzzle-tag">Fibonacci</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="puzzle-card">
+                        <div class="puzzle-header">
+                            <h4><i class="fas fa-search"></i> Find the Missing Number</h4>
+                            <span class="puzzle-category">Mathematical Insight</span>
+                        </div>
+                        <div class="puzzle-body">
+                            <div class="puzzle-problem">
+                                <h5><i class="fas fa-question-circle"></i> Problem</h5>
+                                <p>You have n-1 distinct integers from 1 to n (one missing). Find it in <strong>O(n) time</strong> and <strong>O(1) space</strong> without sorting.</p>
+                            </div>
+                            
+                            <button class="hint-toggle" onclick="toggleHint(this)">
+                                <i class="fas fa-lightbulb"></i> Show Hint
+                            </button>
+                            <div class="hint-content">
+                                <p>You know what the sum of 1 to n should be...</p>
+                            </div>
+
+                            <button class="solution-toggle" onclick="toggleSolution(this)">
+                                <i class="fas fa-check-circle"></i> Show Solution
+                            </button>
+                            <div class="solution-content">
+                                <h5><i class="fas fa-lightbulb"></i> Use the Sum Formula</h5>
+                                <div class="algorithm-visual">
+                                    <div class="step">Expected = n(n+1)/2</div>
+                                    <div class="step">Actual = sum of given list</div>
+                                    <div class="step">Missing = Expected - Actual</div>
+                                </div>
+                                <p><strong>Alternative:</strong> XOR all numbers 1 to n with all elements. Result = missing number.</p>
+                            </div>
+
+                            <div class="puzzle-tags">
+                                <span class="puzzle-tag">Math</span>
+                                <span class="puzzle-tag">XOR</span>
+                                <span class="puzzle-tag">Space Optimization</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="puzzle-card">
+                        <div class="puzzle-header">
+                            <h4><i class="fas fa-coins"></i> Coin Change Greedy Trap</h4>
+                            <span class="puzzle-category">Greedy vs DP</span>
+                        </div>
+                        <div class="puzzle-body">
+                            <div class="puzzle-problem">
+                                <h5><i class="fas fa-question-circle"></i> Problem</h5>
+                                <p>Coins: [1, 3, 4]. What's the minimum coins for <strong>6 cents</strong>? Does greedy (always pick largest) work?</p>
+                            </div>
+                            
+                            <button class="hint-toggle" onclick="toggleHint(this)">
+                                <i class="fas fa-lightbulb"></i> Show Hint
+                            </button>
+                            <div class="hint-content">
+                                <p>Greedy: pick 4, then what? Try 3+3 instead.</p>
+                            </div>
+
+                            <button class="solution-toggle" onclick="toggleSolution(this)">
+                                <i class="fas fa-check-circle"></i> Show Solution
+                            </button>
+                            <div class="solution-content">
+                                <h5><i class="fas fa-lightbulb"></i> Greedy Fails! Answer: 2 coins</h5>
+                                <p><strong>Greedy:</strong> 4 + 1 + 1 = 3 coins ❌</p>
+                                <p><strong>Optimal:</strong> 3 + 3 = 2 coins ✓</p>
+                                <p><strong>Lesson:</strong> Greedy doesn't always work. When in doubt, use DP.</p>
+                            </div>
+
+                            <div class="puzzle-tags">
+                                <span class="puzzle-tag">Greedy</span>
+                                <span class="puzzle-tag">Dynamic Programming</span>
+                                <span class="puzzle-tag">Counter-Example</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strategy & Optimization -->
+                <div class="category-section">
+                    <h3><i class="fas fa-chess"></i> Strategy & Optimization</h3>
+                    <p>Making optimal decisions and understanding trade-offs.</p>
+
+                    <div class="puzzle-card">
+                        <div class="puzzle-header">
+                            <h4><i class="fas fa-egg"></i> The Egg Drop Problem</h4>
+                            <span class="puzzle-category">Optimization</span>
+                        </div>
+                        <div class="puzzle-body">
+                            <div class="puzzle-problem">
+                                <h5><i class="fas fa-question-circle"></i> Problem</h5>
+                                <p><strong>2 eggs</strong>, <strong>100 floors</strong>. Find the highest safe floor. What's the <strong>minimum drops</strong> needed in worst case?</p>
+                            </div>
+                            
+                            <button class="hint-toggle" onclick="toggleHint(this)">
+                                <i class="fas fa-lightbulb"></i> Show Hint
+                            </button>
+                            <div class="hint-content">
+                                <p>If egg breaks at floor k, you have 1 egg for floors 1 to k-1 (linear search). Balance worst cases!</p>
+                            </div>
+
+                            <button class="solution-toggle" onclick="toggleSolution(this)">
+                                <i class="fas fa-check-circle"></i> Show Solution
+                            </button>
+                            <div class="solution-content">
+                                <h5><i class="fas fa-lightbulb"></i> Answer: 14 drops</h5>
+                                <p>Drop from floors: 14, 27, 39, 50, 60, 69, 77, 84, 90, 95, 99, 100</p>
+                                <p>Each step decreases by 1 because you've used one drop.</p>
+                                <p><strong>Math:</strong> n + (n-1) + ... + 1 ≥ 100 → n = 14</p>
+                            </div>
+
+                            <div class="puzzle-tags">
+                                <span class="puzzle-tag">Dynamic Programming</span>
+                                <span class="puzzle-tag">Optimization</span>
+                                <span class="puzzle-tag">Worst-Case Analysis</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="puzzle-card">
+                        <div class="puzzle-header">
+                            <h4><i class="fas fa-hiking"></i> River Crossing Puzzle</h4>
+                            <span class="puzzle-category">Constraint Satisfaction</span>
+                        </div>
+                        <div class="puzzle-body">
+                            <div class="puzzle-problem">
+                                <h5><i class="fas fa-question-circle"></i> Problem</h5>
+                                <p>Farmer with <strong>wolf, goat, cabbage</strong>. Boat fits farmer + 1 item. Wolf eats goat, goat eats cabbage if left alone. Get all across safely.</p>
+                            </div>
+                            
+                            <button class="hint-toggle" onclick="toggleHint(this)">
+                                <i class="fas fa-lightbulb"></i> Show Hint
+                            </button>
+                            <div class="hint-content">
+                                <p>The goat can't be left with either. Sometimes you need to bring something back!</p>
+                            </div>
+
+                            <button class="solution-toggle" onclick="toggleSolution(this)">
+                                <i class="fas fa-check-circle"></i> Show Solution
+                            </button>
+                            <div class="solution-content">
+                                <h5><i class="fas fa-lightbulb"></i> 7 Crossings</h5>
+                                <div class="algorithm-visual">
+                                    <div class="step">Take goat → [W,C] | [G]</div>
+                                    <div class="step">Return alone</div>
+                                    <div class="step">Take wolf → [C] | [W,G]</div>
+                                    <div class="step">Bring goat back → [C,G] | [W]</div>
+                                    <div class="step">Take cabbage → [G] | [W,C]</div>
+                                    <div class="step">Return alone</div>
+                                    <div class="step">Take goat → [] | [W,G,C] ✓</div>
+                                </div>
+                                <p><strong>Key Insight:</strong> Backtracking is necessary!</p>
+                            </div>
+
+                            <div class="puzzle-tags">
+                                <span class="puzzle-tag">Constraint Satisfaction</span>
+                                <span class="puzzle-tag">Backtracking</span>
+                                <span class="puzzle-tag">State Space</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="puzzle-card">
+                        <div class="puzzle-header">
+                            <h4><i class="fas fa-layer-group"></i> Tower of Hanoi</h4>
+                            <span class="puzzle-category">Recursion</span>
+                        </div>
+                        <div class="puzzle-body">
+                            <div class="puzzle-problem">
+                                <h5><i class="fas fa-question-circle"></i> Problem</h5>
+                                <p>3 pegs, <strong>n disks</strong> on peg A (smallest on top). Move all to C. Rules: move one at a time, never place larger on smaller. Minimum moves?</p>
+                            </div>
+                            
+                            <button class="hint-toggle" onclick="toggleHint(this)">
+                                <i class="fas fa-lightbulb"></i> Show Hint
+                            </button>
+                            <div class="hint-content">
+                                <p>To move n disks A→C: First move top (n-1) to B, then bottom to C, then (n-1) from B to C.</p>
+                            </div>
+
+                            <button class="solution-toggle" onclick="toggleSolution(this)">
+                                <i class="fas fa-check-circle"></i> Show Solution
+                            </button>
+                            <div class="solution-content">
+                                <h5><i class="fas fa-lightbulb"></i> Answer: 2ⁿ - 1 moves</h5>
+                                <p><strong>Recurrence:</strong> T(n) = 2T(n-1) + 1</p>
+                                <p>n=1: 1 | n=2: 3 | n=3: 7 | n=4: 15 | n=5: 31</p>
+                                <p><strong>Key Insight:</strong> Classic example of recursive problem decomposition.</p>
+                            </div>
+
+                            <div class="puzzle-tags">
+                                <span class="puzzle-tag">Recursion</span>
+                                <span class="puzzle-tag">Recurrence Relations</span>
+                                <span class="puzzle-tag">Exponential Growth</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>owlingcode</h3>
+                    <p>Learn programming the right way</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="topics.html">Topics</a></li>
+                        <li><a href="practice.html">Practice</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="https://discord.gg/SxXVGnNZ3b" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="global-auth.js"></script>
+    <script>
+        // Tab switching
+        document.querySelectorAll('.section-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active from all tabs
+                document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active to clicked tab
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab + '-tab').classList.add('active');
+            });
+        });
+
+        // Problem filter functionality (for coding section)
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                const filter = button.dataset.filter;
+                const problemCards = document.querySelectorAll('.problem-card');
+                const practiceSections = document.querySelectorAll('.practice-section[id]');
+                
+                if (filter === 'all') {
+                    problemCards.forEach(card => card.style.display = 'flex');
+                    practiceSections.forEach(section => section.style.display = 'block');
+                } else {
+                    problemCards.forEach(card => {
+                        card.style.display = card.dataset.difficulty === filter ? 'flex' : 'none';
+                    });
+                    practiceSections.forEach(section => {
+                        const visible = section.querySelectorAll('.problem-card[style="display: flex"]');
+                        section.style.display = visible.length > 0 ? 'block' : 'none';
+                    });
+                }
+            });
+        });
+
+        // Hint toggle
+        function toggleHint(button) {
+            const content = button.nextElementSibling;
+            content.classList.toggle('show');
+            button.innerHTML = content.classList.contains('show') 
+                ? '<i class="fas fa-lightbulb"></i> Hide Hint'
+                : '<i class="fas fa-lightbulb"></i> Show Hint';
+        }
+
+        // Solution toggle
+        function toggleSolution(button) {
+            const content = button.nextElementSibling;
+            content.classList.toggle('show');
+            button.innerHTML = content.classList.contains('show')
+                ? '<i class="fas fa-eye-slash"></i> Hide Solution'
+                : '<i class="fas fa-check-circle"></i> Show Solution';
+        }
+    </script>
+</body>
+</html>

@@ -2,25 +2,77 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>About Us</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background: #f9f9f9; color: #222; }
-        .container { max-width: 700px; margin: auto; background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07);}
-        h1 { color: #2c3e50; }
-        p { line-height: 1.7; }
-    </style>
+    <title>About - Owling Code</title>
+    <meta name="description" content="Learn about Owling Code's mission to provide quality programming education.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+Pro:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>About Us</h1>
-        <p>
-            Welcome to our website! We are dedicated to providing quality content and services to our users.
-            Our team is passionate about technology, innovation, and delivering the best experience possible.
-        </p>
-        <p>
-            If you have any questions or feedback, feel free to contact us. Thank you for visiting!
-        </p>
-    </div>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Owling Code</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="topics.html">Curriculum</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="about-content">
+            <div class="hero-section">
+                <h2>About Owling Code</h2>
+                <p class="lead">An educational platform dedicated to providing structured, accessible programming education.</p>
+            </div>
+
+            <div class="about-section">
+                <h3>Our Purpose</h3>
+                <p>Owling Code was created to address the need for clear, well-organized programming education. The curriculum is designed to build skills progressively, ensuring learners develop a solid understanding of fundamental concepts before advancing to more complex topics.</p>
+                <p>The materials focus on practical knowledge that can be applied to competitive programming, software development, and computer science studies. Each topic is presented with thorough explanations, working code examples, and practice problems.</p>
+            </div>
+
+            <div class="about-section">
+                <h3>Curriculum Approach</h3>
+                <p>The content is structured around C++ as the primary language of instruction, chosen for its performance characteristics and widespread use in competitive programming. However, the underlying concepts are transferable to other programming languages.</p>
+                <p>Topics are organized into modules covering fundamentals, algorithms, data structures, and advanced techniques. This structure allows learners to follow a clear progression or reference specific topics as needed.</p>
+            </div>
+
+            <div class="about-section">
+                <h3>Contact</h3>
+                <p>For inquiries, suggestions, or feedback regarding the curriculum, please visit the <a href="contact.html">contact page</a> or reach out through our community channels.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Owling Code</h3>
+                    <p>Educational resources for programming and computer science.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Navigation</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="topics.html">Curriculum</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>

@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Introduction to Programming - owlingcode</title>
     <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+Pro:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
@@ -29,14 +32,14 @@
                         </div>
                     </li>
                     <li>
-                    <button class="theme-toggle" onclick="toggleTheme()">
-                        <i class="fas fa-moon" id="theme-icon"></i>
-                        <span id="theme-text">Dark</span>
-                    </button>
+                        <button class="theme-toggle" onclick="toggleTheme()">
+                            <i class="fas fa-moon" id="theme-icon"></i>
+                            <span id="theme-text">Dark</span>
+                        </button>
                     </li>
                     <li>
                         <a href="../login.html" class="btn btn-login" id="login-btn">
-                            <i class="fas fa-sign-in-alt"></i> Login
+                            <i class="fas fa-sign-in-alt"></i> Sign In
                         </a>
                     </li>
                 </ul>
@@ -54,50 +57,41 @@
             <article class="topic">
                 <h2>Introduction to Programming</h2>
                 <div class="topic-metadata">
-                    <span><i class="fas fa-book"></i> Basics</span>
-                    <span><i class="fas fa-code"></i> 3 examples</span>
+                    <span><i class="fas fa-layer-group"></i> Fundamentals</span>
+                    <span><i class="fas fa-code"></i> 3 code examples</span>
                 </div>
-                
-                <br>
 
                 <div class="topic-intro">
-                    <p>Programming is the process of creating instructions for computers to execute. In this, you'll learn about programming languages, how to write your first program, and the fundamental concepts that form the foundation of all programming.</p>
+                    <p>This section introduces the fundamental concepts of programming. You will learn about the structure of a C++ program, basic input and output operations, and how to perform arithmetic calculations.</p>
                 </div>
-                
-                <br>
 
                 <div class="topic-section">
                     <h3>What is Programming?</h3>
-                    <p>Programming is solving problems by writing step-by-step instructions that a computer can understand and execute. These instructions, called code, tell the computer exactly what to do to accomplish a specific task.</p>
+                    <p>Programming is the process of writing instructions that a computer can execute to perform specific tasks. These instructions, written in a programming language, form a program. The process involves understanding the problem, designing a solution (algorithm), implementing the solution in code, and testing for correctness.</p>
                     
                     <div class="info-box">
-                        <h4>Key Programming Concepts:</h4>
+                        <h4>Core Concepts</h4>
                         <ul>
-                            <li>Algorithm: A sequence of steps to solve a problem</li>
-                            <li>Syntax: The rules and structure of a programming language</li>
-                            <li>Logic: The reasoning behind solving problems</li>
-                            <li>Debugging: Finding and fixing errors in code</li>
+                            <li><strong>Algorithm</strong> - A finite sequence of well-defined steps to solve a problem</li>
+                            <li><strong>Syntax</strong> - The rules governing the structure of valid statements in a language</li>
+                            <li><strong>Semantics</strong> - The meaning of syntactically valid statements</li>
+                            <li><strong>Debugging</strong> - The process of identifying and correcting errors in code</li>
                         </ul>
                     </div>
                 </div>
                 
                 <div class="topic-section">
-                    <h3>Your First Program</h3>
-                    <p>Let's start with the base program in C++:</p>
+                    <h3>Program Structure</h3>
+                    <p>Every C++ program follows a basic structure. The following template shows the minimal components required:</p>
                     
-                    <pre><code class="language-cpp">
-#include <iostream>
+                    <pre><code class="language-cpp">#include &lt;iostream&gt;
 using namespace std;
 
 int main() {
-    ...
-    Code
-    ...
-    ...
-    // This is a comment (not executed by the program, it starts with // or /* and ends with */ in case of multi-line comments)
+    // Your code here
+    
     return 0;
-}
-                    </code></pre>
+}</code></pre>
                     
                     <div class="tip-box">
                         <h4>Understanding the Code:</h4>
@@ -122,12 +116,20 @@ using namespace std;
 int main() {
     string name;
     int age;
-    cin >> name;
-    cout << "Hello " << name << endl;
-
-    string s;
-    getline(cin, s);
-
+    
+    cout &lt;&lt; "Enter your name: ";
+    cin &gt;&gt; name;
+    
+    cout &lt;&lt; "Enter your age: ";
+    cin &gt;&gt; age;
+    
+    cout &lt;&lt; "Hello, " &lt;&lt; name &lt;&lt; ". You are " &lt;&lt; age &lt;&lt; " years old." &lt;&lt; endl;
+    
+    // For reading entire lines including spaces:
+    string fullLine;
+    cin.ignore(); // Clear the newline from previous input
+    getline(cin, fullLine);
+    
     return 0;
 }
                     </code></pre>
@@ -142,8 +144,8 @@ int main() {
                 </div>
 
                 <div class="topic-section">
-                    <h3>Working with Numbers</h3>
-                    <p>Programming often involves mathematical calculations:</p>
+                    <h3>Arithmetic Operations</h3>
+                    <p>C++ supports standard arithmetic operations. Note the distinction between integer and floating-point division:</p>
                     
                     <pre><code class="language-cpp">
 #include <iostream>
@@ -165,47 +167,47 @@ int main() {
                     </code></pre>
                     
                     <div class="warning-box">
-                        <h4>Common Beginner Mistakes:</h4>
+                        <h4>Common Errors</h4>
                         <ul>
-                            <li>Forgetting semicolons at the end of statements</li>
-                            <li>Mismatching parentheses or brackets</li>
-                            <li>Case sensitivity errors (C++ is case-sensitive)</li>
-                            <li>Integer division truncating decimal results</li>
+                            <li>Omitting semicolons at statement ends</li>
+                            <li>Mismatched brackets or parentheses</li>
+                            <li>Case sensitivity errors (C++ distinguishes between uppercase and lowercase)</li>
+                            <li>Integer division truncating decimal portions unexpectedly</li>
                         </ul>
                     </div>
                 </div>
             </article>
             
             <div class="practice-section">
-                <h3 class="mt-4">CodeForces Challenge Problems</h3>
-                <p>Practice basic programming concepts with these beginner-friendly problems:</p>
+                <h3>Practice Problems</h3>
+                <p>Apply the concepts from this section with these exercises:</p>
                 
                 <div class="codeforces-problems">
                     <div class="problem-card">
-                        <div class="difficulty beginner">Beginner</div>
-                        <h4>A+B</h4>
-                        <p>Read two integers and output their sum. Perfect for practicing basic input/output.</p>
+                        <div class="difficulty beginner">Introductory</div>
+                        <h4>Theatre Square</h4>
+                        <p>Calculate the number of flagstones needed to pave a rectangular square. Tests basic arithmetic and input/output.</p>
                         <div class="tags">
+                            <span class="tag">Math</span>
                             <span class="tag">Input/Output</span>
-                            <span class="tag">Arithmetic</span>
                         </div>
-                        <a href="https://codeforces.com/problemset/problem/1/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                        <a href="https://codeforces.com/problemset/problem/1/A" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View Problem</a>
                     </div>
                                         
                     <div class="problem-card">
                         <div class="difficulty easy">Easy</div>
                         <h4>Way Too Long Words</h4>
-                        <p>Practice string manipulation and conditional logic with word abbreviation.</p>
+                        <p>Implement word abbreviation based on length. Introduces string handling and conditionals.</p>
                         <div class="tags">
                             <span class="tag">Strings</span>
-                            <span class="tag">Conditionals</span>
+                            <span class="tag">Implementation</span>
                         </div>
-                        <a href="https://codeforces.com/problemset/problem/71/A" class="btn btn-secondary" target="_blank">Solve Problem</a>
+                        <a href="https://codeforces.com/problemset/problem/71/A" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View Problem</a>
                     </div>
                 </div>
                 
                 <div class="practice-tips">
-                    <h4><i class="fas fa-lightbulb"></i>Tips</h4>
+                    <h4>Recommendations</h4>
                     <ul>
                         <li>Start with simple problems to build confidence</li>
                         <li>Read problem statements carefully</li>
@@ -240,7 +242,7 @@ int main() {
                 <div class="footer-section">
                     <h3>Connect With Us</h3>
                     <div class="social-icons">
-                        <a href="https://discord.gg/SxXVGnNZ3b" target="_blank" rel="noopener noreferrer">
+                        <a href="https://discord.gg/SxXVGnNZ3b" target="_blank" rel="noopener noreferrer" aria-label="Discord">
                             <i class="fab fa-discord"></i>
                         </a>
                     </div>
